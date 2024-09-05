@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vente en Ligne</title>
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header with hamburger, logo, love icon, basket icon with badge -->
+    <header>
+        <div class="header-content">
+            <div class="hamburger-menu">☰</div>
+            <img src="logo.png" alt="Logo" class="logo">
+            <div class="header-icons">
+                <i class="fas fa-heart icon"></i> <!-- Love icon using Font Awesome -->
+                <div class="basket-container">
+                    <i class="fas fa-shopping-cart"></i> <!-- Basket icon using Font Awesome -->
+
+                </div>
+            </div>
+        </div>
+        <!-- Search bar -->
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher ...">
+        </div>
+        <!-- Tab component with horizontal scroll -->
+        <div class="tab-component">
+            <div class="tab-scroll">
+                <a href="#tout" class="tab-item active">Tout</a>
+                <a href="#femme" class="tab-item">Femme</a>
+                <a href="#homme" class="tab-item">Homme</a>
+                <a href="#enfant" class="tab-item">Enfant</a>
+                <a href="#literie" class="tab-item">Literie</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bottom navigation bar with Font Awesome icons -->
+    <footer>
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <i class="fas fa-home"></i> <!-- Home icon using Font Awesome -->
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-th-list"></i> <!-- Category icon using Font Awesome -->
+                <span>Categorie</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-box"></i> <!-- Arrivals icon using Font Awesome -->
+                <span>Arrivages</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-shopping-cart"></i> <!-- Cart icon using Font Awesome -->
+                <span>Panier</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-user"></i> <!-- Profile icon using Font Awesome -->
+                <span>Profil</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
