@@ -1,8 +1,9 @@
 const express = require('express');
 const mysql = require('mysql2');
+const cors = require('cors');  // Add the CORS package
 const path = require('path');
 const app = express();
-const port = 3001;
+const port = 3006;
 
 // MySQL connection
 const db = mysql.createConnection({
@@ -21,21 +22,37 @@ db.connect((err) => {
     console.log('Connected to the MySQL database.');
 });
 
-// Serve static files (HTML, CSS, JS)
+// Enable CORS for all routes
+app.use(cors());
+
+// Serve static files (HTML, CSS, JS) from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // API endpoint to get products based on department
 app.get('/api/products', (req, res) => {
-    const department = req.query.department || 'tout';
-    let query = 'SELECT * FROM products';
+    const departmentName = req.query.department || 'tout';
+
+    let query = `
+        SELECT 
+            p.product_id,
+            p.name,
+            p.description,
+            p.price,
+            p.stock,
+            i.image_url
+        FROM 
+            PRODUCTS p
+        JOIN 
+            DEPARTMENT d ON p.department_id = d.department_id
+        LEFT JOIN 
+            PRODUCT_IMAGES i ON p.product_id = i.product_id
+    `;
+    
     let queryParams = [];
 
-    if (department !== 'tout') {
-        query += ' WHERE department = ?';
-        queryParams.push(department);
-    } else {
-        query += ' WHERE department IN (?, ?, ?, ?)';
-        queryParams.push('Femme', 'Homme', 'Enfant', 'Linge de Maison');
+    if (departmentName !== 'tout') {
+        query += ' WHERE d.department_name = ?';
+        queryParams.push(departmentName);
     }
 
     db.query(query, queryParams, (err, results) => {
@@ -44,7 +61,8 @@ app.get('/api/products', (req, res) => {
             res.status(500).send('Server error');
             return;
         }
-        res.json(results);
+
+        res.json(results);  // Return the fetched products as JSON
     });
 });
 

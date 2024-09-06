@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadProducts = async (department) => {
         try {
             // Fetch products based on the selected department
-            const response = await fetch(`/api/products?department=${department}`);
+            const response = await fetch(`http://localhost:3006/api/products?department=${department}`);  // Update to use port 3006
             
             // Check if the API request was successful
             if (!response.ok) {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productCard.classList.add('product-card');
 
                 productCard.innerHTML = `
-                    <img src="${product.image_url}" alt="${product.name}">
+                    <img src="${product.image_url}" alt="${product.name}" style="width: 150px; height: 150px;">
                     <h3>${product.name}</h3>
                     <p>${product.description}</p>
                     <p class="price">${product.price}€</p>
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
 
                 productCard.addEventListener('click', () => {
-                    // Redirect to product details page
+                    // Redirect to product details page (implement this if necessary)
                     window.location.href = `/product/${product.product_id}`;
                 });
 
