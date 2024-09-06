@@ -1,38 +1,54 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
+const path = require('path');
 const app = express();
-const port = 3306;
+const port = 3001;
 
-// MySQL Database connection
+// MySQL connection
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',   // your MySQL username
-  password: 'WhatIs5!',   // your MySQL password
-  database: 'esimen'  // your MySQL database name
+    host: 'localhost',
+    user: 'root',
+    password: 'IlovePHYSICS2003.',
+    database: 'esimen'
 });
 
 // Connect to MySQL
-db.connect(err => {
-  if (err) {
-    console.error('Error connecting to the database: ', err);
-    return;
-  }
-  console.log('Connected to MySQL Database');
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database:', err);
+        return;
+    }
+    console.log('Connected to the MySQL database.');
 });
 
 // Serve static files (HTML, CSS, JS)
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// API route to get products
+// API endpoint to get products based on department
 app.get('/api/products', (req, res) => {
-  const sql = 'SELECT * FROM products';
-  db.query(sql, (err, results) => {
-    if (err) throw err;
-    res.json(results);
-  });
+    const department = req.query.department || 'tout';
+    let query = 'SELECT * FROM products';
+    let queryParams = [];
+
+    if (department !== 'tout') {
+        query += ' WHERE department = ?';
+        queryParams.push(department);
+    } else {
+        query += ' WHERE department IN (?, ?, ?, ?)';
+        queryParams.push('Femme', 'Homme', 'Enfant', 'Linge de Maison');
+    }
+
+    db.query(query, queryParams, (err, results) => {
+        if (err) {
+            console.error('Error fetching products:', err);
+            res.status(500).send('Server error');
+            return;
+        }
+        res.json(results);
+    });
 });
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
