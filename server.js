@@ -39,7 +39,8 @@ app.get('/api/products', (req, res) => {
             p.description,
             p.price,
             p.stock,
-            i.image_url
+            i.image_url,
+            p.created_at  -- Add the created_at field for sorting
         FROM 
             PRODUCTS p
         JOIN 
@@ -55,6 +56,9 @@ app.get('/api/products', (req, res) => {
         queryParams.push(departmentName);
     }
 
+    // Order by created_at in descending order to get the most recent products first
+    query += ' ORDER BY p.created_at DESC';
+
     db.query(query, queryParams, (err, results) => {
         if (err) {
             console.error('Error fetching products:', err);
@@ -65,6 +69,43 @@ app.get('/api/products', (req, res) => {
         res.json(results);  // Return the fetched products as JSON
     });
 });
+
+app.get('/api/products/:product_id', (req, res) => {
+    const product_id = req.params.product_id;
+
+    const query = `
+        SELECT 
+            p.product_id,
+            p.name,
+            p.description,
+            p.price,
+            p.stock,
+            i.image_url
+        FROM 
+            PRODUCTS p
+        LEFT JOIN 
+            PRODUCT_IMAGES i ON p.product_id = i.product_id
+        WHERE 
+            p.product_id = ?
+    `;
+
+    db.query(query, [product_id], (err, result) => {
+        if (err) {
+            console.error('Error fetching product:', err);
+            res.status(500).send('Server error');
+            return;
+        }
+
+        if (result.length === 0) {
+            res.status(404).send('Product not found');
+            return;
+        }
+
+        res.json(result[0]);  // Return the product details as JSON
+    });
+});
+
+
 
 // Start the server
 app.listen(port, () => {

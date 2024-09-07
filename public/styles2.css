@@ -1,0 +1,135 @@
+/* Product details styling */
+.product-details {
+    padding: 20px;
+    text-align: center;
+    margin-top: 80px; /* Ensure space under the fixed header */
+}
+
+.product-details img {
+    width: 50%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px; /* Optional: Rounded corners for the image */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow for the image */
+}
+
+.product-details h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+}
+
+.product-details .price {
+    font-size: 28px;
+    color: #ff4500;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.product-details .description {
+    font-size: 18px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    padding: 0 10%;
+    text-align: justify;
+}
+
+.product-detail-card {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-detail-card img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.product-detail-card h1,
+.product-detail-card .price,
+.product-detail-card .description {
+    margin: 0 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .product-details img {
+        width: 80%;
+    }
+
+    .product-details h1 {
+        font-size: 28px;
+    }
+
+    .product-details .price {
+        font-size: 24px;
+    }
+
+    .product-details .description {
+        font-size: 16px;
+    }
+}
+header {
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0px 4px 2px -2px gray;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hamburger-menu {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo {
+    height: 40px;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon {
+    font-size: 24px;
+}
+
+.basket-container {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+}
+
+/* Search bar */
+.search-bar {
+    margin-top: 10px;
+    padding: 0 10px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}

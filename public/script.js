@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadProducts = async (department) => {
         try {
             // Fetch products based on the selected department
-            const response = await fetch(`http://localhost:3006/api/products?department=${department}`);  // Update to use port 3006
+            const response = await fetch(`http://localhost:3006/api/products?department=${department}`);
             
             // Check if the API request was successful
             if (!response.ok) {
@@ -14,12 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const products = await response.json();
-
-            // Log the products to ensure they are being fetched correctly
             console.log('Products fetched:', products);
 
             // Clear current product list
             productList.innerHTML = '';
+
+            // Check if there are any products
+            if (products.length === 0) {
+                productList.innerHTML = '<p>No products available in this department.</p>';
+                return;
+            }
 
             // Display products
             products.forEach(product => {
@@ -34,9 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Stock: ${product.stock}</p>
                 `;
 
+                // Add event listener to navigate to product details page
                 productCard.addEventListener('click', () => {
-                    // Redirect to product details page (implement this if necessary)
-                    window.location.href = `/product/${product.product_id}`;
+                    window.location.href = `http://localhost:3006/product-details.html?product_id=${product.product_id}`;
                 });
 
                 productList.appendChild(productCard);
@@ -44,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error loading products:', error);
-            // Display error message in the UI (optional)
             productList.innerHTML = '<p>Unable to load products. Please try again later.</p>';
         }
     };
@@ -53,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tabItems.forEach(tab => {
         tab.addEventListener('click', () => {
             const department = tab.getAttribute('data-department');
-            loadProducts(department);  // Load products based on department
+            loadProducts(department);
         });
     });
 
