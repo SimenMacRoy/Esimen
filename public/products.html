@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="hamburger-menu">☰</div>
+            <img src="logo.png" alt="Logo" class="logo">
+            <div class="header-icons">
+                <i class="fas fa-heart icon"></i>
+                <div class="basket-container">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </div>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher un article...">
+        </div>
+    </header>
+
+    <section id="product-list" class="product-list">
+        <!-- Products will be loaded here via JavaScript -->
+    </section>
+
+    <footer>
+        <div class="bottom-nav">
+            <div class="nav-item active" id="nav-accueil">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item" id="nav-categories">
+                <i class="fas fa-th-list"></i>
+                <span>Categorie</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Arrivages</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Panier</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="products.js"></script>
+</body>
+</html>

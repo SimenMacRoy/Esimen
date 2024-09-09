@@ -39,8 +39,8 @@ app.get('/api/products', (req, res) => {
             p.description,
             p.price,
             p.stock,
-            i.image_url,
-            p.created_at  -- Add the created_at field for sorting
+            p.created_at,
+            i.image_url
         FROM 
             PRODUCTS p
         JOIN 
@@ -66,9 +66,37 @@ app.get('/api/products', (req, res) => {
             return;
         }
 
-        res.json(results);  // Return the fetched products as JSON
+        // Grouping images by product_id
+        const productsMap = {};
+
+        results.forEach(row => {
+            const { product_id, name, description, price, stock, created_at, image_url } = row;
+
+            if (!productsMap[product_id]) {
+                productsMap[product_id] = {
+                    product_id,
+                    name,
+                    description,
+                    price,
+                    stock,
+                    created_at,
+                    images: [] // Initialize an empty array to store images
+                };
+            }
+
+            // Push each image into the product's images array
+            if (image_url) {
+                productsMap[product_id].images.push(image_url);
+            }
+        });
+
+        // Convert the map to an array
+        const productsArray = Object.values(productsMap);
+
+        res.json(productsArray);  // Return the fetched products with images as JSON
     });
 });
+
 
 app.get('/api/products/:product_id', (req, res) => {
     const product_id = req.params.product_id;
@@ -89,21 +117,117 @@ app.get('/api/products/:product_id', (req, res) => {
             p.product_id = ?
     `;
 
-    db.query(query, [product_id], (err, result) => {
+    db.query(query, [product_id], (err, results) => {
         if (err) {
             console.error('Error fetching product:', err);
             res.status(500).send('Server error');
             return;
         }
 
-        if (result.length === 0) {
+        if (results.length === 0) {
             res.status(404).send('Product not found');
             return;
         }
 
-        res.json(result[0]);  // Return the product details as JSON
+        // Grouping images for the single product
+        const product = {
+            product_id: results[0].product_id,
+            name: results[0].name,
+            description: results[0].description,
+            price: results[0].price,
+            stock: results[0].stock,
+            images: []
+        };
+
+        results.forEach(row => {
+            if (row.image_url) {
+                product.images.push(row.image_url);
+            }
+        });
+
+        res.json(product);  // Return the product with all associated images
     });
 });
+
+app.get('/api/categories', (req, res) => {
+    const departmentName = req.query.department;
+
+    if (!departmentName) {
+        return res.status(400).send('Department name is required');
+    }
+
+    // Query to fetch categories based on department name
+    const query = `
+        SELECT c.category_id, c.category_name
+        FROM CATEGORY c
+        JOIN DEPARTMENT_CATEGORY dc ON c.category_id = dc.category_id
+        JOIN DEPARTMENT d ON dc.department_id = d.department_id
+        WHERE d.department_name = ?
+    `;
+
+    db.query(query, [departmentName], (err, results) => {
+        if (err) {
+            console.error('Error fetching categories:', err);
+            res.status(500).send('Server error');
+            return;
+        }
+
+        res.json(results);  // Return the fetched categories as JSON
+    });
+});
+
+// API to fetch products by category_id
+app.get('/api/products_cat', (req, res) => {
+    const categoryId = req.query.category_id;
+
+    if (!categoryId) {
+        return res.status(400).json({ error: 'Category ID is required' });
+    }
+
+    // Modified query to join the products and image tables
+    const query = `
+        SELECT p.product_id, p.name, p.description, p.price, p.stock, i.image_url
+        FROM products p
+        LEFT JOIN product_images i ON p.product_id = i.product_id
+        WHERE p.category_id = ?;
+    `;
+
+    db.query(query, [categoryId], (error, results) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Failed to fetch products' });
+        }
+
+        // Grouping images by product
+        const productsMap = {};
+
+        results.forEach(row => {
+            const { product_id, name, description, price, stock, image_url } = row;
+
+            if (!productsMap[product_id]) {
+                productsMap[product_id] = {
+                    product_id,
+                    name,
+                    description,
+                    price,
+                    stock,
+                    images: [] // Initialize an empty array to store images
+                };
+            }
+
+            // Push each image into the product's images array
+            if (image_url) {
+                productsMap[product_id].images.push(image_url);
+            }
+        });
+
+        // Convert the map to an array
+        const productsArray = Object.values(productsMap);
+
+        res.json(productsArray); // Send the products with their associated images
+    });
+});
+
 
 
 

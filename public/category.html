@@ -3,34 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vente en Ligne</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Categories and Products</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
-    <!-- Header with hamburger, logo, love icon, basket icon with badge -->
+    <!-- Header (same as before) -->
     <header>
         <div class="header-content">
             <div class="hamburger-menu">☰</div>
             <img src="logo.png" alt="Logo" class="logo">
             <div class="header-icons">
-                <i class="fas fa-heart icon"></i> <!-- Love icon using Font Awesome -->
+                <i class="fas fa-heart icon"></i>
                 <div class="basket-container">
-                    <i class="fas fa-shopping-cart"></i> <!-- Basket icon using Font Awesome -->
+                    <i class="fas fa-shopping-cart"></i>
                 </div>
             </div>
         </div>
-
-        <!-- Search bar -->
         <div class="search-bar">
             <input type="text" placeholder="Rechercher un article...">
         </div>
-
-        <!-- Tab component with horizontal scroll -->
         <div class="tab-component">
             <div class="tab-scroll">
-                <a href="#tout" class="tab-item active" data-department="tout">Tout</a>
                 <a href="#femme" class="tab-item" data-department="femme">Femme</a>
                 <a href="#homme" class="tab-item" data-department="homme">Homme</a>
                 <a href="#enfant" class="tab-item" data-department="enfant">Enfant</a>
@@ -39,37 +34,36 @@
         </div>
     </header>
 
-    <!-- Product listing -->
-    <section id="product-list" class="product-list">
-        <!-- Dynamic product cards will be appended here via JavaScript -->
+    <!-- Category listing -->
+    <section id="category-list" class="category-list">
+        <!-- Category boxes will be dynamically loaded here via JavaScript -->
     </section>
-
-    <!-- Bottom navigation bar with Font Awesome icons -->
+    <!-- Footer (same as before) -->
     <footer>
         <div class="bottom-nav">
             <div class="nav-item active" id="nav-accueil">
-                <i class="fas fa-home"></i> <!-- Home icon using Font Awesome -->
+                <i class="fas fa-home"></i>
                 <span>Accueil</span>
             </div>
             <div class="nav-item" id="nav-categories">
-                <i class="fas fa-th-list"></i> <!-- Category icon using Font Awesome -->
+                <i class="fas fa-th-list"></i>
                 <span>Categorie</span>
             </div>
             <div class="nav-item">
-                <i class="fas fa-box"></i> <!-- Arrivals icon using Font Awesome -->
+                <i class="fas fa-box"></i>
                 <span>Arrivages</span>
             </div>
             <div class="nav-item">
-                <i class="fas fa-shopping-cart"></i> <!-- Cart icon using Font Awesome -->
+                <i class="fas fa-shopping-cart"></i>
                 <span>Panier</span>
             </div>
             <div class="nav-item">
-                <i class="fas fa-user"></i> <!-- Profile icon using Font Awesome -->
+                <i class="fas fa-user"></i>
                 <span>Profil</span>
             </div>
-        </div>s
+        </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="category.js"></script>
 </body>
 </html>
