@@ -1,6 +1,6 @@
 
 const config = {
-    baseURL: 'http://192.168.51.205:3006', // Update this IP dynamically as needed
+    baseURL: 'http://192.168.2.147:3006', // Update this IP dynamically as needed
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const productList = document.getElementById('product-list');
     const navAccueil = document.getElementById('nav-accueil'); // "Accueil" navigation tab
     const navCategories = document.getElementById('nav-categories'); // "Categorie" navigation tab
+    const navBasket = document.getElementById('nav-basket')
 
     // Function to switch the active department tab (top menu)
     const switchActiveTab = (selectedTab) => {
@@ -124,6 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
         switchActiveNavTab(navCategories); // Set "Categorie" as the active nav tab
         window.location.href = `${config.baseURL}/category.html`;  // Use config.baseURL
     });
+
+    navBasket.addEventListener('click', () => {
+        switchActiveNavTab(navBasket); // Set "Basket" as the active nav tab
+        window.location.href = `${config.baseURL}/basket.html`; // Use config.baseURL
+    })
 
     // Load products for "Tout" by default when the page loads
     const defaultTab = document.querySelector('.tab-item[data-department="tout"]');

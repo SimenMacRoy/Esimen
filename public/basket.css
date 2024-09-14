@@ -1,0 +1,63 @@
+/* Styling for basket items as cards */
+.basket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.item-card {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.item-image {
+    flex: 0 0 100px;
+    margin-right: 20px;
+}
+
+.square-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.item-details {
+    flex-grow: 1;
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-controls button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.item-controls .decrease-quantity {
+    background-color: #ff6347;
+    color: #fff;
+}
+
+.item-controls .increase-quantity {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.remove-item {
+    color: #ff6347;
+    cursor: pointer;
+    font-size: 24px;
+}

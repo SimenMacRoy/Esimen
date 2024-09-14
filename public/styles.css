@@ -18,13 +18,18 @@ body {
     flex-direction: column;
     justify-content: space-between;
     min-height: 100vh;
+    padding-bottom: 60;
 }
 
 /* Header Styles */
 header {
     background-color: #fff;
-    padding: 10px;
+    padding: 5px 10px;  /* Reduce the padding */
     box-shadow: 0px 4px 2px -2px gray;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 .header-content {
@@ -34,22 +39,22 @@ header {
 }
 
 .hamburger-menu {
-    font-size: 24px;
+    font-size: 20px;  /* Reduce font size */
     font-weight: bold;
 }
 
 .logo {
-    height: 40px;
+    height: 30px;  /* Reduce logo height */
 }
 
 .header-icons {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;  /* Reduce the gap between icons */
 }
 
 .icon {
-    font-size: 24px;
+    font-size: 20px;  /* Reduce icon size */
 }
 
 .basket-container {
@@ -63,29 +68,27 @@ header {
     background-color: red;
     color: white;
     border-radius: 50%;
-    padding: 5px;
-    font-size: 12px;
+    padding: 3px;  /* Reduce badge size */
+    font-size: 10px;
 }
 
 /* Search bar */
 .search-bar {
-    margin-top: 10px;
+    margin-top: 5px;  /* Reduce margin */
     padding: 0 10px;
 }
 
 .search-bar input {
     width: 100%;
-    padding: 10px;
-    border-radius: 20px;
+    padding: 5px;  /* Reduce padding inside the input */
+    border-radius: 15px;  /* Slightly reduce the radius */
     border: 1px solid #ccc;
 }
 
 /* Tab Component */
 .tab-component {
-    margin-top: 10px;
+    margin-top: 5px;
     background-color: #fff;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
     overflow-x: auto;
     -ms-overflow-style: none;  /* Hide scrollbar for Internet Explorer and Edge */
     scrollbar-width: none;  /* Hide scrollbar for Firefox */
@@ -98,15 +101,15 @@ header {
 .tab-scroll {
     display: flex;
     justify-content: space-around;
-    padding: 10px;
+    padding: 5px 10px;  /* Reduce padding */
     white-space: nowrap;
 }
 
 .tab-item {
     text-decoration: none;
-    font-size: 16px;
+    font-size: 14px;  /* Slightly reduce font size */
     color: #333;
-    padding: 10px;
+    padding: 5px;  /* Reduce padding */
     cursor: pointer;
 }
 
@@ -124,12 +127,17 @@ footer {
     background-color: #fff;
     box-shadow: 0px -4px 2px -2px gray;
     padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 .bottom-nav {
     display: flex;
     justify-content: space-around;
     align-items: center;
+
 }
 
 .nav-item {
@@ -154,6 +162,7 @@ footer {
     justify-content: space-around;
     gap: 10px;
     padding: 20px;
+    margin-top: 100px;
 }
 
 .product-card {

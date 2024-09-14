@@ -133,3 +133,21 @@ header {
     border-radius: 20px;
     border: 1px solid #ccc;
 }
+
+#footer{
+    background-color: #fff;
+    box-shadow: 0px -4px 2px -2px gray;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    justify-content: space-between;
+}
+.btn-add{
+    background-color: orange;
+    align-content: center;
+    padding: 20px;
+    width: 90%;
+    font-size: 24px;
+}
