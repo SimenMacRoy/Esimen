@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Function to fetch and display categories based on the selected department
-    const loadCategories = async (department) => {
+    const loadCategories = async (departmentName) => {
         try {
-            const response = await fetch(`http://localhost:3006/api/categories?department=${department}`);
+            const response = await fetch(`http://localhost:3006/api/categories?department=${departmentName}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Navigate to product list for the clicked category
                 categoryCard.addEventListener('click', () => {
-                    window.location.href = `http://localhost:3006/products.html?category_id=${category.category_id}`;
+                    // Pass both category_id and departmentName to the products page
+                    window.location.href = `http://localhost:3006/products.html?category_id=${category.category_id}&departmentName=${departmentName}`;
                 });
 
                 categoryList.appendChild(categoryCard);
@@ -58,16 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listeners for department tabs in the top menu
     tabItems.forEach(tab => {
         tab.addEventListener('click', () => {
-            const department = tab.getAttribute('data-department');
+            const departmentName = tab.getAttribute('data-department');
             switchActiveTab(tab);  // Switch active tab
-            loadCategories(department);  // Load categories for the selected department
+            loadCategories(departmentName);  // Load categories for the selected department
         });
     });
 
     // Load "Femme" categories by default on page load
     const defaultTab = document.querySelector('.tab-item[data-department="femme"]');
     switchActiveTab(defaultTab);  // Set "Femme" as the default active tab
-    loadCategories('femme');  // Load "Femme" categories by default
+    loadCategories('Femme');  // Load "Femme" categories by default
 
     // Ensure "Categorie" is the active navigation tab on page load
     switchActiveNavTab(navCategories);  // Set "Categorie" as the default active nav tab

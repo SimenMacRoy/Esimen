@@ -179,20 +179,22 @@ app.get('/api/categories', (req, res) => {
 // API to fetch products by category_id
 app.get('/api/products_cat', (req, res) => {
     const categoryId = req.query.category_id;
+    const departmentName = req.query.departmentName;
 
-    if (!categoryId) {
-        return res.status(400).json({ error: 'Category ID is required' });
+    if (!categoryId || !departmentName) {
+        return res.status(400).json({ error: 'Category ID and Department Name are required' });
     }
 
-    // Modified query to join the products and image tables
+    // Modified query to filter by both category_id and department_name
     const query = `
         SELECT p.product_id, p.name, p.description, p.price, p.stock, i.image_url
         FROM products p
+        JOIN department d ON p.department_id = d.department_id
         LEFT JOIN product_images i ON p.product_id = i.product_id
-        WHERE p.category_id = ?;
+        WHERE p.category_id = ? AND d.department_name = ?;
     `;
 
-    db.query(query, [categoryId], (error, results) => {
+    db.query(query, [categoryId, departmentName], (error, results) => {
         if (error) {
             console.error(error);
             return res.status(500).json({ error: 'Failed to fetch products' });
@@ -225,6 +227,39 @@ app.get('/api/products_cat', (req, res) => {
         const productsArray = Object.values(productsMap);
 
         res.json(productsArray); // Send the products with their associated images
+    });
+});
+
+// API endpoint to search categories based on user input
+app.get('/api/search-categories', (req, res) => {
+    const searchQuery = req.query.query || '';
+
+    if (searchQuery.length < 1) {
+        return res.status(400).send('Search query is too short');
+    }
+
+    const query = `
+        SELECT 
+            c.category_id, 
+            c.category_name, 
+            d.department_name
+        FROM 
+            CATEGORY c
+        JOIN 
+            DEPARTMENT_CATEGORY dc ON c.category_id = dc.category_id
+        JOIN 
+            DEPARTMENT d ON dc.department_id = d.department_id
+        WHERE 
+            c.category_name LIKE ? OR d.department_name LIKE ?
+    `;
+    const queryParams = [`%${searchQuery}%`, `%${searchQuery}%`];
+
+    db.query(query, queryParams, (err, results) => {
+        if (err) {
+            console.error('Error fetching search results:', err);
+            return res.status(500).send('Server error');
+        }
+        res.json(results);  // Return the matched categories and departments as JSON
     });
 });
 

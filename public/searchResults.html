@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats de Recherche</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Résultats de Recherche</h1>
+    <div id="search-results-container"></div>
+
+    <script>
+        const config = { baseURL: 'http://192.168.2.147:3006' };
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryId = urlParams.get('category_id');
+        const departmentName = urlParams.get('departmentName'); // Change 'department' to 'departmentName'
+
+        console.log('Category ID:', categoryId);
+        console.log('Department Name:', departmentName);
+
+        // Fetch products by category and department
+        const loadProductsByCategoryAndDepartment = async (categoryId, departmentName) => {
+            try {
+                const response = await fetch(`${config.baseURL}/api/products_cat?category_id=${categoryId}&departmentName=${departmentName}`); // Use departmentName
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const products = await response.json();
+                const resultsContainer = document.getElementById('search-results-container');
+                resultsContainer.innerHTML = '';  // Clear existing content
+
+                if (products.length === 0) {
+                    resultsContainer.innerHTML = '<p>No products found in this category and department.</p>';
+                    return;
+                }
+
+                // Display products
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <p class="price">${product.price}€</p>
+                        <p>Stock: ${product.stock}</p>
+                        <img src="${product.images[0]}" alt="${product.name}" width="150" height="150">
+                    `;
+                    resultsContainer.appendChild(productCard);
+                });
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('search-results-container').innerHTML = '<p>Error loading products. Please try again later.</p>';
+            }
+        };
+
+        // Load products by category and department on page load
+        if (categoryId && departmentName) {
+            loadProductsByCategoryAndDepartment(categoryId, departmentName);
+        } else {
+            document.getElementById('search-results-container').innerHTML = '<p>Category or Department not found.</p>';
+        }
+    </script>
+</body>
+</html>

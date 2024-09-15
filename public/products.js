@@ -3,10 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const navAccueil = document.getElementById('nav-accueil'); // "Accueil" nav item
     const navCategories = document.getElementById('nav-categories'); // "Categorie" nav item
 
-    // Function to get category_id from the URL query string
-    const getCategoryIDFromURL = () => {
+    // Function to get category_id and departmentName from the URL query string
+    const getParamsFromURL = () => {
         const params = new URLSearchParams(window.location.search);
-        return params.get('category_id');
+        return {
+            categoryId: params.get('category_id'),
+            departmentName: params.get('departmentName') // Change from department to departmentName
+        };
     };
 
     // Function to switch the active navigation tab (bottom menu)
@@ -49,22 +52,35 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(changeImage, 2000); // Change image every 2 seconds
     };
 
-    // Fetch and display products based on category_id
+    // Fetch and display products based on category_id and departmentName
     const loadProducts = async () => {
-        const categoryId = getCategoryIDFromURL();
-        if (!categoryId) {
-            productList.innerHTML = '<p>No category selected.</p>';
+        const { categoryId, departmentName } = getParamsFromURL(); // Change department to departmentName
+
+        if (!categoryId || !departmentName) {
+            productList.innerHTML = '<p>No category or department selected.</p>';
             return;
         }
 
         try {
-            const response = await fetch(`http://localhost:3006/api/products_cat?category_id=${categoryId}`);
+            const response = await fetch(`http://localhost:3006/api/products_cat?category_id=${categoryId}&departmentName=${departmentName}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const products = await response.json();
+
+            // Check if the response is an array
+            if (!Array.isArray(products)) {
+                console.error('Invalid response format:', products);
+                productList.innerHTML = '<p>Unable to load products. Please try again later.</p>';
+                return;
+            }
 
             productList.innerHTML = ''; // Clear previous products
 
             if (products.length === 0) {
-                productList.innerHTML = '<p>No products available in this category.</p>';
+                productList.innerHTML = '<p>No products available in this category and department.</p>';
                 return;
             }
 
@@ -83,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     // Handle case where there are no images or only one image
                     const img = document.createElement('img');
-                    img.src = product.images[0];
+                    img.src = product.images[0] || 'default_image.jpg'; // Use a default image if none
                     img.alt = product.name;
                     img.style.width = '150px';
                     img.style.height = '150px';
@@ -116,5 +132,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    loadProducts();
+    loadProducts(); // Load products when the page loads
 });
