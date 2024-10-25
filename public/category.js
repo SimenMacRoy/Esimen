@@ -1,8 +1,14 @@
+const config = {
+    baseURL: 'http://192.168.2.147:3006', // Update this IP dynamically as needed
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const categoryList = document.getElementById('category-list');
     const tabItems = document.querySelectorAll('.tab-item'); // Top menu department tabs
     const navCategories = document.getElementById('nav-categories'); // "Categorie" navigation tab (bottom menu)
     const navAccueil = document.getElementById('nav-accueil'); // "Accueil" navigation tab (bottom menu)
+    const searchBar = document.getElementById('search-bar'); // Search bar input
+    const searchResultsContainer = document.getElementById('search-results'); // Search results container
 
     // Function to switch the active department tab in the top menu
     const switchActiveTab = (selectedTab) => {
@@ -19,8 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to fetch and display categories based on the selected department
     const loadCategories = async (departmentName) => {
         try {
-            const response = await fetch(`http://localhost:3006/api/categories?department=${departmentName}`);
-            
+            const response = await fetch(`${config.baseURL}/api/categories?department=${departmentName}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -43,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Navigate to product list for the clicked category
                 categoryCard.addEventListener('click', () => {
-                    // Pass both category_id and departmentName to the products page
-                    window.location.href = `http://localhost:3006/products.html?category_id=${category.category_id}&departmentName=${departmentName}`;
+                    window.location.href = `${config.baseURL}/products.html?category_id=${category.category_id}&departmentName=${departmentName}`;
                 });
 
                 categoryList.appendChild(categoryCard);
@@ -76,6 +80,53 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener for "Accueil" navigation tab to redirect to the homepage
     navAccueil.addEventListener('click', () => {
         switchActiveNavTab(navAccueil);  // Set "Accueil" as active
-        window.location.href = 'http://localhost:3006/index.html';  // Redirect to homepage
+        window.location.href = `${config.baseURL}/index.html`;  // Redirect to homepage
+    });
+
+    // Search Bar Functionality
+
+    // Function to fetch and display search results
+    const searchCategories = async (query) => {
+        try {
+            const response = await fetch(`${config.baseURL}/api/search-categories?query=${query}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const categories = await response.json();
+            searchResultsContainer.innerHTML = ''; // Clear previous search results
+
+            if (categories.length === 0) {
+                searchResultsContainer.style.display = 'none';
+                return;
+            }
+
+            // Display search results
+            searchResultsContainer.style.display = 'block';
+            categories.forEach(category => {
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('search-result-item');
+                resultItem.textContent = `${category.category_name} (${category.department_name})`;
+
+                // Add event listener to navigate to the products in this category
+                resultItem.addEventListener('click', () => {
+                    window.location.href = `${config.baseURL}/searchResults.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
+                });
+
+                searchResultsContainer.appendChild(resultItem);
+            });
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
+    };
+
+    // Event listener for search input
+    searchBar.addEventListener('input', (event) => {
+        const query = event.target.value;
+        if (query.length > 1) {
+            searchCategories(query); // Call the search function with the input
+        } else {
+            searchResultsContainer.style.display = 'none';
+        }
     });
 });

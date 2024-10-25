@@ -84,6 +84,28 @@ header {
     border-radius: 15px;  /* Slightly reduce the radius */
     border: 1px solid #ccc;
 }
+.search-results{
+    margin-top: 10px;
+    padding: 5px;
+    cursor: pointer;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+}
+.search-result-item{
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    font-family: 'Ebrima';
+}
+.search-result-item:hover{
+    transform: scale(1.10);
+    background-color: #ff4500;
+}
+
 
 /* Tab Component */
 .tab-component {
@@ -146,6 +168,11 @@ footer {
     align-items: center;
     font-size: 12px;
 }
+.nav-item:hover{
+    cursor:pointer;
+    transform: scale(1.10);
+    color: #ff4500;
+}
 
 .nav-item i {
     font-size: 24px;
@@ -160,29 +187,32 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    gap: 10px;
-    padding: 20px;
-    margin-top: 100px;
+    gap: 5px;
+    padding: 5px;
+    margin-top: 200px;
 }
 
 .product-card {
     background-color: #f9f9f9;
-    padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
     width: 200px;
+    height: auto;
     text-align: center;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
 }
 
+
 .product-card:hover {
     transform: scale(1.05);  /* Slight zoom effect on hover */
+    background-color: #ff4500;
+    cursor: pointer;
+    color: white
 }
 
 .product-card img {
     width: 100%;
-    height: auto;
     border-radius: 8px;
 }
 
@@ -192,10 +222,10 @@ footer {
 }
 
 .product-card .price {
-    color: #ff4500;
     font-size: 20px;
     margin-bottom: 10px;
     font-family: 'Ebrima';
+    font-weight: bold;
 }
 /* Product details styling */
 .product-details {
@@ -300,5 +330,12 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-top: 20px; /* Space below the tab menu */
+    margin-top: 150px; /* Space below the tab menu */
+}
+input[placeholder="Rechercher un article..."]{
+    font-size: 18px;
+    font-family: 'Ebrima';
+}
+input[placeholder="Rechercher un article..."]:hover{
+    border: 1px solid darkorange;
 }

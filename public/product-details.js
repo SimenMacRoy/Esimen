@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const productDetailsSection = document.getElementById('product-details');
     const btnAddToBasket = document.querySelector('.btn-add'); // The add to basket button
     const priceDisplay = document.querySelector('.prix'); // The price display near the button
+    const searchBar = document.getElementById('search-bar'); // Search bar input
+    const searchResultsContainer = document.getElementById('search-results'); // Search results container
 
     // Get product ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -60,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             productDetailsSection.insertBefore(imageContainer, productDetailsSection.firstChild);
 
             // Display the product price near the "Ajouter au panier" button
-            priceDisplay.innerHTML = `<span>Prix: ${product.price}€</span>`;
+            priceDisplay.innerHTML = `<span>Prix: CA$${product.price}</span>`;
 
             // Handle adding the item to the basket
             btnAddToBasket.addEventListener('click', () => {
@@ -74,60 +76,105 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         productDetailsSection.innerHTML = '<p>No product found.</p>';
     }
-});
 
-// Basket Mechanism
+    // Basket Mechanism
 
-// Function to handle adding the product to the basket
-function addToBasket(product) {
-    let basket = getBasket();
+    // Function to handle adding the product to the basket
+    function addToBasket(product) {
+        let basket = getBasket();
 
-    // Check if the product is already in the basket
-    const existingProduct = basket.find(item => item.product_id === product.product_id);
+        // Check if the product is already in the basket
+        const existingProduct = basket.find(item => item.product_id === product.product_id);
 
-    if (existingProduct) {
-        existingProduct.quantity += 1; // Increase the quantity if the product is already in the basket
-    } else {
-        // Add new product to the basket with initial quantity 1 and image
-        basket.push({
-            id: product.product_id,
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            image: product.images && product.images.length > 0 ? product.images[0] : 'default_image.jpg', // Add image if available
-            quantity: 1
-        });
+        if (existingProduct) {
+            existingProduct.quantity += 1; // Increase the quantity if the product is already in the basket
+        } else {
+            // Add new product to the basket with initial quantity 1 and image
+            basket.push({
+                id: product.product_id,
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                image: product.images && product.images.length > 0 ? product.images[0] : 'default_image.jpg', // Add image if available
+                quantity: 1
+            });
+        }
+
+        // Save the updated basket back to localStorage
+        saveBasket(basket);
+
+        // Optional: Give feedback to the user that the item was added to the basket
+        alert(`${product.name} a été ajouté au panier !`);
+    }
+
+    // Get the current basket from localStorage
+    function getBasket() {
+        const basket = localStorage.getItem('basket');
+        return basket ? JSON.parse(basket) : []; // Return an empty array if the basket is not found
     }
 
     // Save the updated basket back to localStorage
-    saveBasket(basket);
-
-    // Optional: Give feedback to the user that the item was added to the basket
-    alert(`${product.name} a été ajouté au panier !`);
-}
-
-
-// Get the current basket from localStorage
-function getBasket() {
-    const basket = localStorage.getItem('basket');
-    return basket ? JSON.parse(basket) : []; // Return an empty array if the basket is not found
-}
-
-// Save the updated basket back to localStorage
-function saveBasket(basket) {
-    localStorage.setItem('basket', JSON.stringify(basket));
-}
-
-// Display the basket content (you can modify this to display on a separate page or modal)
-function displayBasket() {
-    const basket = getBasket();
-    if (basket.length === 0) {
-        console.log('Le panier est vide.');
-        return;
+    function saveBasket(basket) {
+        localStorage.setItem('basket', JSON.stringify(basket));
     }
 
-    console.log('Contenu du panier:');
-    basket.forEach(item => {
-        console.log(`${item.name} - ${item.quantity} x ${item.price}€`);
+    // Display the basket content (you can modify this to display on a separate page or modal)
+    function displayBasket() {
+        const basket = getBasket();
+        if (basket.length === 0) {
+            console.log('Le panier est vide.');
+            return;
+        }
+
+        console.log('Contenu du panier:');
+        basket.forEach(item => {
+            console.log(`${item.name} - ${item.quantity} x ${item.price}€`);
+        });
+    }
+
+    // Search Bar Functionality
+
+    const searchCategories = async (query) => {
+        try {
+            const response = await fetch(`${config.baseURL}/api/search-categories?query=${query}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const categories = await response.json();
+            searchResultsContainer.innerHTML = ''; // Clear previous search results
+
+            if (categories.length === 0) {
+                searchResultsContainer.style.display = 'none';
+                return;
+            }
+
+            // Display search results
+            searchResultsContainer.style.display = 'block';
+            categories.forEach(category => {
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('search-result-item');
+                resultItem.textContent = `${category.category_name} (${category.department_name})`;
+
+                // Add event listener to navigate to the products in this category
+                resultItem.addEventListener('click', () => {
+                    window.location.href = `${config.baseURL}/searchResults.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
+                });
+
+                searchResultsContainer.appendChild(resultItem);
+            });
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
+    };
+
+    // Event listener for search input
+    searchBar.addEventListener('input', (event) => {
+        const query = event.target.value;
+        if (query.length > 1) {
+            searchCategories(query); // Call the search function with the input
+        } else {
+            searchResultsContainer.style.display = 'none';
+        }
     });
-}
+});

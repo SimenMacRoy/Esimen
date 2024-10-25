@@ -29,8 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const startImageSlideshow = (imageContainer, images) => {
         let currentIndex = 0;
         const imgElement = document.createElement('img');
-        imgElement.style.width = '150px';
-        imgElement.style.height = '150px';
         imageContainer.appendChild(imgElement);
 
         const changeImage = () => {
@@ -76,8 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const img = document.createElement('img');
                     img.src = product.images[0] || 'default_image.jpg'; // Handle no images
                     img.alt = product.name;
-                    img.style.width = '150px';
-                    img.style.height = '150px';
                     imageContainer.appendChild(img);
                 }
 
@@ -86,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productDetails.innerHTML = `
                     <h3>${product.name}</h3>
                     <p>${product.description}</p>
-                    <p class="price">${product.price}€</p>
+                    <p class="price">CA$ ${product.price}</p>
                     <p>Stock: ${product.stock}</p>
                 `;
 
