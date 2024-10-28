@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener to the "Basket" navigation tab (bottom menu)
     navBasket.addEventListener('click', () => {
         switchActiveNavTab(navBasket); // Set "Basket" as the active nav tab
-        window.location.href = `${config.baseURL}/basket.html`;
+        window.location.href = './basket.html';
     });
 
     // Load products for "Tout" by default when the page loads

@@ -1,4 +1,17 @@
 /* Styling for basket items as cards */
+
+.basket{
+    float: left;
+    width: 60%;
+    height: 100%;
+    margin: 2%;
+    padding-right: 5%;
+    border-right: 1px solid #ccc;
+}
+.checkout{
+    margin-left: 45%;
+    margin-top: 5%;
+}
 .basket-item {
     display: flex;
     justify-content: space-between;
@@ -8,6 +21,83 @@
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+#basket-content{
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.empty-basket-message {
+    text-align: center;
+    color: #666;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+#empty-cart{
+    width: 30% ;
+}
+
+.empty-basket-message p {
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: 'Ebrima';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    padding: 20px;
+}
+
+.empty-basket-message p i {
+    margin-right: 12px;
+    font-size: 3em; /* Large icon size */
+    color: #ff6600; /* Icon color */
+}
+
+.empty-basket-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.signup-button, .shop-button {
+    padding: 15px 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #e0e5ec;
+    color: #333;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff; /* Neumorphic shadow */
+    transition: transform 0.1s ease-in-out;
+}
+
+.signup-button:hover, .shop-button:hover {
+    transform: translateY(-4px); /* Slight lift effect on hover */
+}
+
+.signup-button:active, .shop-button:active {
+    box-shadow: inset 6px 6px 12px #a3b1c6, inset -6px -6px 12px #ffffff; /* Inset shadow for pressed effect */
+}
+
+.signup-button i, .shop-button i {
+    font-size: 1.3em;
+}
+
+/* Colors for the buttons */
+.signup-button {
+    color: #007bff;
+}
+
+.shop-button {
+    color: #28a745;
 }
 
 .item-card {
@@ -61,3 +151,59 @@
     cursor: pointer;
     font-size: 24px;
 }
+.checkout-items{
+    display: flex;
+    justify-content: center;
+}
+#checkout-button{
+    margin-top: 20px;
+    color: #fff;
+    padding: 0.7em 1.7em;
+    font-size: 18px;
+    font-family: 'Ebrima';
+    border-radius: 0.5em;
+    background: #4caf50;
+    cursor: pointer;
+    border: 1px solid #e8e8e8;
+    transition: all 0.3s;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+#checkout-button:active {
+    color: #96cf98;;
+    box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+  }
+
+.payment-methods {
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 45%;
+}
+
+.payment-method {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.neumorphic {
+    width: 60px;
+    height: 60px;
+    background: #e0e5ec;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+    transition: transform 0.1s ease-in-out;
+}
+
+.neumorphic:hover {
+    transform: translateY(-5px);
+}
+
+.payment-logo {
+    width: 40px;
+    height: auto;
+    border-radius: 5px;
+}
+
