@@ -263,6 +263,71 @@ app.get('/api/search-categories', (req, res) => {
     });
 });
 
+// Endpoint to check if a user is registered
+app.post('/api/users/check', (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required.' });
+    }
+
+    const query = 'SELECT * FROM USERS WHERE email = ?';
+    db.query(query, [email], async (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database error.' });
+        }
+
+        if (results.length > 0) {
+            const user = results[0];
+            const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+            if (isPasswordMatch) {
+                res.json({
+                    isRegistered: true,
+                    userData: {
+                        name: user.name,
+                        surname: user.surname,
+                        phone: user.phone,
+                        email: user.email,
+                        address: user.postal_address,
+                        profilePicture: user.profile_picture,
+                    },
+                });
+            } else {
+                res.status(401).json({ error: 'Incorrect password.' });
+            }
+        } else {
+            res.json({ isRegistered: false });
+        }
+    });
+});
+
+// Endpoint to register a new user
+app.post('/api/users/register', async (req, res) => {
+    const { name, surname, email, password, phone, address } = req.body;
+
+    if (!name || !surname || !email || !password || !phone || !address) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const query = 'INSERT INTO USERS (name, surname, email, password, phone, postal_address) VALUES (?, ?, ?, ?, ?, ?)';
+        db.query(query, [name, surname, email, hashedPassword, phone, address], (err, result) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    return res.status(400).json({ error: 'Email already exists.' });
+                }
+                return res.status(500).json({ error: 'Database error.' });
+            }
+
+            res.json({ success: true, message: 'User registered successfully.' });
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error hashing the password.' });
+    }
+});
 
 
 

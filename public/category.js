@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabItems = document.querySelectorAll('.tab-item'); // Top menu department tabs
     const navCategories = document.getElementById('nav-categories'); // "Categorie" navigation tab (bottom menu)
     const navAccueil = document.getElementById('nav-accueil'); // "Accueil" navigation tab (bottom menu)
+    const navBasket = document.getElementById('nav-basket'); // 
+    const navProfile = document.getElementById('nav-profile');
     const searchBar = document.getElementById('search-bar'); // Search bar input
     const searchResultsContainer = document.getElementById('search-results'); // Search results container
 
@@ -18,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to switch the active navigation tab in the bottom menu
     const switchActiveNavTab = (selectedNav) => {
-        [navAccueil, navCategories].forEach(nav => nav.classList.remove('active')); // Remove active class from both navigation tabs
+        [navAccueil, navCategories, navBasket, navProfile].forEach(nav => nav.classList.remove('active')); // Remove active class from both navigation tabs
         selectedNav.classList.add('active'); // Add active class to the clicked navigation tab
     };
 
@@ -81,6 +83,23 @@ document.addEventListener('DOMContentLoaded', () => {
     navAccueil.addEventListener('click', () => {
         switchActiveNavTab(navAccueil);  // Set "Accueil" as active
         window.location.href = `${config.baseURL}/index.html`;  // Redirect to homepage
+    });
+
+    // Event listener for "Basket" navigation item
+    navBasket.addEventListener('click', () => {
+        switchActiveNavTab(navBasket); // Set "Basket" as the active nav tab
+        window.location.href = `${config.baseURL}/basket.html`; // Redirect to the basket page
+    });
+
+    // Event listener for "Profile" navigation item
+    navProfile.addEventListener('click', () => {
+        switchActiveNavTab(navProfile); // Set "Profile" as the active nav tab
+        window.location.href = `${config.baseURL}/profile.html`; // Redirect to the profile page
+    });
+
+    navCategories.addEventListener('click', () => {
+        switchActiveNavTab(navCategories); // Set "Categories" as the active nav tab
+        window.location.href = `${config.baseURL}/category.html`; // Redirect to the category page
     });
 
     // Search Bar Functionality

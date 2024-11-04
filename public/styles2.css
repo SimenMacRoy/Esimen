@@ -1,84 +1,85 @@
 /* Product details styling */
 .product-details {
-    padding: 20px;
+    padding: 1.25em; /* 20px converted */
     text-align: center;
-    margin-top: 80px; /* Ensure space under the fixed header */
+    margin-top: 5em; /* 80px converted */
 }
 
 .product-details img {
     width: 50%;
     height: auto;
-    margin-bottom: 20px;
-    border-radius: 8px; /* Optional: Rounded corners for the image */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow for the image */
+    margin-bottom: 1.25em; /* 20px converted */
+    border-radius: 0.5em; /* 8px converted */
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1); /* 0 4px 8px */
 }
 
 .product-details h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
+    font-size: 2em; /* 32px converted */
+    margin-bottom: 1.25em; /* 20px converted */
     color: #333;
     font-weight: 700;
 }
 
 .product-details .price {
-    font-size: 28px;
+    font-size: 1.75em; /* 28px converted */
     color: #ff4500;
-    margin-bottom: 10px;
+    margin-bottom: 0.625em; /* 10px converted */
     font-weight: 600;
 }
 
 .product-details .description {
-    font-size: 18px;
+    font-size: 1.125em; /* 18px converted */
     color: #666;
     line-height: 1.6;
-    margin-bottom: 20px;
-    padding: 0 10%;
+    margin-bottom: 1.25em; /* 20px converted */
+    padding: 0 6.25%; /* 10% converted */
     text-align: justify;
 }
 
 .product-detail-card {
-    max-width: 800px;
+    max-width: 50em; /* 800px converted */
     margin: 0 auto;
-    padding: 20px;
+    padding: 1.25em; /* 20px converted */
     background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 0.625em; /* 10px converted */
+    box-shadow: 0 0.375em 0.75em rgba(0, 0, 0, 0.1); /* 0 6px 12px */
 }
 
 .product-detail-card img {
     max-width: 100%;
     height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 1.25em; /* 20px converted */
 }
 
 .product-detail-card h1,
 .product-detail-card .price,
 .product-detail-card .description {
-    margin: 0 20px;
+    margin: 0 1.25em; /* 20px converted */
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 48em) { /* 768px converted */
     .product-details img {
         width: 80%;
     }
 
     .product-details h1 {
-        font-size: 28px;
+        font-size: 1.75em; /* 28px converted */
     }
 
     .product-details .price {
-        font-size: 24px;
+        font-size: 1.5em; /* 24px converted */
     }
 
     .product-details .description {
-        font-size: 16px;
+        font-size: 1em; /* 16px converted */
     }
 }
+
 header {
     background-color: #fff;
-    padding: 10px;
-    box-shadow: 0px 4px 2px -2px gray;
+    padding: 0.625em; /* 10px converted */
+    box-shadow: 0px 0.25em 0.125em -0.125em gray; /* 0px 4px 2px -2px */
 }
 
 .header-content {
@@ -88,22 +89,22 @@ header {
 }
 
 .hamburger-menu {
-    font-size: 24px;
+    font-size: 1.5em; /* 24px converted */
     font-weight: bold;
 }
 
 .logo {
-    height: 40px;
+    height: 2.5em; /* 40px converted */
 }
 
 .header-icons {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 0.9375em; /* 15px converted */
 }
 
 .icon {
-    font-size: 24px;
+    font-size: 1.5em; /* 24px converted */
 }
 
 .basket-container {
@@ -112,73 +113,110 @@ header {
 
 .badge {
     position: absolute;
-    top: -5px;
-    right: -10px;
+    top: -0.3125em; /* -5px converted */
+    right: -0.625em; /* -10px converted */
     background-color: red;
     color: white;
     border-radius: 50%;
-    padding: 5px;
-    font-size: 12px;
+    padding: 0.3125em; /* 5px converted */
+    font-size: 0.75em; /* 12px converted */
 }
 
 /* Search bar */
 .search-bar {
-    margin-top: 10px;
-    padding: 0 10px;
+    margin-top: 0.625em; /* 10px converted */
+    padding: 0 0.625em; /* 10px converted */
 }
 
 .search-bar input {
     width: 100%;
-    padding: 10px;
-    border-radius: 20px;
+    padding: 0.625em; /* 10px converted */
+    border-radius: 1.25em; /* 20px converted */
     border: 1px solid #ccc;
 }
 
-#footer{
+#footer {
     background-color: #fff;
-    box-shadow: 0px -4px 2px -2px gray;
-    padding: 10px;
+    box-shadow: 0px -0.25em 0.125em -0.125em gray; /* 0px -4px 2px -2px */
+    padding: 0.625em; /* 10px converted */
     position: fixed;
     bottom: 0;
     width: 100%;
     z-index: 1000;
     justify-content: space-between;
 }
-.btn-add{
-    background-color: orange;
-    align-content: center;
-    padding: 20px;
-    width: 90%;
-    font-size: 24px;
+.quantity-details{
+    display: flex;
+    justify-content: center;
+    margin-top: 0.625em; /* 10px converted */
 }
-.search-bar {
-    margin-top: 5px;  /* Reduce margin */
-    padding: 0 10px;
+.btn-minus, .btn-plus{
+    width: 2.7em;
+    height: 2.7em;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: #c7c3c0;
+    box-shadow: rgba(0, 0, 0, 0.377) 10px 10px 8px,
+      #ffffff 1.5px 1.5px 2px 0px inset, #c7c3c0 -3.2px -3.2px 8px 0px inset;
+    cursor: pointer;
+    font-family: Montserrat;
+    transition: 0.1s ease-in-out;
+  }
+.btn-minus:active,
+.btn-plus:active {
+  box-shadow: rgba(0, 0, 0, 0.377) 0px 0px 0px, inset 0.5px 0.5px 4px #000000,
+    #c7c3c0 -3.2px -3.2px 8px 0px inset;
+}
+.mp{
+    font-size: 24px;;
 }
 
-.search-bar input {
-    width: 100%;
-    padding: 5px;  /* Reduce padding inside the input */
-    border-radius: 15px;  /* Slightly reduce the radius */
+input[type="number"]{
+    width: 50px;
+    padding: 0.3em;
+    border-radius: 0.5em;
     border: 1px solid #ccc;
 }
-.search-results{
-    margin-top: 10px;
-    padding: 5px;
+
+.add-to-basket{
+    display: flex;
+    justify-content: center;
+}
+
+.btn-add {
+    background-color: #ff4500;
+    align-content: center;
+    padding: 1.15em; 
+    width: 80%;
+    color: white;
+    font-size: 1.5em;
+    font-family:'Ebrima';
+}
+.btn-add:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.search-results {
+    margin-top: 0.625em; /* 10px converted */
+    padding: 0.3125em; /* 5px converted */
     cursor: pointer;
     position: absolute;
     background-color: #fff;
     border: 1px solid #ccc;
     border-top: none;
-    max-height: 200px;
+    max-height: 12.5em; /* 200px converted */
     overflow-y: auto;
     z-index: 100;
 }
-.search-result-item{
+
+.search-result-item {
     border-bottom: 1px solid #ccc;
-    padding: 10px;
+    padding: 0.625em; /* 10px converted */
 }
-.search-result-item:hover{
+
+.search-result-item:hover {
     transform: scale(1.10);
     background-color: #ff4500;
 }

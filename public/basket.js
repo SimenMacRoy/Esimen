@@ -1,5 +1,12 @@
+const config = {
+    baseURL: 'http://192.168.2.147:3006', // Update this IP dynamically as needed
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     renderBasket();  // Load and display the basket when the page loads
+
+    document.querySelector('.shop-button').addEventListener('click', 
+        () => window.location.href = `${config.baseURL}/index.html`);
 });
 
 // Function to render the basket contents
@@ -16,7 +23,7 @@ function renderBasket() {
         // Display message with icon and buttons for an empty basket
         basketItemContainer.innerHTML = `
             <div class="empty-basket-message">
-                <p><img src="../images/empty-cart.png" alt="Panier vide" id="empty-cart"></img> Oups ! Votre panier est vide</p>
+                <p><img src="./logos/empty-cart.png" alt="Panier vide" id="empty-cart"></img> Oups ! Votre panier est vide</p>
                 <div class="empty-basket-buttons">
                     <button class="signup-button">
                         <i class="fas fa-user-plus"></i> Inscrivez-vous !
@@ -49,7 +56,7 @@ function renderBasket() {
                         <button class="decrease-quantity" data-id="${item.id}">-</button>
                         <span>${item.quantity}</span>
                         <button class="increase-quantity" data-id="${item.id}">+</button>
-                        ${item.quantity === 1 ? `<i class="fas fa-trash-alt remove-item" data-id="${item.id}"></i>` : ''}
+                        ${item.quantity > 0 ? `<i class="fas fa-trash-alt remove-item" data-id="${item.id}"></i>` : ''}
                     </div>
                 </div>
             `;
@@ -77,24 +84,29 @@ function renderBasket() {
 
 // Function to update the quantity of an item in the basket
 function updateQuantity(event, change) {
-    const productId = parseInt(event.target.getAttribute('data-id'));
+    const productId = parseInt(event.target.getAttribute('data-id'), 10);
     const basket = getBasket();
-
     const item = basket.find(i => i.id === productId);
+
     if (item) {
-        item.quantity += change;
+        
+        item.quantity = parseInt(item.quantity, 10) + change; 
+        console.log(item.quantity);
+
         if (item.quantity < 1) {
-            removeItem(event);  // If quantity drops to 0, remove the item
+            removeItem(event);  
         } else {
-            saveBasket(basket);  // Save the updated basket to localStorage
-            renderBasket();  // Re-render the basket to show changes
+            saveBasket(basket); 
+            renderBasket();  
         }
     }
 }
 
+
 // Function to remove an item from the basket
 function removeItem(event) {
     const productId = parseInt(event.target.getAttribute('data-id'));
+    
     let basket = getBasket();
 
     basket = basket.filter(item => item.id !== productId);
@@ -124,3 +136,4 @@ function getBasket() {
 function saveBasket(basket) {
     localStorage.setItem('basket', JSON.stringify(basket));
 }
+

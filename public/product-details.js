@@ -8,10 +8,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const priceDisplay = document.querySelector('.prix'); // The price display near the button
     const searchBar = document.getElementById('search-bar'); // Search bar input
     const searchResultsContainer = document.getElementById('search-results'); // Search results container
+    const quantity = document.getElementById('quantity-input'); 
+    const quantityAdd = document.querySelector('.btn-plus');
+    const quantityMinus = document.querySelector('.btn-minus');
+    
 
     // Get product ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const product_id = urlParams.get('product_id');
+    
+    console.log(product_id);
 
     if (product_id) {
         try {
@@ -21,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             const product = await response.json();
+            console.log(product);
 
             // Create container for image slideshow
             const imageContainer = document.createElement('div');
@@ -62,11 +69,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             productDetailsSection.insertBefore(imageContainer, productDetailsSection.firstChild);
 
             // Display the product price near the "Ajouter au panier" button
-            priceDisplay.innerHTML = `<span>Prix: CA$${product.price}</span>`;
+            priceDisplay.innerHTML = `<span>${product.price * quantity.value}</span>`;
 
             // Handle adding the item to the basket
             btnAddToBasket.addEventListener('click', () => {
-                addToBasket(product);
+
+                const selectedQuantity = parseInt(quantity.value);
+
+                addToBasket(product, selectedQuantity);
             });
 
         } catch (error) {
@@ -77,35 +87,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         productDetailsSection.innerHTML = '<p>No product found.</p>';
     }
 
-    // Basket Mechanism
+    quantityAdd.addEventListener('click', () => {
+
+        const currentQuantity = parseInt(quantity.value);
+
+        quantity.value = currentQuantity + 1;
+
+    })
+
+    quantityMinus.addEventListener('click', () => {
+        const currentQuantity = parseInt(quantity.value);
+        if (currentQuantity > 1) {
+            quantity.value = currentQuantity - 1;
+        }
+        
+    })
 
     // Function to handle adding the product to the basket
-    function addToBasket(product) {
+    function addToBasket(product, selectedQuantity) {
+
         let basket = getBasket();
 
+        basket.forEach(item => console.log(item.id));
+
+        selectedQuantity = parseInt(quantity.value);
+
         // Check if the product is already in the basket
-        const existingProduct = basket.find(item => item.product_id === product.product_id);
+        const existingProduct = basket.find(item => item.id === product.product_id);
+
+        console.log(existingProduct);
 
         if (existingProduct) {
-            existingProduct.quantity += 1; // Increase the quantity if the product is already in the basket
+            existingProduct.quantity = selectedQuantity; // Update the quantity
+            alert(`${product.name} quantité modifiée de ${selectedQuantity} !`);
+
         } else {
-            // Add new product to the basket with initial quantity 1 and image
+            // Add new product to the basket with selected quantity
             basket.push({
                 id: product.product_id,
                 name: product.name,
                 description: product.description,
                 price: product.price,
                 image: product.images && product.images.length > 0 ? product.images[0] : 'default_image.jpg', // Add image if available
-                quantity: 1
+                quantity: selectedQuantity
             });
+            alert(`${product.name} a été ajouté au panier avec une quantité de ${selectedQuantity} !`);
         }
 
         // Save the updated basket back to localStorage
         saveBasket(basket);
-
-        // Optional: Give feedback to the user that the item was added to the basket
-        alert(`${product.name} a été ajouté au panier !`);
     }
+
 
     // Get the current basket from localStorage
     function getBasket() {

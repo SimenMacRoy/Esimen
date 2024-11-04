@@ -1,7 +1,14 @@
+const config = {
+    baseURL: 'http://192.168.2.147:3006', // Update this IP dynamically as needed
+};
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const productList = document.getElementById('product-list');
     const navAccueil = document.getElementById('nav-accueil'); // "Accueil" nav item
     const navCategories = document.getElementById('nav-categories'); // "Categorie" nav item
+    const navBasket = document.getElementById('nav-basket'); // Basket navigation tab
+    const navProfile = document.getElementById('nav-profile'); // Profile
 
     // Function to get category_id and departmentName from the URL query string
     const getParamsFromURL = () => {
@@ -14,9 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to switch the active navigation tab (bottom menu)
     const switchActiveNavTab = (selectedNav) => {
-        navAccueil.classList.remove('active');
-        navCategories.classList.remove('active');
-        selectedNav.classList.add('active');
+        [navAccueil, navCategories, navBasket, navProfile].forEach(nav => nav.classList.remove('active')); // Remove active class from both navigation tabs
+        selectedNav.classList.add('active'); // Add active class to the clicked navigation tab
     };
 
     // Ensure "Categorie" remains active by default on products.html
@@ -25,8 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener to redirect to Accueil (Home) when "Accueil" is clicked
     navAccueil.addEventListener('click', () => {
         switchActiveNavTab(navAccueil); // Set "Accueil" as the active tab
-        window.location.href = 'http://localhost:3006/index.html'; // Redirect to Accueil page
+        window.location.href = `${config.baseURL}/index.html`; // Redirect to Accueil page
     });
+
+    navBasket.addEventListener('click', () => {
+        switchActiveNavTab(navBasket); // Set "Basket" as the active tab
+        window.location.href = `${config.baseURL}/basket.html`; // Redirect to Basket page
+    })
+
+    navProfile.addEventListener('click', () => {
+        switchActiveNavTab(navProfile); // Set "Basket" as the active tab
+        window.location.href = `${config.baseURL}/profile.html`; // Redirect to Basket page
+    })
 
     // Function to start image slideshow
     const startImageSlideshow = (imageContainer, images) => {

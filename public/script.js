@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navAccueil = document.getElementById('nav-accueil'); // "Accueil" navigation tab
     const navCategories = document.getElementById('nav-categories'); // "Categorie" navigation tab
     const navBasket = document.getElementById('nav-basket'); // Basket navigation tab
+    const navProfile = document.getElementById('nav-profile'); // Profile navigation tab
     const searchBar = document.getElementById('search-bar'); // Search bar input
     const searchResultsContainer = document.getElementById('search-results'); // Search results container
 
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navAccueil.classList.remove('active');
         navCategories.classList.remove('active');
         navBasket.classList.remove('active');
+        navProfile.classList.remove('active');
         selectedNav.classList.add('active');
     };
 
@@ -172,7 +174,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener to the "Basket" navigation tab (bottom menu)
     navBasket.addEventListener('click', () => {
         switchActiveNavTab(navBasket); // Set "Basket" as the active nav tab
-        window.location.href = './basket.html';
+        window.location.href = `${config.baseURL}/basket.html`;
+    });
+
+    navProfile.addEventListener('click', () => {
+        switchActiveNavTab(navProfile); // Set "Basket" as the active nav tab
+        window.location.href = `${config.baseURL}/profile.html`;
     });
 
     // Load products for "Tout" by default when the page loads
