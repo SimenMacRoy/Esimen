@@ -2,7 +2,11 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');  // Add the CORS package
 const path = require('path');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const app = express();
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 const port = 3006;
 
 // MySQL connection
@@ -24,6 +28,8 @@ db.connect((err) => {
 
 // Enable CORS for all routes
 app.use(cors());
+
+app.use(express.json());
 
 // Serve static files (HTML, CSS, JS) from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -304,7 +310,7 @@ app.post('/api/users/check', (req, res) => {
 
 // Endpoint to register a new user
 app.post('/api/users/register', async (req, res) => {
-    const { name, surname, email, password, phone, address } = req.body;
+    const { name, surname, email, password, phone, address} = req.body;
 
     if (!name || !surname || !email || !password || !phone || !address) {
         return res.status(400).json({ error: 'All fields are required.' });

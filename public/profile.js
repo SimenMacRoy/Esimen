@@ -8,12 +8,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     const profileSection = document.getElementById('profile-section');
     const registerFormSection = document.getElementById('register-form-section');
     const loginFormSection = document.getElementById('login-form-section');
+    const registerButton = document.getElementById('register-button');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+
+     // Handle click on the "S'inscrire" button to show the registration form
+     registerButton.addEventListener('click', () => {
+        loginFormSection.style.display = 'none';
+        registerFormSection.style.display = 'flex';
+    });
+
+    // Handle "Mot de Passe Oublié" functionality (example)
+    forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Functionality for password reset will be implemented here.');
+        // You can redirect to a password reset page or show a password reset form/modal
+    });
 
      // Handle login form submission
      loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+
+        console.log('Login attempt:', { email, password });
 
         try {
             const response = await fetch(`${config.baseURL}/api/users/check`, {
@@ -31,8 +48,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 loginFormSection.style.display = 'none';
                 profileSection.style.display = 'block';
             } else {
-                loginFormSection.style.display = 'none';
-                registerFormSection.style.display = 'block';
+                alert('Votre email ou mot de passe est incorrect.');
+                loginFormSection.style.display = 'flex';
             }
         } catch (error) {
             console.error('Error checking user:', error);
@@ -44,13 +61,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const registerForm = document.getElementById('register-form');
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const address = document.getElementById('reg-address').value;
+        const city = document.getElementById('reg-city').value;
+        const postalCode = document.getElementById('reg-postal-code').value;
+        const fullAddress = `${address}, ${city}, ${postalCode}`;
+
         const userData = {
             name: document.getElementById('reg-name').value,
             surname: document.getElementById('reg-surname').value,
             phone: document.getElementById('reg-phone').value,
             email: document.getElementById('reg-email').value,
             password: document.getElementById('reg-password').value,
-            address: document.getElementById('reg-address').value,
+            address: fullAddress,
         };
 
         try {
@@ -77,10 +100,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('An error occurred. Please try again later.');
         }
     });
+    
 });
 
 function displayProfile(userData) {
-    document.getElementById('profile-picture').src = userData.profilePicture || 'default_profile.jpg';
+    document.getElementById('profile-picture').src = './logos/default_picture.jpg';
     document.getElementById('profile-name').querySelector('span').textContent = userData.name;
     document.getElementById('profile-surname').querySelector('span').textContent = userData.surname;
     document.getElementById('profile-phone').querySelector('span').textContent = userData.phone;

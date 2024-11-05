@@ -8,21 +8,25 @@
     </head>
     <body>
         <section id="login-form-section">
-            <h2>Connexion</h2>
-            <form id="login-form">
-                <label for="email">Email:</label>
+            <h2>Connectez-vous</h2>
+            <form id="login-form" class="login-form">
+                <label for="email">Email ou Telephone</label>
                 <input type="email" id="email" required>
                 <label for="password">Mot de passe:</label>
                 <input type="password" id="password" required>
                 <button type="submit">Connexion</button>
             </form>
+            <div class="extra-options">
+                <a href="#" id="forgot-password-link">Mot de Passe Oublié?</a>
+                <button id="register-button">S'inscrire</button>
+            </div>
         </section>
         <!-- Profile Display Section -->
     <section id="profile-section" style="display: none;">
         <div class="profile-container">
             <!-- Left side: Profile details -->
             <div class="profile-details">
-                <img id="profile-picture" src="default_profile.jpg" alt="Profile Picture">
+                <img id="profile-picture" src="./logos/default_picture.jpg" alt="Profile Picture">
                 <p id="profile-name">Nom: <span></span></p>
                 <p id="profile-surname">Prénom: <span></span></p>
                 <p id="profile-phone">Téléphone: <span></span></p>
@@ -47,7 +51,7 @@
     <!-- Registration Form Section -->
     <section id="register-form-section" style="display: none;">
         <h2>Inscription</h2>
-        <form id="register-form">
+        <form id="register-form" class="register-form">
             <label for="reg-name">Nom:</label>
             <input type="text" id="reg-name" required>
             <label for="reg-surname">Prénom:</label>
@@ -60,6 +64,10 @@
             <input type="password" id="reg-password" required>
             <label for="reg-address">Adresse postale:</label>
             <input type="text" id="reg-address" required>
+            <label for="reg-city">Ville:</label>
+            <input type="text" id="reg-city" required>
+            <label for="reg-postal-code">Code Postal:</label>
+            <input type="text" id="reg-postal-code" required>
             <button type="submit">S'inscrire</button>
         </form>
     </section>
