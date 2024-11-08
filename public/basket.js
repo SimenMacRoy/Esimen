@@ -28,7 +28,7 @@ function renderBasket() {
                     <button class="signup-button">
                         <i class="fas fa-user-plus"></i> Inscrivez-vous !
                     </button>
-                    <button class="shop-button">
+                    <button class="shop-button" onclick="magasiner()">
                         <i class="fas fa-store"></i> Magasiner
                     </button>
                 </div>
@@ -65,7 +65,10 @@ function renderBasket() {
             total += item.quantity * item.price;
         });
 
-        totalPriceElement.textContent = `${total}€`;
+         // Save subtotal to localStorage
+         localStorage.setItem('subtotal', total.toFixed(2));
+
+        totalPriceElement.textContent = `CA $${total.toFixed(2)}`;
 
         // Add event listeners again after re-render
         document.querySelectorAll('.increase-quantity').forEach(button => {
@@ -80,6 +83,9 @@ function renderBasket() {
             button.addEventListener('click', (e) => removeItem(e));
         });
     }
+    document.querySelector('.signup-button').addEventListener('click', () => {
+        window.location.href = `${config.baseURL}/profile.html?register=true`;
+    });
 }
 
 // Function to update the quantity of an item in the basket
@@ -137,3 +143,10 @@ function saveBasket(basket) {
     localStorage.setItem('basket', JSON.stringify(basket));
 }
 
+function magasiner(){
+
+    window.location.href = `${config.baseURL}/index.html`;
+}
+function proceedToCheckout() {
+    window.location.href = `${config.baseURL}/checkout.html`;
+}

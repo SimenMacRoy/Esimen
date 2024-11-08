@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div class="search-bar"></div>
+        <div class="search-bar">
             <input type="text" id="search-bar" placeholder="Rechercher un article...">
             <div id="search-results" class="search-results"></div>
         </div>
@@ -53,14 +53,5 @@
     <script src="products.js"></script>
     <script src="searchBar.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchBarElement = document.getElementById('search-bar');
-            const searchResultsContainer = document.getElementById('search-results');
-
-            // Initialize the search bar functionality
-            initSearchBar(searchBarElement, searchResultsContainer);
-        });
-    </script>
 </body>
 </html>

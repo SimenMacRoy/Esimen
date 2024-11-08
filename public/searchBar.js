@@ -1,6 +1,3 @@
-const config = {
-    baseURL: 'http://192.168.2.147:3006', // Update this dynamically as needed
-};
 
 // Initialize the search bar with event listeners and handlers
 const initSearchBar = (searchBarElement, searchResultsContainer) => {

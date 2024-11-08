@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+const Stripe = require('stripe');
+const stripe = Stripe('sk_test_51PIRk7DIrmiE2Hgb3odn47yqCN3ojcMsp70vzrz93fqUIeOxtl35xvqdzBNX8Tji2UkxtdJvnWxgNDpRlPS80AA900horxTCdC');
 const port = 3006;
 
 // MySQL connection
@@ -332,6 +334,27 @@ app.post('/api/users/register', async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ error: 'Error hashing the password.' });
+    }
+});
+
+app.post('/api/payment', async (req, res) => {
+    const { amount, currency, paymentMethodId } = req.body;
+
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount,
+            currency: currency,
+            payment_method: paymentMethodId,
+            confirm: true,
+            return_url: 'http://192.168.2.147:3006/index.html',
+            automatic_payment_methods: {
+                enabled: true,
+            }
+        });
+
+        res.json({ success: true, paymentIntent });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 

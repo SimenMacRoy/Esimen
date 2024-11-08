@@ -1,9 +1,7 @@
 const config = {
     baseURL: 'http://192.168.2.147:3006', // Update this IP dynamically as needed
 };
-
 document.addEventListener('DOMContentLoaded', async () => {
-
     const loginForm = document.getElementById('login-form');
     const profileSection = document.getElementById('profile-section');
     const registerFormSection = document.getElementById('register-form-section');
@@ -11,8 +9,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const registerButton = document.getElementById('register-button');
     const forgotPasswordLink = document.getElementById('forgot-password-link');
 
-     // Handle click on the "S'inscrire" button to show the registration form
-     registerButton.addEventListener('click', () => {
+    // Check if user data exists in localStorage
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+        displayProfile(JSON.parse(storedUserData));
+        loginFormSection.style.display = 'none';
+        profileSection.style.display = 'block';
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const showRegister = urlParams.get('register');
+
+    if (showRegister === 'true') {
+        loginFormSection.style.display = 'none';
+        registerFormSection.style.display = 'flex'; // Display the registration form
+    }
+
+    // Handle click on the "S'inscrire" button to show the registration form
+    registerButton.addEventListener('click', () => {
         loginFormSection.style.display = 'none';
         registerFormSection.style.display = 'flex';
     });
@@ -24,13 +38,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         // You can redirect to a password reset page or show a password reset form/modal
     });
 
-     // Handle login form submission
-     loginForm.addEventListener('submit', async (e) => {
+    // Handle login form submission
+    loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-
-        console.log('Login attempt:', { email, password });
 
         try {
             const response = await fetch(`${config.baseURL}/api/users/check`, {
@@ -44,6 +56,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const result = await response.json();
 
             if (result.isRegistered) {
+                // Store user data in localStorage to remember the user
+                localStorage.setItem('userData', JSON.stringify(result.userData));
                 displayProfile(result.userData);
                 loginFormSection.style.display = 'none';
                 profileSection.style.display = 'block';
@@ -89,6 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (result.success) {
                 alert('Inscription réussie! Vous serez redirigé vers votre profil.');
+                localStorage.setItem('userData', JSON.stringify(userData)); // Save user data
                 displayProfile(userData);
                 registerFormSection.style.display = 'none';
                 profileSection.style.display = 'block';
@@ -100,7 +115,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('An error occurred. Please try again later.');
         }
     });
-    
 });
 
 function displayProfile(userData) {

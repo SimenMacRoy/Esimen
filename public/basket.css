@@ -1,5 +1,7 @@
 /* Styling for basket items as cards */
-
+body{
+    font-family: 'Ebrima';
+}
 .basket{
     float: left;
     width: 60%;

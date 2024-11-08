@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="checkout.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1>Paiement Sécurisé</h1>
+        </div>
+    </header>
+
+    <!-- Checkout Summary -->
+    <section id="checkout-summary-section">
+        <div class="checkout-summary-container">
+            <h2>Récapitulatif de la commande</h2>
+            <p>Sous-total: <span id="subtotal-price">CA$ 0</span></p>
+            <p>Taxes (15%): <span id="taxes-price">CA$ 0</span></p>
+            <p>Livraison (10%): <span id="delivery-price">CA$ 0</span></p>
+            <h3>Total: <span id="total-price">CA$ 0</span></h3>
+        </div>
+    </section>
+
+    <!-- Checkout Form -->
+    <section id="checkout-form-section">
+        <div class="checkout-form-container">
+            <form id="checkout-form">
+                <h2>Informations de la carte</h2>
+
+                <label for="card-holder">Titulaire de la carte:</label>
+                <input type="text" id="card-holder" required placeholder="John Doe">
+
+                <label for="card-element">Détails de la carte:</label>
+                <div id="card-element" class="card-element"></div> <!-- Stripe Elements container -->
+
+                <label for="postal-code">Code Postal:</label>
+                <input type="text" id="postal-code" placeholder="A1A 1A1" required>
+
+                <button type="submit" id="pay-button">Payer</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="checkout.js"></script>
+</body>
+</html>
