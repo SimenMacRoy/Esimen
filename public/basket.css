@@ -1,8 +1,14 @@
-/* Styling for basket items as cards */
-body{
-    font-family: 'Ebrima';
+/* General body styling */
+body {
+    font-family: 'Ebrima', sans-serif;
+    background-color: #f0f3f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
-.basket{
+
+/* Styling for basket */
+.basket {
     float: left;
     width: 60%;
     height: 100%;
@@ -10,10 +16,12 @@ body{
     padding-right: 5%;
     border-right: 1px solid #ccc;
 }
-.checkout{
+
+.checkout {
     margin-left: 45%;
     margin-top: 5%;
 }
+
 .basket-item {
     display: flex;
     justify-content: space-between;
@@ -24,7 +32,8 @@ body{
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-#basket-content{
+
+#basket-content {
     margin-left: 10%;
     margin-right: 10%;
 }
@@ -38,8 +47,9 @@ body{
     align-items: center;
     gap: 20px;
 }
-#empty-cart{
-    width: 30% ;
+
+#empty-cart {
+    width: 30%;
 }
 
 .empty-basket-message p {
@@ -55,8 +65,8 @@ body{
 
 .empty-basket-message p i {
     margin-right: 12px;
-    font-size: 3em; /* Large icon size */
-    color: #ff6600; /* Icon color */
+    font-size: 3em;
+    color: #ff6600;
 }
 
 .empty-basket-buttons {
@@ -65,7 +75,8 @@ body{
     gap: 20px;
 }
 
-.signup-button, .shop-button {
+.signup-button,
+.shop-button {
     padding: 15px 25px;
     font-size: 1.1em;
     font-weight: bold;
@@ -77,29 +88,23 @@ body{
     gap: 10px;
     background-color: #e0e5ec;
     color: #333;
-    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff; /* Neumorphic shadow */
+    box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
     transition: transform 0.1s ease-in-out;
 }
 
-.signup-button:hover, .shop-button:hover {
-    transform: translateY(-4px); /* Slight lift effect on hover */
+.signup-button:hover,
+.shop-button:hover {
+    transform: translateY(-4px);
 }
 
-.signup-button:active, .shop-button:active {
-    box-shadow: inset 6px 6px 12px #a3b1c6, inset -6px -6px 12px #ffffff; /* Inset shadow for pressed effect */
+.signup-button:active,
+.shop-button:active {
+    box-shadow: inset 6px 6px 12px #a3b1c6, inset -6px -6px 12px #ffffff;
 }
 
-.signup-button i, .shop-button i {
+.signup-button i,
+.shop-button i {
     font-size: 1.3em;
-}
-
-/* Colors for the buttons */
-.signup-button {
-    color: #007bff;
-}
-
-.shop-button {
-    color: #28a745;
 }
 
 .item-card {
@@ -153,11 +158,13 @@ body{
     cursor: pointer;
     font-size: 24px;
 }
-.checkout-items{
+
+.checkout-items {
     display: flex;
     justify-content: center;
 }
-#checkout-button{
+
+#checkout-button {
     margin-top: 20px;
     color: #fff;
     padding: 0.7em 1.7em;
@@ -170,10 +177,11 @@ body{
     transition: all 0.3s;
     box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
 }
+
 #checkout-button:active {
-    color: #96cf98;;
+    color: #96cf98;
     box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
-  }
+}
 
 .payment-methods {
     text-align: center;
@@ -209,3 +217,78 @@ body{
     border-radius: 5px;
 }
 
+/* Media Queries for Responsiveness */
+
+/* Tablets and smaller desktops */
+@media (max-width: 768px) {
+    .basket {
+        width: 100%;
+        float: none;
+        margin: 2% 0;
+        padding-right: 0;
+        border-right: none;
+    }
+
+    .checkout {
+        margin: 0;
+        width: 100%;
+        margin-top: 2rem;
+    }
+
+    .item-image {
+        flex: 0 0 80px;
+    }
+
+    .square-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .signup-button,
+    .shop-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 480px) {
+    .basket {
+        width: 100%;
+        margin: 1% 0;
+        padding-right: 0;
+    }
+
+    .checkout {
+        margin-top: 1rem;
+        width: 100%;
+    }
+
+    .item-image {
+        flex: 0 0 60px;
+    }
+
+    .square-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .empty-basket-message p {
+        font-size: 1.2em;
+    }
+
+    #empty-cart {
+        width: 50%;
+    }
+
+    .signup-button,
+    .shop-button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .payment-methods {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}

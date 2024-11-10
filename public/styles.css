@@ -7,7 +7,7 @@
 
 @font-face {
     font-family: 'Ebrima';
-    src: url('C:\Users\Mac Roy\Documents\Esimen\fonts\Ebrima.ttf') format('truetype'); /* Adjust the path to your font file */
+    src: url('../fonts/Ebrima.ttf') format('truetype'); /* Adjust the path to your font file */
 }
 
 /* Body Styles */
@@ -228,115 +228,5 @@ footer {
     font-family: 'Ebrima';
     font-weight: bold;
 }
-/* Product details styling */
-.product-details {
-    padding: 20px;
-    text-align: center;
-    margin-top: 0; /* Remove margin-top to place images directly below the header */
-}
 
-.product-details img {
-    width: 50%;
-    height: auto;
-    margin-bottom: 20px;
-    border-radius: 8px; /* Optional: Rounded corners for the image */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow for the image */
-}
-.product-details h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
-    color: #333;
-    font-weight: 700;
-}
 
-.product-details .price {
-    font-size: 28px;
-    color: #ff4500;
-    margin-bottom: 10px;
-    font-weight: 600;
-    font-family: Ebr;
-}
-
-.product-details .description {
-    font-size: 18px;
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    padding: 0 10%;
-    text-align: justify;
-}
-
-.product-detail-card {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
-
-.product-detail-card img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 20px;
-}
-
-.product-detail-card h1,
-.product-detail-card .price,
-.product-detail-card .description {
-    margin: 0 20px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .product-details img {
-        width: 80%;
-    }
-
-    .product-details h1 {
-        font-size: 28px;
-    }
-
-    .product-details .price {
-        font-size: 24px;
-    }
-
-    .product-details .description {
-        font-size: 16px;
-    }
-}
-
-/* Style for category boxes */
-.category-card {
-    display: inline-block;
-    background-color: orange;
-    color: black;
-    padding: 10px 20px;
-    margin: 10px;
-    border-radius: 15px;
-    font-size: 18px;
-    cursor: pointer;
-    text-align: center;
-    transition: transform 0.2s;
-}
-
-/* Hover effect for category boxes */
-.category-card:hover {
-    transform: scale(1.05);
-    background-color: darkorange;
-}
-
-/* Ensure the category section starts below the tab menu */
-.category-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-top: 150px; /* Space below the tab menu */
-}
-input[placeholder="Rechercher un article..."]{
-    font-size: 18px;
-    font-family: 'Ebrima';
-}
-input[placeholder="Rechercher un article..."]:hover{
-    border: 1px solid darkorange;
-}
