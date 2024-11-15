@@ -23,6 +23,7 @@
         </section>
         <!-- Profile Display Section -->
     <section id="profile-section" style="display: none;">
+        <h1>Mon Profil</h1>
         <div class="profile-container">
             <!-- Left side: Profile details -->
             <div class="profile-details">
@@ -33,16 +34,43 @@
                 <p id="profile-email">Email: <span></span></p>
                 <p id="profile-address">Adresse postale: <span></span></p>
                 <button id="modify-account">Modifier le compte</button>
+                <section id="modify-profile-section" style="display: none;">
+                    <h2>Modifiez votre compte</h2>
+                    <form id="modify-profile-form">
+                        <label for="mod-name">Nom:</label>
+                        <input type="text" id="mod-name" required>
+                        <label for="mod-surname">Prénom:</label>
+                        <input type="text" id="mod-surname" required>
+                        <label for="mod-phone">Téléphone:</label>
+                        <input type="tel" id="mod-phone" required>
+                        <label for="mod-email">Email:</label>
+                        <input type="email" id="mod-email" required>
+                        <label for="mod-password">Nouveau mot de passe:</label>
+                        <input type="password" id="mod-password">
+                        <label for="mod-address">Adresse postale:</label>
+                        <input type="text" id="mod-address" required>
+                        <button type="submit">Modifier</button>
+                    </form>
+                </section>
+                
                 <button id="delete-account">Supprimer le compte</button>
+                <button id="logout-button">Deconnexion</button>
             </div>
 
             <!-- Right side: Historics and options -->
             <div class="profile-options">
-                <h3>Historique</h3>
+                <h2>Historique</h2>
                 <div class="buttons-container">
-                    <button id="orders-button">Vos Commandes</button>
-                    <button id="messages-button">Vos Messages</button>
-                    <button id="coupons-button">Vos Coupons</button>
+                    <button id="orders-button" class="option-button">Vos Commandes</button>
+                    <button id="messages-button" class="option-button">Vos Messages</button>
+                    <button id="coupons-button" class="option-button">Vos Coupons</button>
+                </div>
+    
+                <h2>Administrateur</h2>
+                <div class="admin-buttons">
+                    <button id="add-product-button" class="admin-button">Ajouter Article</button>
+                    <button id="delete-product-button" class="admin-button">Supprimer Article</button>
+                    <button id="edit-product-button" class="admin-button">Modifier Article</button>
                 </div>
             </div>
         </div>

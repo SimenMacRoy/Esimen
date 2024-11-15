@@ -7,7 +7,7 @@
 
 @font-face {
     font-family: 'Ebrima';
-    src: url('../fonts/Ebrima.ttf') format('truetype'); /* Adjust the path to your font file */
+    src: url('C:\Users\Mac Roy\Documents\Esimen\fonts\Ebrima.ttf') format('truetype'); /* Adjust the path to your font file */
 }
 
 /* Body Styles */
@@ -77,11 +77,12 @@ header {
 .search-bar {
     margin-top: 5px;  /* Reduce margin */
     padding: 0 10px;
+    width: 30%;
 }
 
 .search-bar input {
     width: 100%;
-    padding: 5px;  /* Reduce padding inside the input */
+    padding: 10px;  /* Reduce padding inside the input */
     border-radius: 15px;  /* Slightly reduce the radius */
     border: 1px solid #ccc;
 }
@@ -105,6 +106,12 @@ header {
 .search-result-item:hover{
     transform: scale(1.10);
     background-color: #ff4500;
+}
+input[placeholder="Rechercher un article..."] {
+    font-size: 18px;
+    font-family: 'Ebrima';
+    width: 100%; /* Ensure input is responsive */
+    margin-bottom: 20px;
 }
 
 
@@ -190,7 +197,8 @@ footer {
     justify-content: space-around;
     gap: 5px;
     padding: 5px;
-    margin-top: 200px;
+    margin-top: 180px;
+    
 }
 
 .product-card {
@@ -227,6 +235,17 @@ footer {
     margin-bottom: 10px;
     font-family: 'Ebrima';
     font-weight: bold;
+}
+@media(max-width: 768px){
+    .search-bar{
+        width: 100%;
+    }
+    .product-list{
+        margin-bottom: 80px;
+    }
+    .product-card{
+        margin: 5px;
+    }
 }
 
 

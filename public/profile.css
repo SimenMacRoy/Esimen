@@ -5,8 +5,269 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* Profile container */
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    width: 80%; /* Adjusted width for better visibility */
+    max-width: 1200px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 2.5rem; /* Added padding for spacing */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+/* Styling for profile details */
+.profile-details {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.profile-details h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.profile-details img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+}
+
+.profile-details p {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.profile-details span {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Buttons for account actions */
+.action-button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#modify-account {
+    background-color: #4caf50;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#modify-account:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+#delete-account {
+    background-color: #f44336;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#delete-account:hover {
+    background-color: #e53935;
+    transform: translateY(-2px);
+}
+#logout-button {
+    background-color: #ffa500;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#logout-button:hover {
+    background-color: #e59400;
+    transform: translateY(-2px);
+}
+
+/* Styling for profile options */
+.profile-options {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.profile-options h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.buttons-container,
+.admin-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.option-button,
+.admin-button {
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.option-button:hover,
+.admin-button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+        width: 90%; /* Adjusted for smaller screens */
+        padding: 2rem;
+    }
+
+    .profile-details,
+    .profile-options {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .profile-details p {
+        font-size: 1rem;
+    }
+}
+/* General styling for the modify profile section */
+#modify-profile-section {
+    display: none; /* Initially hidden */
+    background-color: #e0e5ec;
+    border-radius: 15px;
+    padding: 3rem;
+    margin-top: 2rem;
+    box-shadow: 8px 8px 15px #b8b9be, -8px -8px 15px #ffffff;
+    
+    max-width: 600px;
+    margin: 2rem auto; /* Centered on the page */
+}
+
+/* Styling for the form heading */
+#modify-profile-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px #b8b9be;
+}
+
+/* Styling for form labels */
+#modify-profile-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Styling for form inputs */
+#modify-profile-form input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background-color: #f0f3f5;
+    box-shadow: inset 6px 6px 12px #b8b9be, inset -6px -6px 12px #ffffff;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+/* Input hover and focus effects */
+#modify-profile-form input:focus {
+    border-color: #007bff;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Styling for the submit button */
+#modify-profile-form button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+/* Button hover and active effects */
+#modify-profile-form button:hover {
+    background-color: #0056b3;
+}
+
+#modify-profile-form button:active {
+    background-color: #004085;
+    transform: scale(0.98);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    #modify-profile-section {
+        padding: 2rem;
+        width: 90%; /* Reduce width for smaller screens */
+    }
+
+    #modify-profile-section h2 {
+        font-size: 1.75rem; /* Adjust font size */
+    }
+
+    #modify-profile-form input {
+        padding: 0.5rem; /* Reduce padding */
+        font-size: 0.9rem; /* Adjust font size */
+    }
+
+    #modify-profile-form button {
+        padding: 0.5rem 1rem; /* Adjust button padding */
+        font-size: 1rem; /* Adjust font size */
+    }
+}
 /* Login form section */
 #login-form-section {
     display: flex;
@@ -39,7 +300,7 @@ body {
     border-radius: 15px;
     padding: 3rem;
     box-shadow: 8px 8px 15px #b8b9be, -8px -8px 15px #ffffff;
-    width: 100%;
+    width: 70%;
 }
 
 /* Input field styling */
@@ -73,7 +334,7 @@ body {
 .extra-options {
     display: flex;
     justify-content: space-between;
-    width: 100%; /* Full width for flexibility */
+    width: 85%; /* Full width for flexibility */
     margin-top: 1rem;
 }
 
@@ -111,39 +372,105 @@ body {
         gap: 0.5rem; /* Add spacing between stacked items */
     }
 }
-
-/* Registration form */
+/* Styling for the registration section */
 #register-form-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #e0e5ec;
+    background-color: #f9f9f9;
     border-radius: 15px;
     padding: 3rem;
     margin-top: 2rem;
     box-shadow: 8px 8px 15px #b8b9be, -8px -8px 15px #ffffff;
     width: 100%;
+    max-width: 600px;
 }
 
-/* Responsive registration form */
+/* Styling for the form heading */
+#register-form-section h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 1px 1px 2px #b8b9be;
+}
+
+/* Styling for form labels */
+#register-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Styling for form inputs */
+#register-form input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background-color: #f0f3f5;
+    box-shadow: inset 6px 6px 12px #b8b9be, inset -6px -6px 12px #ffffff;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+/* Input hover and focus effects */
+#register-form input:hover,
+#register-form input:focus {
+    box-shadow: inset 3px 3px 8px #b8b9be, inset -3px -3px 8px #ffffff;
+}
+
+/* Styling for the submit button */
+#register-form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+/* Button hover and active effects */
+#register-form button:hover {
+    background-color: #0056b3;
+}
+
+#register-form button:active {
+    background-color: #004085;
+    transform: scale(0.98);
+}
+
+/* Responsive adjustments for smaller screens */
 @media (max-width: 600px) {
     #register-form-section {
-        width: 90%; /* Adjust form width */
-        padding: 2rem; /* Reduce padding */
+        width: 90%; /* Adjust width for mobile */
+        padding: 2rem;
     }
 
     #register-form label {
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem; /* Adjust font size */
+        font-size: 0.9rem;
     }
 
     #register-form input {
-        padding: 0.5rem; /* Reduce padding */
-        font-size: 0.9rem; /* Adjust font size */
+        padding: 0.5rem;
+        font-size: 0.9rem;
     }
 
     #register-form button {
-        padding: 0.5rem 1.5rem; /* Adjust button padding */
-        font-size: 0.9rem; /* Adjust font size */
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    #register-form-section h2 {
+        font-size: 1.75rem; /* Adjust heading size */
     }
 }
+

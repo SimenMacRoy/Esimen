@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loginFormSection = document.getElementById('login-form-section');
     const registerButton = document.getElementById('register-button');
     const forgotPasswordLink = document.getElementById('forgot-password-link');
+    const modifyProfileSection = document.getElementById('modify-profile-section');
+    const modifyProfileForm = document.getElementById('modify-profile-form');
+    const modifyButton = document.getElementById('modify-account');
+    const deleteButton = document.getElementById('delete-account');
+    const logoutButton = document.getElementById('logout-button');
 
     // Check if user data exists in localStorage
     const storedUserData = localStorage.getItem('userData');
@@ -57,7 +62,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (result.isRegistered) {
                 // Store user data in localStorage to remember the user
-                localStorage.setItem('userData', JSON.stringify(result.userData));
+                const userData = {
+                    name: result.userData.name,
+                    surname: result.userData.surname,
+                    phone: result.userData.phone,
+                    email: result.userData.email,
+                    address: result.userData.address,
+                    user_id: result.userData.user_id, // Ensure this is included
+                };
+                localStorage.setItem('userData', JSON.stringify(userData));
                 displayProfile(result.userData);
                 loginFormSection.style.display = 'none';
                 profileSection.style.display = 'block';
@@ -114,6 +127,89 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error registering user:', error);
             alert('An error occurred. Please try again later.');
         }
+    });
+    // Prefill the modify form with user data
+    modifyButton.addEventListener('click', () => {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData) {
+            document.getElementById('mod-name').value = userData.name;
+            document.getElementById('mod-surname').value = userData.surname;
+            document.getElementById('mod-phone').value = userData.phone;
+            document.getElementById('mod-email').value = userData.email;
+            document.getElementById('mod-address').value = userData.address;
+            modifyProfileSection.style.display = 'block';
+        }
+    });
+
+    // Handle form submission for modifying the profile
+    modifyProfileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const updatedData = {
+            name: document.getElementById('mod-name').value,
+            surname: document.getElementById('mod-surname').value,
+            phone: document.getElementById('mod-phone').value,
+            email: document.getElementById('mod-email').value,
+            password: document.getElementById('mod-password').value, // Optional if not changed
+            address: document.getElementById('mod-address').value,
+        };
+
+        try {
+            const response = await fetch(`${config.baseURL}/api/users/update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Votre profil a été modifié avec succès.');
+                localStorage.setItem('userData', JSON.stringify(updatedData));
+                displayProfile(updatedData);
+                modifyProfileSection.style.display = 'none';
+            } else {
+                alert('Une erreur est survenue lors de la modification de votre profil.');
+            }
+        } catch (error) {
+            console.error('Error updating user:', error);
+            alert('Une erreur est survenue. Veuillez réessayer plus tard.');
+        }
+    });
+
+    // Handle account deletion
+    deleteButton.addEventListener('click', async () => {
+        const confirmation = confirm('Êtes-vous sûr de vouloir supprimer votre compte?');
+        if (confirmation) {
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                const response = await fetch(`${config.baseURL}/api/users/delete`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: userData.email }),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('Votre compte a été supprimé avec succès.');
+                    localStorage.removeItem('userData');
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Une erreur est survenue lors de la suppression de votre compte.');
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Une erreur est survenue. Veuillez réessayer plus tard.');
+            }
+        }
+    });
+
+    // Handle logout
+    logoutButton.addEventListener('click', () => {
+        localStorage.removeItem('userData');
+        window.location.href = 'index.html';
     });
 });
 

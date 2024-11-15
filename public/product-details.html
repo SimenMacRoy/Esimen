@@ -29,23 +29,25 @@
         </div>
     </header>
 
-    <!-- Product details container -->
-    <section id="product-details" class="product-details">
-        <!-- Product information will be dynamically loaded here -->
-    </section>
-    <section id="quantity-details" class="quantity-details">
-        <div class="quantity-controls">
-            <button type="button" class="btn-minus"><span class="mp">-</span></button>
-            <input type="number" id="quantity-input" value="1">
-            <button type="button" class="btn-plus"><span class="mp">+</span></button>
-        </div>
-    </section>
+    <div class="container">
+        <!-- Product details container -->
+        <section id="product-details" class="product-details">
+            <!-- Product information will be dynamically loaded here -->
+        </section>
+        <section id="quantity-details" class="quantity-details">
+            <div class="quantity-controls">
+                <button type="button" class="btn-minus"><span class="mp">-</span></button>
+                <input type="numbers" id="quantity-input" value="1">
+                <button type="button" class="btn-plus"><span class="mp">+</span></button>
+            </div>
+        </section>
 
-    <footer id="footer">
-        <div class="add-to-basket">
-            <button type="button" class="btn-add">Ajouter au panier (CA$ <span class="prix"></span>)</button>    
-        </div>
-    </footer>
+        <footer id="footer">
+            <div class="add-to-basket">
+                <button type="button" class="btn-add">Ajouter au panier (CA$ <span class="prix"></span>)</button>    
+            </div>
+        </footer>
+    </div>
 
     <script src="product-details.js"></script>
     <script src="searchBar.js"></script>

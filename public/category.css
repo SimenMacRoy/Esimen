@@ -29,19 +29,6 @@
     margin-top: 150px; /* Space below the tab menu */
 }
 
-/* Styling for the search input */
-input[placeholder="Rechercher un article..."] {
-    font-size: 18px;
-    font-family: 'Ebrima';
-    width: 100%; /* Ensure input is responsive */
-    max-width: 400px; /* Optional maximum width */
-    margin-bottom: 20px;
-}
-
-input[placeholder="Rechercher un article..."]:hover {
-    border: 1px solid darkorange;
-}
-
 /* Media query for tablets */
 @media (max-width: 768px) {
     .category-card {
@@ -64,7 +51,7 @@ input[placeholder="Rechercher un article..."]:hover {
     }
 
     .category-list {
-        margin-top: 80px; /* Adjust spacing for smaller screens */
+        margin-top: 150px; /* Adjust spacing for smaller screens */
     }
 
     input[placeholder="Rechercher un article..."] {

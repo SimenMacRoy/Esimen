@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedTab.classList.add('active');
     };
 
+    searchResultsContainer.style.display = 'none';
+
     // Function to switch the active navigation tab (bottom menu)
     const switchActiveNavTab = (selectedNav) => {
         navAccueil.classList.remove('active');

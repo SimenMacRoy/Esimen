@@ -1,6 +1,10 @@
 body{
     font-family: 'Ebrima'
 }
+.container{
+    flex: 1; /* Pushes the footer to the bottom */
+    padding-bottom: 10em; /* Ensure content is not blocked by the footer */
+}
 /* Product details styling */
 .product-details {
     padding: 1.25em; /* 20px converted */
@@ -60,25 +64,6 @@ body{
     margin: 0 1.25em; /* 20px converted */
 }
 
-/* Responsive adjustments */
-@media (max-width: 48em) { /* 768px converted */
-    .product-details img {
-        width: 80%;
-    }
-
-    .product-details h1 {
-        font-size: 1.75em; /* 28px converted */
-    }
-
-    .product-details .price {
-        font-size: 1.5em; /* 24px converted */
-    }
-
-    .product-details .description {
-        font-size: 1em; /* 16px converted */
-    }
-}
-
 header {
     background-color: #fff;
     padding: 0.625em; /* 10px converted */
@@ -129,6 +114,7 @@ header {
 .search-bar {
     margin-top: 0.625em; /* 10px converted */
     padding: 0 0.625em; /* 10px converted */
+    width: 30%;
 }
 
 .search-bar input {
@@ -138,6 +124,12 @@ header {
     border: 1px solid #ccc;
 }
 
+input[placeholder="Rechercher un article..."] {
+    font-size: 18px;
+    font-family: 'Ebrima';
+    width: 100%; /* Ensure input is responsive */
+}
+
 #footer {
     background-color: #fff;
     box-shadow: 0px -0.25em 0.125em -0.125em gray; /* 0px -4px 2px -2px */
@@ -145,7 +137,7 @@ header {
     position: fixed;
     bottom: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 10;
     justify-content: space-between;
 }
 .quantity-details{
@@ -175,11 +167,12 @@ header {
     font-size: 24px;;
 }
 
-input[type="number"]{
+input[type="numbers"]{
     width: 50px;
     padding: 0.3em;
     border-radius: 0.5em;
     border: 1px solid #ccc;
+    text-align: center;
 }
 
 .add-to-basket{
@@ -223,3 +216,28 @@ input[type="number"]{
     transform: scale(1.10);
     background-color: #ff4500;
 }
+/* Responsive adjustments */
+@media (max-width: 48em) { /* 768px converted */
+    .product-details img {
+        width: 80%;
+    }
+
+    .product-details h1 {
+        font-size: 1.75em; /* 28px converted */
+    }
+
+    .product-details .price {
+        font-size: 1.5em; /* 24px converted */
+    }
+
+    .product-details .description {
+        font-size: 1em; /* 16px converted */
+    }
+    .search-bar{
+        width: 87%;
+    }
+    #footer{
+        width: 90%;
+    }
+}
+

@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedNav.classList.add('active'); // Add active class to the clicked navigation tab
     };
 
+    searchResultsContainer.style.display = 'none';
+
     // Function to fetch and display categories based on the selected department
     const loadCategories = async (departmentName) => {
         try {

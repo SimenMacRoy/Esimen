@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const app = express();
 const multer = require('multer');
+const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 const Stripe = require('stripe');
 const stripe = Stripe('sk_test_51PIRk7DIrmiE2Hgb3odn47yqCN3ojcMsp70vzrz93fqUIeOxtl35xvqdzBNX8Tji2UkxtdJvnWxgNDpRlPS80AA900horxTCdC');
@@ -299,6 +300,7 @@ app.post('/api/users/check', (req, res) => {
                         email: user.email,
                         address: user.postal_address,
                         profilePicture: user.profile_picture,
+                        user_id: user.user_id
                     },
                 });
             } else {
@@ -312,7 +314,7 @@ app.post('/api/users/check', (req, res) => {
 
 // Endpoint to register a new user
 app.post('/api/users/register', async (req, res) => {
-    const { name, surname, email, password, phone, address} = req.body;
+    const { name, surname, email, password, phone, address } = req.body;
 
     if (!name || !surname || !email || !password || !phone || !address) {
         return res.status(400).json({ error: 'All fields are required.' });
@@ -330,12 +332,93 @@ app.post('/api/users/register', async (req, res) => {
                 return res.status(500).json({ error: 'Database error.' });
             }
 
-            res.json({ success: true, message: 'User registered successfully.' });
+            // Fetch the newly created user_id
+            const getUserIdQuery = 'SELECT user_id FROM USERS WHERE email = ?';
+            db.query(getUserIdQuery, [email], (err, results) => {
+                if (err || results.length === 0) {
+                    return res.status(500).json({ error: 'Error retrieving user ID.' });
+                }
+
+                res.json({
+                    success: true,
+                    message: 'User registered successfully.',
+                    user_id: results[0].user_id, // Return the user_id
+                });
+            });
         });
     } catch (error) {
         res.status(500).json({ error: 'Error hashing the password.' });
     }
 });
+
+/// Update user details
+app.put('/api/users/update', async (req, res) => {
+    const { email, name, surname, phone, password, address } = req.body;
+
+    if (!email || !name || !surname || !phone || !address) {
+        return res.status(400).json({ error: 'All fields except password are required.' });
+    }
+
+    try {
+        let updateQuery = 'UPDATE USERS SET name = ?, surname = ?, phone = ?, postal_address = ?';
+        const queryParams = [name, surname, phone, address];
+
+        // If the password field is provided, hash it and include it in the update
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateQuery += ', password = ?';
+            queryParams.push(hashedPassword);
+        }
+
+        updateQuery += ' WHERE email = ?';
+        queryParams.push(email);
+
+        db.query(updateQuery, queryParams, (err, result) => {
+            if (err) {
+                console.error('Error updating user:', err);
+                return res.status(500).json({ error: 'Database error.' });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'User not found.' });
+            }
+
+            res.json({ success: true, message: 'User profile updated successfully.' });
+        });
+    } catch (error) {
+        console.error('Error hashing the password:', error);
+        res.status(500).json({ error: 'Error processing the update.' });
+    }
+});
+
+// Delete user account
+app.delete('/api/users/delete', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ error: 'Email is required.' });
+    }
+
+    try {
+        const query = 'DELETE FROM USERS WHERE email = ?';
+        db.query(query, [email], (err, result) => {
+            if (err) {
+                console.error('Error deleting user:', err);
+                return res.status(500).json({ error: 'Database error.' });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'User not found.' });
+            }
+
+            res.json({ success: true, message: 'User account deleted successfully.' });
+        });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ error: 'Error processing the deletion.' });
+    }
+});
+
 
 app.post('/api/payment', async (req, res) => {
     const { amount, currency, paymentMethodId } = req.body;
@@ -357,6 +440,100 @@ app.post('/api/payment', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+// Endpoint to get a user's basket
+app.get('/api/basket', (req, res) => {
+    const userId = req.query.user_id;
+    if (!userId) {
+        return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    const query = 'SELECT * FROM BASKET WHERE user_id = ?';
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.json(results);
+    });
+});
+
+// Endpoint to update/add items to a user's basket
+app.post('/api/basket', (req, res) => {
+    const { userId, productId, quantity } = req.body;
+
+    if (!userId || isNaN(userId)) {
+        return res.status(400).json({ error: 'A valid User ID is required' });
+    }
+    if (!productId || isNaN(productId)) {
+        return res.status(400).json({ error: 'A valid Product ID is required' });
+    }
+    if (!quantity || isNaN(quantity) || quantity <= 0) {
+        return res.status(400).json({ error: 'Quantity must be a positive number' });
+    }
+
+    const query = `
+        INSERT INTO BASKET (user_id, product_id, quantity)
+        VALUES (?, ?, ?)
+        ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity), added_at = NOW()
+    `;
+    db.query(query, [userId, productId, quantity, quantity], (err) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        res.json({ success: true, message: 'Basket updated successfully' });
+    });
+});
+
+app.put('/api/basket', (req, res) => {
+    const { user_id, product_id, quantity } = req.body;
+
+    if (!user_id || !product_id || quantity === undefined) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    const query = `
+        UPDATE BASKET 
+        SET quantity = ?, added_at = NOW() 
+        WHERE user_id = ? AND product_id = ?
+    `;
+
+    db.query(query, [quantity, user_id, product_id], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error.' });
+        }
+
+        res.json({ success: true, message: 'Basket updated successfully.' });
+    });
+});
+
+app.delete('/api/basket', (req, res) => {
+    const { user_id, product_id } = req.query;
+
+    if (!user_id || !product_id) {
+        return res.status(400).json({ error: 'Both user_id and product_id are required.' });
+    }
+
+    const query = `DELETE FROM BASKET WHERE user_id = ? AND product_id = ?`;
+
+    db.query(query, [user_id, product_id], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error.' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Item not found in the basket.' });
+        }
+
+        res.json({ success: true, message: 'Item removed from the basket.' });
+    });
+});
+
+
 
 
 

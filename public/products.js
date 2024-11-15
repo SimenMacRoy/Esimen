@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
 
+    searchResultsContainer.style.display = 'none';
+
     // Function to switch the active navigation tab (bottom menu)
     const switchActiveNavTab = (selectedNav) => {
         [navAccueil, navCategories, navBasket, navProfile].forEach(nav => nav.classList.remove('active')); // Remove active class from both navigation tabs
