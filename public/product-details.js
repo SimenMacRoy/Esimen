@@ -136,11 +136,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         selectedQuantity = parseInt(quantity.value);
     
         // Check if the product is already in the basket
-        const existingProduct = basket.find(item => item.id === product.product_id);
+        const existingProduct = basket.find(item => item.product_id === product.product_id);
     
         if (existingProduct) {
             existingProduct.quantity = selectedQuantity; // Update the quantity
             alert(`${product.name} quantité modifiée à ${selectedQuantity} !`);
+            try {
+                const response = await fetch(`${config.baseURL}/api/basket`, {
+                    method: 'PUT', // Assuming you're using PUT for updates
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: getUserId(), // Include the user_id
+                        product_id: existingProduct.product_id, // Include the product_id
+                        quantity: existingProduct.quantity, // Include the new quantity
+                    }),
+                });
+
+                if (response.ok) {
+                    console.log(`Quantity for product ${existingProduct.productId} updated successfully.`);
+                } else {
+                    console.error(`Failed to update quantity for product ${existingProduct.productId}.`);
+                }
+            } catch (error) {
+                console.error('Error updating quantity on the server:', error);
+            }
         } else {
             // Add new product to the basket with selected quantity
             basket.push({
@@ -152,9 +173,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 quantity: selectedQuantity
             });
             alert(`${product.name} a été ajouté au panier avec une quantité de ${selectedQuantity} !`);
-        }
-    
-        // Save the updated basket to localStorage
+
+            // Save the updated basket to localStorage
         saveBasket(basket);
     
         // Send the basket update to the backend
@@ -178,6 +198,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error('Error updating basket on the server:', error);
         }
+        }
+    
     }
     
     
