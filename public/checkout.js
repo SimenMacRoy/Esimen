@@ -25,26 +25,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     const checkoutForm = document.getElementById('checkout-form');
     checkoutForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
+    
         const cardHolderName = document.getElementById('card-holder').value;
         const postalCode = document.getElementById('postal-code').value;
-
+        const userId = getUserId(); // Ensure this fetches the logged-in user's ID
+    
         const { paymentMethod, error } = await stripe.createPaymentMethod({
             type: 'card',
             card: cardElement,
             billing_details: {
                 name: cardHolderName,
                 address: {
-                    postal_code: postalCode // Include postal code from the input field
+                    postal_code: postalCode
                 },
             },
         });
-
+    
         if (error) {
             alert(`Erreur de paiement: ${error.message}`);
             return;
         }
-
+    
         // Send payment method to your server to create a payment intent
         try {
             const response = await fetch(`${config.baseURL}/api/payment`, {
@@ -53,16 +54,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    amount: Math.round(total * 100), // Amount in cents (e.g., 1234 for CA$12.34)
-                    currency: 'cad', // Adjust as needed
+                    user_id: userId, // Include user ID in the request
+                    amount: Math.round(total * 100),
+                    currency: 'cad',
                     paymentMethodId: paymentMethod.id,
                 }),
             });
-
+    
             const result = await response.json();
             if (result.success) {
-                alert('Paiement accepté. Merci pour votre achat!');
-                // Optionally redirect or update UI
+                alert('Paiement accepté. Un courriel de confirmation vous a été envoyé.');
+                window.location.href = '/index.html'; // Redirect to homepage
             } else {
                 alert(`Échec du paiement: ${result.error}`);
             }
@@ -71,4 +73,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Une erreur s\'est produite. Veuillez réessayer plus tard.');
         }
     });
+    
 });
+function getUserId() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    return userData ? userData.user_id : null;
+}

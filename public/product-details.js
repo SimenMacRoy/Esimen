@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
                 if (response.ok) {
-                    console.log(`Quantity for product ${existingProduct.productId} updated successfully.`);
+                    console.log(`Quantity for product ${existingProduct.product_id} updated successfully.`);
                 } else {
                     console.error(`Failed to update quantity for product ${existingProduct.productId}.`);
                 }
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
         // Send the basket update to the backend
         const userId = getUserId();
-    
+        console.log(userId);
         try {
             const response = await fetch(`${config.baseURL}/api/basket`, {
                 method: 'POST',

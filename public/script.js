@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const navProfile = document.getElementById('nav-profile'); // Profile navigation tab
     const searchBar = document.getElementById('search-bar'); // Search bar input
     const searchResultsContainer = document.getElementById('search-results'); // Search results container
+    const basketContainer = document.querySelector('.basket-container');
+    const basketCountElement = document.querySelector('.basket-count');
+
 
     // Function to switch the active department tab (top menu)
     const switchActiveTab = (selectedTab) => {
@@ -191,4 +194,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ensure "Accueil" is the active navigation tab (bottom menu) by default
     switchActiveNavTab(navAccueil); // Ensure only "Accueil" is active by default
+
+     // Fetch the basket count from the backend
+     async function fetchBasketCount() {
+        const userId = getUserId(); // Replace with your logic to get the logged-in user's ID
+
+        if (!userId) return;
+
+        try {
+            const response = await fetch(`${config.baseURL}/api/basket/count?user_id=${userId}`);
+            if (response.ok) {
+                const data = await response.json();
+                basketCountElement.textContent = data.itemCount || 0; // Update the badge
+            } else {
+                console.error('Error fetching basket count:', response.statusText);
+                basketCountElement.textContent = 0; // Fallback to 0
+            }
+        } catch (error) {
+            console.error('Error fetching basket count:', error);
+            basketCountElement.textContent = 0; // Fallback to 0
+        }
+    }
+
+    // Navigate to the basket page when the basket icon is clicked
+    basketContainer.addEventListener('click', () => {
+        window.location.href = 'basket.html'; // Replace with your actual basket page URL
+    });
+
+    // Fetch and update the basket count on page load
+    fetchBasketCount();
 });
+
+function getUserId() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    return userData ? userData.user_id : null;
+}
