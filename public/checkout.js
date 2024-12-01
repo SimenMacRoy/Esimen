@@ -3,6 +3,8 @@ const config = {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+    
     const stripe = Stripe('pk_test_51PIRk7DIrmiE2Hgb4lLVD99VQnFg7uWaAhtEBBBzLIixaLhcQ9FOuhkSonPw8SozcgiS19efR92rNwYX6kQ7TRvT00YayxN2sq'); // Replace with your actual public key
     const elements = stripe.elements();
     const cardElement = elements.create('card', {
@@ -15,6 +17,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const taxes = subtotal * 0.15;
     const delivery = subtotal * 0.10;
     const total = subtotal + taxes + delivery;
+    const checkoutForm = document.getElementById('checkout-form');
+
+
+    if (subtotal === 0) {
+        alert("Votre panier est vide. Veuillez ajouter des articles avant de procéder au paiement.");
+        window.location.href = `${config.baseURL}/basket.html`;
+        return; // Stop further processing
+    }
 
     // Display values on the page
     document.getElementById('subtotal-price').textContent = `CA$ ${subtotal.toFixed(2)}`;
@@ -22,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('delivery-price').textContent = `CA$ ${delivery.toFixed(2)}`;
     document.getElementById('total-price').textContent = `CA$ ${total.toFixed(2)}`;
 
-    const checkoutForm = document.getElementById('checkout-form');
+    
     checkoutForm.addEventListener('submit', async (e) => {
         e.preventDefault();
     

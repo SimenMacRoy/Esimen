@@ -1,7 +1,6 @@
 /* General body styling */
 body {
-    font-family: 'Ebrima', sans-serif;
-    background-color: #f0f3f5;
+    font-family: 'Ebrima';
     color: #333;
     margin: 0;
     padding: 0;
@@ -17,10 +16,9 @@ body {
     gap: 2rem;
     width: 80%; /* Adjusted width for better visibility */
     max-width: 1200px;
-    background-color: #ffffff;
     border-radius: 15px;
     padding: 2.5rem; /* Added padding for spacing */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    
     margin-top: 2rem;
 }
 
@@ -60,6 +58,26 @@ body {
     color: #333;
 }
 
+.fa-arrow-left {
+    display: inline-block;
+    background-color: #f1874a;
+    border-radius: 50%;
+    margin-right: 15px; /* Adjust spacing */
+    cursor: pointer;
+    padding: 10px;
+    font-size: 14px; /* Adjust size */
+    color: #333; /* Match your header text color */
+}
+
+.fa-arrow-left:hover{
+    background-color: #f16849;
+    transform: translateY(-2px);
+}
+
+.fa {
+    padding-right: 5px;
+}
+
 /* Buttons for account actions */
 .action-button {
     width: 100%;
@@ -76,6 +94,14 @@ body {
     background-color: #4caf50;
     color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+    font-family: 'Ebrima';
 }
 
 #modify-account:hover {
@@ -87,6 +113,14 @@ body {
     background-color: #f44336;
     color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+    font-family: 'Ebrima';
 }
 
 #delete-account:hover {
@@ -104,6 +138,7 @@ body {
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.3s, transform 0.2s;
+    font-family: 'Ebrima';
 }
 
 #logout-button:hover {
@@ -138,7 +173,7 @@ body {
     padding: 1rem;
     border: none;
     border-radius: 8px;
-    background-color: #007bff;
+    background:linear-gradient(45deg, #961414, #f1874a);
     color: #fff;
     font-size: 1rem;
     cursor: pointer;
@@ -148,6 +183,7 @@ body {
 .option-button:hover,
 .admin-button:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 /* Responsive adjustments */
@@ -319,7 +355,7 @@ body {
 }
 
 #login-form button {
-    background-color: #ff6347;
+    background:linear-gradient(45deg, #961414, #f1874a);
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -341,7 +377,7 @@ body {
 .extra-options a,
 .extra-options button {
     font-size: 0.9rem;
-    color: #ff6347;
+    color: #f1874a;
     text-decoration: none;
     background: none;
     border: none;
@@ -448,29 +484,46 @@ body {
     transform: scale(0.98);
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 600px) {
-    #register-form-section {
-        width: 90%; /* Adjust width for mobile */
-        padding: 2rem;
+/* Responsive adjustments for profile screen */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column; /* Stack sections vertically */
+        width: 90%; /* Adjust width for smaller screens */
+        padding: 1.5rem; /* Reduce padding */
+        gap: 1.5rem; /* Reduce gap */
     }
 
-    #register-form label {
-        font-size: 0.9rem;
+    .profile-details, 
+    .profile-options {
+        width: 100%;
+        margin-bottom: 1rem;
     }
 
-    #register-form input {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-    }
-
-    #register-form button {
-        padding: 0.5rem 1.5rem;
-        font-size: 1rem;
-    }
-
-    #register-form-section h2 {
-        font-size: 1.75rem; /* Adjust heading size */
+    .profile-details p {
+        font-size: 1rem; /* Reduce text size */
     }
 }
 
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 1rem; /* Further reduce padding for very small screens */
+    }
+
+    .profile-details p {
+        font-size: 0.9rem; /* Further reduce text size */
+    }
+
+    .profile-details h2 {
+        font-size: 1.5rem; /* Adjust heading size */
+    }
+
+    .profile-details img {
+        width: 120px;
+        height: 120px; /* Adjust profile image size */
+    }
+
+    .action-button {
+        font-size: 0.9rem; /* Adjust button font size */
+        padding: 0.75rem; /* Adjust button padding */
+    }
+}

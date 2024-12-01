@@ -63,7 +63,6 @@ async function loadUserBasket() {
     }
 }
 
-// Function to render the basket contents
 async function renderBasket() {
     const basketItemContainer = document.querySelector('.basket-items');
     const totalPriceElement = document.getElementById('total-price');
@@ -74,19 +73,30 @@ async function renderBasket() {
     basketItemContainer.innerHTML = '';
     let total = 0;
 
+    // Check if user is logged in
+    const userLoggedIn = isUserLoggedIn();
+    
+
     if (basket.length === 0) {
         // Display empty basket message
         basketItemContainer.innerHTML = `
             <div class="empty-basket-message">
                 <p><img src="./logos/empty-cart.png" alt="Panier vide" id="empty-cart"></img> Oups ! Votre panier est vide</p>
                 <div class="empty-basket-buttons">
-                    <button class="signup-button">
-                        <i class="fas fa-user-plus"></i> Inscrivez-vous !</button>
+                    ${!userLoggedIn ? `
+                        <button class="signup-button">
+                            <i class="fas fa-user-plus"></i> Inscrivez-vous !
+                        </button>` : ''}
                     <button class="shop-button" onclick="magasiner()">
-                        <i class="fas fa-store"></i> Magasiner</button>
+                        <i class="fas fa-store"></i> Magasiner
+                    </button>
                 </div>
             </div>
         `;
+        // Disable the checkout button
+        checkoutButton.disabled = true;
+        checkoutButton.style.opacity = 0.5;
+        checkoutButton.style.cursor = 'not-allowed';
         return; // Exit if the basket is empty
     }
 
@@ -137,8 +147,8 @@ async function renderBasket() {
     // Update total price in the DOM
     totalPriceElement.textContent = `CA $${total.toFixed(2)}`;
 
-    // Disable the checkout button if the total is 0
-    if (total === 0) {
+    // Disable the checkout button if the total is 0 or the user is not logged in
+    if (total === 0 || !userLoggedIn) {
         checkoutButton.disabled = true;
         checkoutButton.style.opacity = 0.5;
         checkoutButton.style.cursor = 'not-allowed';
@@ -160,7 +170,9 @@ async function renderBasket() {
     document.querySelectorAll('.remove-item').forEach(button => {
         button.addEventListener('click', (e) => removeItem(e));
     });
+
 }
+
 
 // Helper function to fetch product details
 async function fetchProductDetails(productId) {
@@ -181,23 +193,42 @@ async function fetchProductDetails(productId) {
 // Function to show the empty cart message with sign-up prompt
 function showEmptyCartWithSignUp() {
     const basketItemContainer = document.querySelector('.basket-items');
-    basketItemContainer.innerHTML = `
-        <div class="empty-basket-message">
-            <p><img src="./logos/empty-cart.png" alt="Panier vide" id="empty-cart"></img> Oups ! Votre panier est vide</p>
-            <div class="empty-basket-buttons">
-                <button class="signup-button">
-                    <i class="fas fa-user-plus"></i> Inscrivez-vous !
-                </button>
+    const checkoutButton = document.getElementById('checkout-button');
+
+    // Check if the user is logged in
+    if (isUserLoggedIn()) {
+        basketItemContainer.innerHTML = `
+            <div class="empty-basket-message">
+                <p><img src="./logos/empty-cart.png" alt="Panier vide" id="empty-cart"></img> Oups ! Votre panier est vide</p>
                 <button class="shop-button" onclick="magasiner()">
                     <i class="fas fa-store"></i> Magasiner
                 </button>
             </div>
-        </div>
-    `;
+        `;
+    } else {
+        basketItemContainer.innerHTML = `
+            <div class="empty-basket-message">
+                <p><img src="./logos/empty-cart.png" alt="Panier vide" id="empty-cart"></img> Oups ! Votre panier est vide</p>
+                <div class="empty-basket-buttons">
+                    <button class="signup-button">
+                        <i class="fas fa-user-plus"></i> Inscrivez-vous !
+                    </button>
+                    <button class="shop-button" onclick="magasiner()">
+                        <i class="fas fa-store"></i> Magasiner
+                    </button>
+                </div>
+            </div>
+        `;
 
-    document.querySelector('.signup-button').addEventListener('click', () => {
-        window.location.href = `${config.baseURL}/profile.html?register=true`;
-    });
+        checkoutButton.disabled = true;
+        checkoutButton.style.opacity = 0.5;
+        checkoutButton.style.cursor = 'not-allowed';
+
+        // Add event listener to the "Inscrivez-vous" button
+        document.querySelector('.signup-button').addEventListener('click', () => {
+            window.location.href = `${config.baseURL}/profile.html?register=true`;
+        });
+    }
 }
 
 // Function to update the quantity of an item in the basket
@@ -291,4 +322,7 @@ function magasiner(){
 }
 function proceedToCheckout() {
     window.location.href = `${config.baseURL}/checkout.html`;
+}
+function goBack() {
+    window.history.back(); // Navigate to the previous page
 }

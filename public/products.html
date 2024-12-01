@@ -10,17 +10,25 @@
 <body>
     <header>
         <div class="header-content">
-            <div class="hamburger-menu">☰</div>
-            <img src="logo.png" alt="Logo" class="logo">
+            <div class="back-icon">
+                <i class="fas fa-arrow-left" onclick="goBack()"></i>
+            </div>
+            <div>
+                <img src="logos/logoShek.jpg" alt="Logo" class="logo"><span class="title-logo">SHEK'S HOUSE</span>
+            </div>
             <div class="header-icons">
-                <i class="fas fa-heart icon"></i>
+                <i class="fas fa-heart icon"></i> <!-- Love icon using Font Awesome -->
                 <div class="basket-container">
-                    <i class="fas fa-shopping-cart"></i>
+                    <i class="fas fa-shopping-cart"></i> <!-- Basket icon using Font Awesome -->
+                    <span class="basket-count">0</span> 
                 </div>
             </div>
         </div>
         <div class="search-bar">
-            <input type="text" id="search-bar" placeholder="Rechercher un article...">
+            <div class="search">
+                <input type="text" id="search-bar" placeholder="Rechercher un article...">
+                <i class="fas fa-times clear-icon" id="clear-search"></i>
+            </div>
             <div id="search-results" class="search-results"></div>
         </div>
     </header>

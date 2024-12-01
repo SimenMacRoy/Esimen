@@ -9,7 +9,7 @@ body{
 .product-details {
     padding: 1.25em; /* 20px converted */
     text-align: center;
-    margin-top: 5em; /* 80px converted */
+    margin-top: 10em; /* 80px converted */
 }
 
 .product-details img {
@@ -68,66 +68,6 @@ header {
     background-color: #fff;
     padding: 0.625em; /* 10px converted */
     box-shadow: 0px 0.25em 0.125em -0.125em gray; /* 0px 4px 2px -2px */
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.hamburger-menu {
-    font-size: 1.5em; /* 24px converted */
-    font-weight: bold;
-}
-
-.logo {
-    height: 2.5em; /* 40px converted */
-}
-
-.header-icons {
-    display: flex;
-    align-items: center;
-    gap: 0.9375em; /* 15px converted */
-}
-
-.icon {
-    font-size: 1.5em; /* 24px converted */
-}
-
-.basket-container {
-    position: relative;
-}
-
-.badge {
-    position: absolute;
-    top: -0.3125em; /* -5px converted */
-    right: -0.625em; /* -10px converted */
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    padding: 0.3125em; /* 5px converted */
-    font-size: 0.75em; /* 12px converted */
-}
-
-/* Search bar */
-.search-bar {
-    margin-top: 0.625em; /* 10px converted */
-    padding: 0 0.625em; /* 10px converted */
-    width: 30%;
-}
-
-.search-bar input {
-    width: 100%;
-    padding: 0.625em; /* 10px converted */
-    border-radius: 1.25em; /* 20px converted */
-    border: 1px solid #ccc;
-}
-
-input[placeholder="Rechercher un article..."] {
-    font-size: 18px;
-    font-family: 'Ebrima';
-    width: 100%; /* Ensure input is responsive */
 }
 
 #footer {
@@ -236,8 +176,9 @@ input[type="numbers"]{
     .search-bar{
         width: 87%;
     }
-    #footer{
-        width: 90%;
+    .btn-add {
+        padding: 0.5em; 
     }
+   
 }
 

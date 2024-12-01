@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modifyButton = document.getElementById('modify-account');
     const deleteButton = document.getElementById('delete-account');
     const logoutButton = document.getElementById('logout-button');
+    const addProductButton = document.getElementById('add-product-button');
+    const manageProductButton = document.getElementById('manage-product-button');
 
     // Check if user data exists in localStorage
     const storedUserData = localStorage.getItem('userData');
@@ -20,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         displayProfile(JSON.parse(storedUserData));
         loginFormSection.style.display = 'none';
         profileSection.style.display = 'block';
+        console.log(storedUserData);
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -34,13 +37,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     registerButton.addEventListener('click', () => {
         loginFormSection.style.display = 'none';
         registerFormSection.style.display = 'flex';
-    });
-
-    // Handle "Mot de Passe Oublié" functionality (example)
-    forgotPasswordLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('Functionality for password reset will be implemented here.');
-        // You can redirect to a password reset page or show a password reset form/modal
     });
 
     // Handle login form submission
@@ -68,8 +64,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     phone: result.userData.phone,
                     email: result.userData.email,
                     address: result.userData.address,
-                    user_id: result.userData.user_id, // Ensure this is included
+                    user_id: result.userData.user_id,
+                    is_admin: result.userData.is_admin
                 };
+
+                console.log('User Data:', userData);
+                
                 localStorage.setItem('userData', JSON.stringify(userData));
                 displayProfile(result.userData);
                 loginFormSection.style.display = 'none';
@@ -118,8 +118,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert('Inscription réussie! Vous serez redirigé vers votre profil.');
                 localStorage.setItem('userData', JSON.stringify(userData)); // Save user data
                 displayProfile(userData);
+                loginFormSection.style.display = 'block';
                 registerFormSection.style.display = 'none';
-                profileSection.style.display = 'block';
+                profileSection.style.display = 'none';
             } else {
                 alert('Une erreur est survenue lors de l\'inscription.');
             }
@@ -128,9 +129,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('An error occurred. Please try again later.');
         }
     });
+    addProductButton.addEventListener('click', () => {
+        window.location.href = `${config.baseURL}/add-product.html`;
+    });
+    manageProductButton.addEventListener('click', () => {
+        window.location.href = `${config.baseURL}/manage-products.html`;
+    });
     // Prefill the modify form with user data
     modifyButton.addEventListener('click', () => {
         const userData = JSON.parse(localStorage.getItem('userData'));
+        
         if (userData) {
             document.getElementById('mod-name').value = userData.name;
             document.getElementById('mod-surname').value = userData.surname;
@@ -144,7 +152,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Handle form submission for modifying the profile
     modifyProfileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const user_id = userData?.user_id;
         const updatedData = {
+            user_id,
             name: document.getElementById('mod-name').value,
             surname: document.getElementById('mod-surname').value,
             phone: document.getElementById('mod-phone').value,
@@ -220,4 +232,17 @@ function displayProfile(userData) {
     document.getElementById('profile-phone').querySelector('span').textContent = userData.phone;
     document.getElementById('profile-email').querySelector('span').textContent = userData.email;
     document.getElementById('profile-address').querySelector('span').textContent = userData.address;
+
+    const adminSection = document.querySelector('.admin-buttons');
+
+    console.log(userData.is_admin);
+    if (userData.is_admin) {
+        adminSection.style.display = 'block'; // Show admin buttons
+    } else {
+        adminSection.style.display = 'none'; // Hide admin buttons
+    }
+}
+
+function goBack() {
+    window.history.back(); // Navigate to the previous page
 }

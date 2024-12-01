@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const navProfile = document.getElementById('nav-profile'); // Profile
     const searchBar = document.getElementById('search-bar'); // Search bar input
     const searchResultsContainer = document.getElementById('search-results'); // Search results container
+    const clearSearch = document.getElementById('clear-search'); // Clear
+    const basketContainer = document.querySelector('.basket-container');
+    const basketCountElement = document.querySelector('.basket-count');
 
     // Function to get category_id and departmentName from the URL query string
     const getParamsFromURL = () => {
@@ -54,8 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Create an img element to show the current image
         const imgElement = document.createElement('img');
-        imgElement.style.width = '150px';
-        imgElement.style.height = '150px';
+        //imgElement.style.width = '306px';
+        //imgElement.style.height = '300px';
         imageContainer.appendChild(imgElement);
 
         // Function to change the image every 2 seconds
@@ -82,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:3006/api/products_cat?category_id=${categoryId}&departmentName=${departmentName}`);
+            const response = await fetch(`${config.baseURL}/api/products_cat?category_id=${categoryId}&departmentName=${departmentName}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -121,8 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const img = document.createElement('img');
                     img.src = product.images[0] || 'default_image.jpg'; // Use a default image if none
                     img.alt = product.name;
-                    img.style.width = '150px';
-                    img.style.height = '150px';
+                    img.style.width = '300px';
+                    img.style.height = '300px';
                     imageContainer.appendChild(img);
                 }
 
@@ -160,27 +163,27 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+    
             const categories = await response.json();
             searchResultsContainer.innerHTML = ''; // Clear previous search results
-
+    
             if (categories.length === 0) {
                 searchResultsContainer.style.display = 'none';
                 return;
             }
-
+    
             // Display search results
             searchResultsContainer.style.display = 'block';
             categories.forEach(category => {
                 const resultItem = document.createElement('div');
                 resultItem.classList.add('search-result-item');
                 resultItem.textContent = `${category.category_name} (${category.department_name})`;
-
+    
                 // Add event listener to navigate to the products in this category
                 resultItem.addEventListener('click', () => {
-                    window.location.href = `${config.baseURL}/searchResults.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
+                    window.location.href = `products.html?category_id=${category.category_id}&departmentName=${encodeURIComponent(category.department_name)}`;
                 });
-
+    
                 searchResultsContainer.appendChild(resultItem);
             });
         } catch (error) {
@@ -197,4 +200,58 @@ document.addEventListener('DOMContentLoaded', () => {
             searchResultsContainer.style.display = 'none';
         }
     });
+       // Show or hide the clear icon based on input value
+       searchBar.addEventListener('input', () => {
+        if (searchBar.value.trim() !== '') {
+            clearSearch.style.display = 'flex';
+        } else {
+            clearSearch.style.display = 'none';
+        }
+    });
+
+    // Clear the search bar when the clear icon is clicked
+    clearSearch.addEventListener('click', () => {
+        searchBar.value = '';
+        clearSearch.style.display = 'none';
+        searchResultsContainer.style.display = 'none'; 
+        //document.getElementById('search-results').innerHTML = ''; // Clear search results if applicable
+        searchBar.focus(); // Refocus on the input
+    });
+
+    // Fetch the basket count from the backend
+    async function fetchBasketCount() {
+        const userId = getUserId(); // Replace with your logic to get the logged-in user's ID
+
+        if (!userId) return;
+
+        try {
+            const response = await fetch(`${config.baseURL}/api/basket/count?user_id=${userId}`);
+            if (response.ok) {
+                const data = await response.json();
+                basketCountElement.textContent = data.itemCount || 0; // Update the badge
+            } else {
+                console.error('Error fetching basket count:', response.statusText);
+                basketCountElement.textContent = 0; // Fallback to 0
+            }
+        } catch (error) {
+            console.error('Error fetching basket count:', error);
+            basketCountElement.textContent = 0; // Fallback to 0
+        }
+    }
+
+    // Navigate to the basket page when the basket icon is clicked
+    basketContainer.addEventListener('click', () => {
+        window.location.href = 'basket.html'; // Replace with your actual basket page URL
+    });
+
+    // Fetch and update the basket count on page load
+    fetchBasketCount();
 });
+function goBack() {
+    window.history.back(); // Navigate to the previous page
+}
+
+function getUserId() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    return userData ? userData.user_id : null;
+}

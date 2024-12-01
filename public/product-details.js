@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const quantity = document.getElementById('quantity-input'); 
     const quantityAdd = document.querySelector('.btn-plus');
     const quantityMinus = document.querySelector('.btn-minus');
+    const clearSearch = document.getElementById('clear-search');
     
     // Load the user's basket when the page loads
     loadUserBasket();
@@ -89,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="product-detail-card">
                     <h1>${product.name}</h1>
                     <p>${product.description}</p>
-                    <p class="price">${product.price}€</p>
+                    <p class="price">CA $${product.price}</p>
                     <p>Stock: ${product.stock}</p>
                 </div>
             `;
@@ -202,8 +203,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     }
     
-    
-
     // Get the current basket from localStorage for the logged-in user
     function getBasket() {
         const userId = getUserId();
@@ -236,8 +235,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Search Bar Functionality
-    const searchCategories = async (query) => {
+     // Function to fetch categories or departments and navigate to product.html
+     const searchCategories = async (query) => {
         try {
             const response = await fetch(`${config.baseURL}/api/search-categories?query=${query}`);
             if (!response.ok) {
@@ -259,18 +258,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 resultItem.classList.add('search-result-item');
                 resultItem.textContent = `${category.category_name} (${category.department_name})`;
 
-                // Add event listener to navigate to the products in this category
+                // Add event listener to navigate to the products page
                 resultItem.addEventListener('click', () => {
-                    window.location.href = `${config.baseURL}/searchResults.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
+                    // Navigate to product.html with the category_id and department name
+                    
+                    window.location.href = `products.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
                 });
 
                 searchResultsContainer.appendChild(resultItem);
             });
-        } catch(error) {
+        } catch (error) {
             console.error('Error fetching search results:', error);
         }
     };
-
     // Event listener for search input
     searchBar.addEventListener('input', (event) => {
         const query = event.target.value;
@@ -299,5 +299,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
         }
     }
+
+    // Show or hide the clear icon based on input value
+    searchBar.addEventListener('input', () => {
+        if (searchBar.value.trim() !== '') {
+            clearSearch.style.display = 'flex';
+        } else {
+            clearSearch.style.display = 'none';
+        }
+    });
+
+    // Clear the search bar when the clear icon is clicked
+    clearSearch.addEventListener('click', () => {
+        searchBar.value = '';
+        clearSearch.style.display = 'none';
+        searchResultsContainer.style.display = 'none'; 
+        //document.getElementById('search-results').innerHTML = ''; // Clear search results if applicable
+        searchBar.focus(); // Refocus on the input
+    });
  
 });
+function goBack() {
+    window.history.back(); // Navigate to the previous page
+}

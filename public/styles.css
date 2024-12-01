@@ -7,12 +7,11 @@
 
 @font-face {
     font-family: 'Ebrima';
-    src: url('C:\Users\Mac Roy\Documents\Esimen\fonts\Ebrima.ttf') format('truetype'); /* Adjust the path to your font file */
+    src: url('../fonts/Ebrima.ttf') format('truetype'); /* Adjust the path to your font file */
 }
 
 /* Body Styles */
 body {
-    font-family: Arial, sans-serif;
     background-color: #f5f5f5;
     display: flex;
     flex-direction: column;
@@ -40,9 +39,19 @@ header {
     align-items: center;
 }
 
-.hamburger-menu {
-    font-size: 20px;  /* Reduce font size */
-    font-weight: bold;
+.back-icon {
+    display: inline-block;
+    background-color: white;
+    border-radius: 50%;
+    margin-right: 15px; /* Adjust spacing */
+    cursor: pointer;
+    padding: 5px;
+    font-size: 14px; /* Adjust size */
+    color: #333; /* Match your header text color */
+}
+
+.back-icon:hover {
+    color: #c76a6a; /* Optional: Add hover effect */
 }
 
 .logo {
@@ -112,12 +121,23 @@ header {
     padding: 0 10px;
     width: 30%;
 }
+.search{
+    display: flex;
+    flex-direction: row;
+}
 
 .search-bar input {
     width: 100%;
     padding: 10px;  /* Reduce padding inside the input */
     border-radius: 15px;  /* Slightly reduce the radius */
     border: 1px solid #ccc;
+}
+.clear-icon{
+    position: relative;
+    right: 30px;
+    top: 8px;
+    color: gray;
+    cursor: pointer;
 }
 .search-results{
     margin-top: 10px;
@@ -146,7 +166,6 @@ input[placeholder="Rechercher un article..."] {
     width: 100%; /* Ensure input is responsive */
     margin-bottom: 20px;
 }
-
 
 /* Tab Component */
 .tab-component {
@@ -180,6 +199,7 @@ input[placeholder="Rechercher un article..."] {
 
 .tab-item.active {
     font-weight: bold;
+    color: black;
     border-bottom: 3px solid orange; /* Orange indicator for active tab */
 }
 
@@ -240,7 +260,7 @@ footer {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 10px;
-    width: 200px;
+    width: calc(16.66% - 10px);
     height: auto;
     text-align: center;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -256,7 +276,9 @@ footer {
 }
 
 .product-card img {
-    width: 100%;
+    width: 100%; /* Stretch to fit the card width */
+    height: 250px; /* Fixed height for uniformity */
+    object-fit: cover; /* Crop the image to fit within the fixed dimensions */
     border-radius: 8px;
 }
 
@@ -278,8 +300,11 @@ footer {
     .product-list{
         margin-bottom: 80px;
     }
-    .product-card{
-        margin: 5px;
+    .product-card {
+        width: calc(50% - 10px); 
+    }
+    .back-icon {
+        display:none;
     }
 }
 

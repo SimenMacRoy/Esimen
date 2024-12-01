@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navProfile = document.getElementById('nav-profile'); // Profile navigation tab
     const searchBar = document.getElementById('search-bar'); // Search bar input
     const searchResultsContainer = document.getElementById('search-results'); // Search results container
+    const clearSearch= document.getElementById('clear-search');
     const basketContainer = document.querySelector('.basket-container');
     const basketCountElement = document.querySelector('.basket-count');
 
@@ -79,7 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     startImageSlideshow(imageContainer, product.images);
                 } else {
                     const img = document.createElement('img');
-                    img.src = product.images[0] || 'default_image.jpg'; // Handle no images
+                    img.src = `${config.baseURL}${product.images[0] || '/uploads/default_image.jpg'}`;
+                    //img.src = product.images[0] || 'default_image.jpg'; // Handle no images
                     img.alt = product.name;
                     imageContainer.appendChild(img);
                 }
@@ -90,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${product.name}</h3>
                     <p>${product.description}</p>
                     <p class="price">CA$ ${product.price}</p>
-                    <p>Stock: ${product.stock}</p>
+                    <p>En Stock: ${product.stock}</p>
                 `;
 
                 // Append image container and details to the product card
@@ -110,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Function to fetch and display search results
+    // Function to fetch categories or departments and navigate to product.html
     const searchCategories = async (query) => {
         try {
             const response = await fetch(`${config.baseURL}/api/search-categories?query=${query}`);
@@ -133,9 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 resultItem.classList.add('search-result-item');
                 resultItem.textContent = `${category.category_name} (${category.department_name})`;
 
-                // Add event listener to navigate to the products in this category
+                // Add event listener to navigate to the products page
                 resultItem.addEventListener('click', () => {
-                    window.location.href = `${config.baseURL}/searchResults.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
+                    // Navigate to product.html with the category_id and department name
+                    
+                    window.location.href = `products.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
                 });
 
                 searchResultsContainer.appendChild(resultItem);
@@ -153,6 +157,25 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             searchResultsContainer.style.display = 'none';
         }
+    });
+
+
+    // Show or hide the clear icon based on input value
+    searchBar.addEventListener('input', () => {
+        if (searchBar.value.trim() !== '') {
+            clearSearch.style.display = 'flex';
+        } else {
+            clearSearch.style.display = 'none';
+        }
+    });
+
+    // Clear the search bar when the clear icon is clicked
+    clearSearch.addEventListener('click', () => {
+        searchBar.value = '';
+        clearSearch.style.display = 'none';
+        searchResultsContainer.style.display = 'none'; 
+        //document.getElementById('search-results').innerHTML = ''; // Clear search results if applicable
+        searchBar.focus(); // Refocus on the input
     });
 
     // Set up event listeners for department tab clicks (top menu)
@@ -174,17 +197,20 @@ document.addEventListener('DOMContentLoaded', () => {
     navCategories.addEventListener('click', () => {
         switchActiveNavTab(navCategories); // Set "Categorie" as the active nav tab
         window.location.href = `${config.baseURL}/category.html`;
+        switchActiveNavTab(navAccueil); 
     });
 
     // Add event listener to the "Basket" navigation tab (bottom menu)
     navBasket.addEventListener('click', () => {
         switchActiveNavTab(navBasket); // Set "Basket" as the active nav tab
         window.location.href = `${config.baseURL}/basket.html`;
+        switchActiveNavTab(navAccueil); 
     });
 
     navProfile.addEventListener('click', () => {
         switchActiveNavTab(navProfile); // Set "Basket" as the active nav tab
         window.location.href = `${config.baseURL}/profile.html`;
+        switchActiveNavTab(navAccueil); 
     });
 
     // Load products for "Tout" by default when the page loads
@@ -223,9 +249,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch and update the basket count on page load
     fetchBasketCount();
+
 });
 
 function getUserId() {
     const userData = JSON.parse(localStorage.getItem('userData'));
     return userData ? userData.user_id : null;
+}
+function goBack() {
+    window.history.back(); // Navigate to the previous page
 }

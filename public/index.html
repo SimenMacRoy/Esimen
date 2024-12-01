@@ -12,7 +12,9 @@
     <!-- Header with hamburger, logo, love icon, basket icon with badge -->
     <header>
         <div class="header-content">
-            <div class="hamburger-menu"></div>
+            <div class="back-icon">
+                <i class="fas fa-arrow-left" onclick="goBack()"></i>
+            </div>
             <div>
                 <img src="logos/logoShek.jpg" alt="Logo" class="logo"><span class="title-logo">SHEK'S HOUSE</span>
             </div>
@@ -27,7 +29,10 @@
 
         <!-- Search bar -->
         <div class="search-bar">
-            <input type="text" id="search-bar" placeholder="Rechercher un article...">
+            <div class="search">
+                <input type="text" id="search-bar" placeholder="Rechercher un article...">
+                <i class="fas fa-times clear-icon" id="clear-search"></i>
+            </div>
             <div id="search-results" class="search-results"></div>
         </div>
 

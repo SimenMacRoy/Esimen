@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details</title>
     <link rel="stylesheet" href="product-details.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
 </head>
 <body>
@@ -12,19 +13,27 @@
     <!-- Header without the tab components -->
     <header>
         <div class="header-content">
-            <div class="hamburger-menu">☰</div>
-            <img src="logo.png" alt="Logo" class="logo">
+            <div class="back-icon">
+                <i class="fas fa-arrow-left" onclick="goBack()"></i>
+            </div>
+            <div>
+                <img src="logos/logoShek.jpg" alt="Logo" class="logo"><span class="title-logo">SHEK'S HOUSE</span>
+            </div>
             <div class="header-icons">
                 <i class="fas fa-heart icon"></i> <!-- Love icon using Font Awesome -->
                 <div class="basket-container">
                     <i class="fas fa-shopping-cart"></i> <!-- Basket icon using Font Awesome -->
+                    <span class="basket-count">0</span> 
                 </div>
             </div>
         </div>
 
         <!-- Search bar -->
         <div class="search-bar">
-            <input type="text" id="search-bar" placeholder="Rechercher un article...">
+            <div class="search">
+                <input type="text" id="search-bar" placeholder="Rechercher un article...">
+                <i class="fas fa-times clear-icon" id="clear-search"></i>
+            </div>
             <div id="search-results" class="search-results"></div>
         </div>
     </header>
@@ -44,7 +53,7 @@
 
         <footer id="footer">
             <div class="add-to-basket">
-                <button type="button" class="btn-add">Ajouter au panier (CA$ <span class="prix"></span>)</button>    
+                <button type="button" class="btn-add">Ajouter au panier <br>(CA$ <span class="prix"></span>)</button>    
             </div>
         </footer>
     </div>

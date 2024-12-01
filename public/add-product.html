@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Article</title>
+    <link rel="stylesheet" href="add-product.css">
+</head>
+<body>
+    <header>
+        <h1>Ajouter un Article</h1>
+    </header>
+
+    <form id="add-product-form" enctype="multipart/form-data">
+        <label for="product-name">Nom:</label>
+        <input type="text" id="product-name" name="name" required>
+
+        <label for="product-description">Description:</label>
+        <textarea id="product-description" name="description" required></textarea>
+
+        <label for="product-stock">Stock:</label>
+        <input type="number" id="product-stock" name="stock" min="0" required>
+
+        <label for="product-price">Prix:</label>
+        <input type="number" id="product-price" name="price" step="0.01" min="0" required>
+
+        <label for="department-id">Département:</label>
+        <select id="department-id" name="department_id" required>
+            <option value="">Sélectionnez un département</option>
+        </select>
+
+        <label for="category-id">Catégorie:</label>
+        <select id="category-id" name="category_id" required>
+            <option value="">Sélectionnez une catégorie</option>
+        </select>
+
+        <label for="product-images">Images (une ou plusieurs):</label>
+        <input type="file" id="product-images" name="images" accept="image/*" multiple required>
+
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <script src="add-product.js"></script>
+</body>
+</html>

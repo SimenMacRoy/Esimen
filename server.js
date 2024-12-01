@@ -11,7 +11,6 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const multer = require('multer');
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
 const Stripe = require('stripe');
 const stripe = Stripe('sk_test_51PIRk7DIrmiE2Hgb3odn47yqCN3ojcMsp70vzrz93fqUIeOxtl35xvqdzBNX8Tji2UkxtdJvnWxgNDpRlPS80AA900horxTCdC');
 const port = 3006;
@@ -23,6 +22,15 @@ const db = mysql.createConnection({
     password: 'IlovePHYSICS2003.',
     database: 'esimen'
 });
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'macroysimen@gmail.com', // Replace with your email
+        pass: 'rnhq ewng eiye rfjy'  // Replace with your email password or app password
+    }
+});
+
 
 // Connect to MySQL
 db.connect((err) => {
@@ -40,6 +48,35 @@ app.use(express.json());
 
 // Serve static files (HTML, CSS, JS) from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, 'uploads');
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+        cb(null, `${uniqueSuffix}-${file.originalname}`);
+    }
+});
+
+// Filter for image files only
+const fileFilter = (req, file, cb) => {
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (allowedMimeTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid file type. Only JPEG, PNG, and GIF are allowed.'));
+    }
+};
+
+const upload = multer({
+    storage,
+    fileFilter,
+    limits: { fileSize: 5 * 1024 * 1024 } // Limit file size to 5 MB
+});
 
 // API endpoint to get products based on department
 app.get('/api/products', (req, res) => {
@@ -162,6 +199,82 @@ app.get('/api/products/:product_id', (req, res) => {
     });
 });
 
+app.delete('/api/products/:product_id', (req, res) => {
+    const { product_id } = req.params;
+
+    // Delete rows from the basket table first
+    const deleteBasketQuery = 'DELETE FROM basket WHERE product_id = ?';
+    db.query(deleteBasketQuery, [product_id], (err) => {
+        if (err) {
+            console.error('Database error (basket):', err);
+            return res.status(500).json({ error: 'Failed to delete associated basket entries.' });
+        }
+
+        // Now delete the product
+        const deleteProductQuery = 'DELETE FROM products WHERE product_id = ?';
+        db.query(deleteProductQuery, [product_id], (err) => {
+            if (err) {
+                console.error('Database error (products):', err);
+                return res.status(500).json({ error: 'Failed to delete product.' });
+            }
+            res.json({ success: true, message: 'Product deleted successfully.' });
+        });
+    });
+});
+
+
+app.put('/api/products/:product_id', upload.array('images', 5), (req, res) => {
+    const { name, description, stock, price, department_id, category_id } = req.body;
+    const { product_id } = req.params;
+    const files = req.files;
+
+    if (!product_id || !name || !description || !stock || !price || !department_id || !category_id) {
+        return res.status(400).json({ error: 'All fields are required for the update.' });
+    }
+
+    // Update product details
+    const query = `
+        UPDATE PRODUCTS
+        SET name = ?, description = ?, stock = ?, price = ?, department_id = ?, category_id = ?
+        WHERE product_id = ?
+    `;
+
+    db.query(
+        query,
+        [name, description, stock, price, department_id, category_id, product_id],
+        (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Database error.' });
+            }
+
+            // If images are provided, update them
+            if (files && files.length > 0) {
+                const imageQuery = `
+                    DELETE FROM PRODUCT_IMAGES WHERE product_id = ?;
+                    INSERT INTO PRODUCT_IMAGES (product_id, image_url) VALUES ?
+                `;
+
+                const imageValues = files.map(file => [product_id, `/uploads/${file.filename}`]);
+
+                db.query(imageQuery, [product_id, imageValues], (imageErr) => {
+                    if (imageErr) {
+                        console.error('Error updating images:', imageErr);
+                        return res.status(500).json({ error: 'Error updating images.' });
+                    }
+
+                    return res.json({ success: true, message: 'Product updated successfully with images.' });
+                });
+            } else {
+                // No images to update
+                res.json({ success: true, message: 'Product updated successfully without image changes.' });
+            }
+        }
+    );
+});
+
+
+
 app.get('/api/categories', (req, res) => {
     const departmentName = req.query.department;
 
@@ -188,6 +301,65 @@ app.get('/api/categories', (req, res) => {
         res.json(results);  // Return the fetched categories as JSON
     });
 });
+
+app.get('/api/all-categories', (req, res) => {
+    const query = 'SELECT category_id, category_name FROM CATEGORY';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching categories:', err);
+            return res.status(500).json({ error: 'Database error.' });
+        }
+        res.json(results);
+    });
+});
+
+app.get('/api/departments', (req, res) => {
+    const query = 'SELECT department_id, department_name FROM DEPARTMENT';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching departments:', err);
+            return res.status(500).json({ error: 'Database error.' });
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/add-products', upload.array('images', 5), (req, res) => {
+    const { name, description, stock, price, department_id, category_id } = req.body;
+    const files = req.files; // Array of uploaded files
+
+    if (!name || !description || !stock || !price || !department_id || !category_id || files.length === 0) {
+        return res.status(400).json({ error: 'All fields and at least one image are required.' });
+    }
+
+    const query = `
+        INSERT INTO PRODUCTS (description, stock, name, price, department_id, category_id, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, NOW())
+    `;
+
+    db.query(query, [description, stock, name, price, department_id, category_id], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error.' });
+        }
+
+        const product_id = result.insertId;
+
+        // Prepare image data for insertion
+        const imageQuery = 'INSERT INTO PRODUCT_IMAGES (product_id, image_url) VALUES ?';
+        const imageValues = files.map(file => [product_id, `/uploads/${file.filename}`]);
+
+        db.query(imageQuery, [imageValues], (imageErr) => {
+            if (imageErr) {
+                console.error('Error saving images:', imageErr);
+                return res.status(500).json({ error: 'Error saving images.' });
+            }
+
+            res.json({ success: true, message: 'Product and images added successfully.' });
+        });
+    });
+});
+
 
 // API to fetch products by category_id
 app.get('/api/products_cat', (req, res) => {
@@ -255,7 +427,7 @@ app.get('/api/search-categories', (req, res) => {
         SELECT 
             c.category_id, 
             c.category_name, 
-            d.department_name
+            LOWER(d.department_name) AS department_name
         FROM 
             CATEGORY c
         JOIN 
@@ -304,7 +476,8 @@ app.post('/api/users/check', (req, res) => {
                         email: user.email,
                         address: user.postal_address,
                         profilePicture: user.profile_picture,
-                        user_id: user.user_id
+                        user_id: user.user_id,
+                        is_admin: user.is_admin
                     },
                 });
             } else {
@@ -316,7 +489,6 @@ app.post('/api/users/check', (req, res) => {
     });
 });
 
-// Endpoint to register a new user
 app.post('/api/users/register', async (req, res) => {
     const { name, surname, email, password, phone, address } = req.body;
 
@@ -343,10 +515,38 @@ app.post('/api/users/register', async (req, res) => {
                     return res.status(500).json({ error: 'Error retrieving user ID.' });
                 }
 
-                res.json({
-                    success: true,
-                    message: 'User registered successfully.',
-                    user_id: results[0].user_id, // Return the user_id
+                const userId = results[0].user_id;
+
+                // Send confirmation email
+                const mailOptions = {
+                    from: 'macroysimen@gmail.com', // Replace with your email
+                    to: email,
+                    subject: 'Bienvenu(e) chez SHEK\'S HOUSE!',
+                    text: `Salut ${name},\n\nMerci de votre inscription. Nous sommes fières de votre inscription!\n`,
+                    html: `
+                        <p>Dear ${name},</p>
+                        <p>Thank you for registering with us. We're excited to have you onboard!</p>
+                        <p>If you have any questions, feel free to reach out to us at any time.</p>
+                        <p>Best Regards,</p>
+                        <p><strong>Your Team</strong></p>
+                    `,
+                };
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        console.error('Error sending email:', error);
+                        return res.status(500).json({
+                            success: true,
+                            message: 'User registered, but failed to send confirmation email.',
+                            user_id: userId,
+                        });
+                    }
+                    console.log('Email sent:', info.response);
+                    res.json({
+                        success: true,
+                        message: 'User registered successfully. Confirmation email sent.',
+                        user_id: userId,
+                    });
                 });
             });
         });
@@ -623,14 +823,6 @@ function generateInvoiceAndSendEmail(userEmail, userId, userAddress, userSurname
 
 
 function sendInvoiceEmail(userEmail, userId, invoicePath, callback) {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'macroysimen@gmail.com', // Replace with your email
-            pass: 'rnhq ewng eiye rfjy'  // Replace with your email password or app password
-        }
-    });
-
     const mailOptions = {
         from: 'macroysimen@gmail.com', // Replace with your email
         to: userEmail,
@@ -768,8 +960,88 @@ app.delete('/api/basket', (req, res) => {
         res.json({ success: true, message: 'Item removed from the basket.' });
     });
 });
+app.post('/api/forgot-password', (req, res) => {
+    const { email } = req.body;
 
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'Email is required.' });
+    }
 
+    // Generate a 6-digit reset code
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Update the reset code in the database
+    const query = 'UPDATE USERS SET reset_code = ? WHERE email = ?';
+    db.query(query, [resetCode, email], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ success: false, message: 'Database error.' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Email not found.' });
+        }
+
+        // Send the reset code via email
+        const mailOptions = {
+            from: 'macroysimen@gmail.com', // Replace with your email
+            to: email,
+            subject: 'Password Reset Code',
+            text: `Your password reset code is: ${resetCode}`,
+            html: `<p>Dear user,</p>
+                   <p>Your password reset code is:</p>
+                   <h2>${resetCode}</h2>
+                   <p>Please use this code to reset your password. If you did not request this, please ignore this email.</p>
+                   <p>Thank you,</p>
+                   <p>Your Application Team</p>`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                return res.status(500).json({ success: false, message: 'Failed to send email.' });
+            }
+            console.log('Email sent:', info.response);
+            res.json({ success: true, message: 'Reset code sent to your email.' });
+        });
+    });
+});
+app.post('/api/verify-code', (req, res) => {
+    const { code } = req.body;
+
+    const query = 'SELECT * FROM USERS WHERE reset_code = ?';
+    db.query(query, [code], (err, results) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Database error.' });
+        }
+        if (results.length === 0) {
+            return res.json({ success: false, message: 'Invalid reset code.' });
+        }
+        res.json({ success: true });
+    });
+});
+app.post('/api/reset-password', (req, res) => {
+    const { code, newPassword } = req.body;
+
+    if (!code || !newPassword) {
+        return res.status(400).json({ success: false, message: 'Reset code and new password are required.' });
+    }
+
+    // Hash the new password
+    const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+    const query = 'UPDATE USERS SET password = ?, reset_code = NULL WHERE reset_code = ?';
+    db.query(query, [hashedPassword, code], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ success: false, message: 'Database error.' });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Invalid or expired reset code.' });
+        }
+        res.json({ success: true, message: 'Password reset successfully.' });
+    });
+});
 
 
 

@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const navProfile = document.getElementById('nav-profile');
     const searchBar = document.getElementById('search-bar'); // Search bar input
     const searchResultsContainer = document.getElementById('search-results'); // Search results container
+    const clearSearch = document.getElementById('clear-search');
+    const basketContainer = document.querySelector('.basket-container');
+    const basketCountElement = document.querySelector('.basket-count');
 
     // Function to switch the active department tab in the top menu
     const switchActiveTab = (selectedTab) => {
@@ -64,6 +67,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+       // Show or hide the clear icon based on input value
+       searchBar.addEventListener('input', () => {
+        if (searchBar.value.trim() !== '') {
+            clearSearch.style.display = 'flex';
+        } else {
+            clearSearch.style.display = 'none';
+        }
+    });
+
+    // Clear the search bar when the clear icon is clicked
+    clearSearch.addEventListener('click', () => {
+        searchBar.value = '';
+        clearSearch.style.display = 'none';
+        searchResultsContainer.style.display = 'none'; 
+        //document.getElementById('search-results').innerHTML = ''; // Clear search results if applicable
+        searchBar.focus(); // Refocus on the input
+    });
+
     // Add event listeners for department tabs in the top menu
     tabItems.forEach(tab => {
         tab.addEventListener('click', () => {
@@ -106,8 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Search Bar Functionality
 
-    // Function to fetch and display search results
-    const searchCategories = async (query) => {
+     // Function to fetch categories or departments and navigate to product.html
+     const searchCategories = async (query) => {
         try {
             const response = await fetch(`${config.baseURL}/api/search-categories?query=${query}`);
             if (!response.ok) {
@@ -129,9 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 resultItem.classList.add('search-result-item');
                 resultItem.textContent = `${category.category_name} (${category.department_name})`;
 
-                // Add event listener to navigate to the products in this category
+                // Add event listener to navigate to the products page
                 resultItem.addEventListener('click', () => {
-                    window.location.href = `${config.baseURL}/searchResults.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
+                    // Navigate to product.html with the category_id and department name
+                    
+                    window.location.href = `products.html?category_id=${category.category_id}&departmentName=${category.department_name}`;
                 });
 
                 searchResultsContainer.appendChild(resultItem);
@@ -150,4 +173,41 @@ document.addEventListener('DOMContentLoaded', () => {
             searchResultsContainer.style.display = 'none';
         }
     });
+
+    // Fetch the basket count from the backend
+    async function fetchBasketCount() {
+        const userId = getUserId(); // Replace with your logic to get the logged-in user's ID
+
+        if (!userId) return;
+
+        try {
+            const response = await fetch(`${config.baseURL}/api/basket/count?user_id=${userId}`);
+            if (response.ok) {
+                const data = await response.json();
+                basketCountElement.textContent = data.itemCount || 0; // Update the badge
+            } else {
+                console.error('Error fetching basket count:', response.statusText);
+                basketCountElement.textContent = 0; // Fallback to 0
+            }
+        } catch (error) {
+            console.error('Error fetching basket count:', error);
+            basketCountElement.textContent = 0; // Fallback to 0
+        }
+    }
+
+    // Navigate to the basket page when the basket icon is clicked
+    basketContainer.addEventListener('click', () => {
+        window.location.href = 'basket.html'; // Replace with your actual basket page URL
+    });
+
+    // Fetch and update the basket count on page load
+    fetchBasketCount();
+
 });
+function goBack() {
+    window.history.back(); // Navigate to the previous page
+}
+function getUserId() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    return userData ? userData.user_id : null;
+}

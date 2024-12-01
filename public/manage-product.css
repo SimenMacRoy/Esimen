@@ -1,0 +1,62 @@
+body{
+    font-family: 'Ebrima';
+}
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.product-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: calc(30% - 20px);
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-card h3 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.product-card .price {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.product-card .action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.product-card .action-buttons button {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.product-card .action-buttons .modify-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.product-card .action-buttons .delete-button {
+    background-color: #dc3545;
+    color: white;
+}

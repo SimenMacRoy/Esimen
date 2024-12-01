@@ -1,7 +1,7 @@
 .category-card {
     display: inline-block;
-    background-color: orange;
-    color:black;
+    background:linear-gradient(45deg, #961414, #f1874a);
+    color:white;
     width: 20%; /* Default width for desktop */
     padding: 10px 20px;
     margin: 10px;
@@ -16,7 +16,7 @@
 /* Hover effect for category boxes */
 .category-card:hover {
     transform: scale(1.05);
-    background-color: red;
+    background: red;
 }
 
 /* Ensure the category section starts below the tab menu */
