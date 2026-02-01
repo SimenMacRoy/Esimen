@@ -30,7 +30,8 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder');
 // Helmet for HTTP security headers
 app.use(helmet({
     contentSecurityPolicy: false, // Disable for static files
-    crossOriginEmbedderPolicy: false
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" } // Allow images to be loaded from other origins
 }));
 
 // CORS configuration
@@ -205,7 +206,13 @@ function validatePositiveInteger(value) {
 // ===================
 
 app.use(express.static(path.join(__dirname, '../frontend')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve uploads with explicit CORS headers for cross-origin access
+app.use('/uploads', (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+}, express.static(path.join(__dirname, 'uploads')));
 
 // ===================
 // FILE UPLOAD CONFIG
