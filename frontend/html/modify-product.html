@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+    <title>Modifier le Produit - Shek's House</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/add-product.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logos/logoShek.jpg">
+</head>
+<body>
+
+    <header></header>
+
+    <main class="admin-container">
+        <div class="page-header">
+            <h1><i class="fas fa-edit"></i> Modifier le Produit</h1>
+            <p>Modifiez les informations du produit</p>
+        </div>
+
+        <form id="modify-product-form" class="product-form">
+            <div class="form-section">
+                <h3><i class="fas fa-info-circle"></i> Informations de base</h3>
+
+                <div class="form-group">
+                    <label for="name">Nom du produit</label>
+                    <input type="text" id="name" name="name" placeholder="Ex: T-shirt Premium" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Decrivez le produit en detail..." required></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-dollar-sign"></i> Prix et Stock</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Prix (CA$)</label>
+                        <input type="number" id="price" name="price" step="0.01" min="0" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stock">Stock disponible</label>
+                        <input type="number" id="stock" name="stock" min="0" placeholder="0" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-folder"></i> Classification</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="department-id">Departement</label>
+                        <select id="department-id" name="department_id" required>
+                            <option value="">Selectionnez un departement</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="category-id">Categorie</label>
+                        <select id="category-id" name="category_id" required>
+                            <option value="">Selectionnez une categorie</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3><i class="fas fa-images"></i> Images</h3>
+                <div id="current-images" class="current-images-grid"></div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label for="product-images">Remplacer les images (optionnel)</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="product-images" name="images" accept="image/*" multiple>
+                        <div class="file-upload-text">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Cliquez pour choisir de nouvelles images</span>
+                            <small>Les anciennes images seront remplacees</small>
+                        </div>
+                    </div>
+                    <div id="image-preview" class="image-preview"></div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" onclick="window.location.href='manage-products.html'">
+                    <i class="fas fa-times"></i>
+                    Annuler
+                </button>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i>
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer></footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/components.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/modify-product.js"></script>
+</body>
+</html>

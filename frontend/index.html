@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shek's House - Boutique de mode en ligne. Femme, Homme, Enfant et Linge de Maison.">
+    <meta name="theme-color" content="#ff4500">
+    <title>Shek's House - Vente en Ligne</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="assets/images/logos/logoShek.jpg">
+    <link rel="apple-touch-icon" href="assets/images/logos/logoShek.jpg">
+</head>
+<body>
+
+    <!-- Header -->
+    <header></header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section (Optional - for featured products) -->
+        <section class="hero-banner" id="hero-banner" style="display: none;">
+            <div class="hero-content">
+                <span class="hero-badge">Nouveautes</span>
+                <h1 class="hero-title">Collection Printemps</h1>
+                <p class="hero-subtitle">Decouvrez nos dernieres tendances</p>
+                <button class="hero-cta">Voir la collection</button>
+            </div>
+        </section>
+
+        <!-- Product Grid -->
+        <section id="product-list" class="product-list">
+            <!-- Loading State -->
+            <div class="loader-container" id="loader">
+                <div class="loader"></div>
+                <p>Chargement des produits...</p>
+            </div>
+            <!-- Products will be dynamically loaded here -->
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <footer></footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/components.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/searchBar.js"></script>
+
+    <script>
+        // Initialize components
+        document.addEventListener('DOMContentLoaded', () => {
+            ShekComponents.initHeader({ showSearch: true, showTabs: true });
+            ShekComponents.initFooter('accueil');
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+    <title>Gestion des Utilisateurs - Shek's House</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <style>
+        .admin-container {
+            padding-top: 100px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--dark) 0%, #2a2a2a 100%);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .page-header h1 {
+            color: var(--white);
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i {
+            color: var(--primary);
+        }
+
+        .page-header p {
+            color: var(--gray-light);
+            margin: 8px 0 0;
+            font-size: 14px;
+        }
+
+        .users-table {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 120px;
+            padding: 16px 20px;
+            background: var(--bg-light);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--gray-lighter);
+        }
+
+        .user-row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 120px;
+            padding: 16px 20px;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-lighter);
+            transition: background var(--transition-fast);
+        }
+
+        .user-row:hover {
+            background: var(--bg-light);
+        }
+
+        .user-row:last-child {
+            border-bottom: none;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .user-email {
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .user-phone {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.admin {
+            background: rgba(255, 69, 0, 0.1);
+            color: var(--primary);
+        }
+
+        .status-badge.user {
+            background: var(--bg-light);
+            color: var(--gray);
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-promote {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-promote:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-demote {
+            background: var(--gray-lighter);
+            color: var(--dark);
+        }
+
+        .btn-demote:hover {
+            background: var(--gray-light);
+        }
+
+        .btn-demote:disabled,
+        .btn-promote:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: var(--gray-lighter);
+            margin-bottom: 16px;
+        }
+
+        /* Toast */
+        #toast-container {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .table-header {
+                display: none;
+            }
+
+            .user-row {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .user-info {
+                width: 100%;
+            }
+
+            .user-phone {
+                margin-top: 4px;
+            }
+
+            .status-badge {
+                align-self: flex-start;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header></header>
+
+    <main class="admin-container">
+        <div class="page-header">
+            <h1><i class="fas fa-users-cog"></i> Gestion des Utilisateurs</h1>
+            <p>Promouvoir ou révoquer le statut administrateur des membres</p>
+        </div>
+
+        <div class="users-table">
+            <div class="table-header">
+                <span>Utilisateur</span>
+                <span>Téléphone</span>
+                <span>Statut</span>
+                <span>Action</span>
+            </div>
+            <div id="users-list">
+                <div class="loader-container">
+                    <div class="loader"></div>
+                    <p>Chargement des utilisateurs...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer></footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/components.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <script>
+        const config = {
+            baseURL: 'http://localhost:3006'
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check admin access
+            if (!Auth.isLoggedIn() || !Auth.isAdmin()) {
+                alert('Accès refusé. Vous devez être administrateur.');
+                window.location.href = 'profile.html';
+                return;
+            }
+
+            // Initialize components
+            ShekComponents.initHeader({ showSearch: false, showTabs: false, showBackButton: true, pageTitle: 'Admin' });
+            ShekComponents.initFooter('profile');
+
+            loadUsers();
+        });
+
+        async function loadUsers() {
+            const usersList = document.getElementById('users-list');
+
+            try {
+                const response = await fetch(`${config.baseURL}/api/admin/users`, {
+                    headers: {
+                        'Authorization': `Bearer ${Auth.getToken()}`
+                    }
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    alert('Accès refusé.');
+                    window.location.href = 'profile.html';
+                    return;
+                }
+
+                const data = await response.json();
+
+                // Handle error response or ensure data is an array
+                const users = Array.isArray(data) ? data : (data.users || []);
+
+                if (!Array.isArray(users) || users.length === 0) {
+                    usersList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <p>${data.error || 'Aucun utilisateur trouvé'}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const currentUserId = Auth.getUserId();
+
+                usersList.innerHTML = users.map(user => {
+                    const isCurrentUser = user.user_id === currentUserId;
+                    const isAdmin = user.is_admin === 1;
+
+                    return `
+                        <div class="user-row">
+                            <div class="user-info">
+                                <span class="user-name">${user.name} ${user.surname}</span>
+                                <span class="user-email">${user.email}</span>
+                            </div>
+                            <span class="user-phone">${user.phone || '-'}</span>
+                            <span class="status-badge ${isAdmin ? 'admin' : 'user'}">
+                                <i class="fas ${isAdmin ? 'fa-shield-alt' : 'fa-user'}"></i>
+                                ${isAdmin ? 'Admin' : 'Membre'}
+                            </span>
+                            <div>
+                                ${isAdmin ? `
+                                    <button class="action-btn btn-demote"
+                                            onclick="updateUserRole(${user.user_id}, 0)"
+                                            ${isCurrentUser ? 'disabled title="Vous ne pouvez pas vous retirer le statut admin"' : ''}>
+                                        <i class="fas fa-user-minus"></i>
+                                        Révoquer
+                                    </button>
+                                ` : `
+                                    <button class="action-btn btn-promote" onclick="updateUserRole(${user.user_id}, 1)">
+                                        <i class="fas fa-user-shield"></i>
+                                        Promouvoir
+                                    </button>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading users:', error);
+                usersList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Erreur lors du chargement des utilisateurs</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function updateUserRole(userId, isAdmin) {
+            const action = isAdmin ? 'promouvoir' : 'révoquer';
+            if (!confirm(`Voulez-vous vraiment ${action} cet utilisateur?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${config.baseURL}/api/admin/users/${userId}/role`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${Auth.getToken()}`
+                    },
+                    body: JSON.stringify({ is_admin: isAdmin })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast(result.message, 'success');
+                    loadUsers();
+                } else {
+                    showToast(result.error || 'Erreur lors de la mise à jour', 'error');
+                }
+            } catch (error) {
+                console.error('Error updating user role:', error);
+                showToast('Erreur lors de la mise à jour', 'error');
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

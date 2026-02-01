@@ -1,0 +1,39 @@
+{
+  "name": "esimen-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "seed:admin": "node database/seed-admin.js",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch --runInBand",
+    "test:coverage": "jest --coverage --runInBand"
+  },
+  "keywords": [
+    "ecommerce",
+    "backend",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "Backend pour Shek's House - Site e-commerce",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.0",
+    "nodemailer": "^6.9.16",
+    "pdfkit": "^0.15.1",
+    "stripe": "^17.3.1"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.2.2"
+  }
+}

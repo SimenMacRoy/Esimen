@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+    <title>Votre Panier - Shek's House</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/basket.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logos/logoShek.jpg">
+</head>
+<body>
+
+    <!-- Header -->
+    <header></header>
+
+    <!-- Main Content -->
+    <main class="basket-page">
+        <!-- Basket Items Section -->
+        <section class="basket">
+            <div class="section-header">
+                <h2><i class="fas fa-box"></i> Articles (<span id="item-count">0</span>)</h2>
+            </div>
+
+            <div id="basket-content" class="basket-items">
+                <!-- Loading state -->
+                <div class="loader-container" id="basket-loader">
+                    <div class="loader"></div>
+                    <p>Chargement de votre panier...</p>
+                </div>
+                <!-- Items will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Checkout Section -->
+        <aside class="checkout">
+            <div class="checkout-card">
+                <h2><i class="fas fa-receipt"></i> Sommaire</h2>
+
+                <div class="checkout-summary">
+                    <div class="checkout-row">
+                        <span>Sous-total</span>
+                        <span id="subtotal">CA$ 0.00</span>
+                    </div>
+                    <div class="checkout-row" id="discount-row" style="display: none;">
+                        <span><i class="fas fa-tag"></i> Reduction</span>
+                        <span class="discount-amount" style="color: #27ae60; font-weight: 600;">-CA$ 0.00</span>
+                    </div>
+                    <div class="checkout-row">
+                        <span>Livraison</span>
+                        <span class="free-shipping"><i class="fas fa-truck"></i> Gratuite</span>
+                    </div>
+                    <div class="checkout-row">
+                        <span>Taxes (TPS + TVQ)</span>
+                        <span id="taxes">CA$ 0.00</span>
+                    </div>
+                    <div class="checkout-row total">
+                        <span>Total</span>
+                        <span class="amount" id="total-price">CA$ 0.00</span>
+                    </div>
+                </div>
+
+                <!-- Delivery Address -->
+                <div id="delivery-address-section"></div>
+
+                <!-- Promo Code -->
+                <div class="promo-section">
+                    <label for="promo-code"><i class="fas fa-tag"></i> Code promo</label>
+                    <div class="promo-input-wrapper">
+                        <input type="text" id="promo-code" placeholder="Entrez votre code">
+                        <button type="button" class="btn-apply" onclick="applyPromoCode()">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                    <div id="applied-promo" class="applied-promo" style="display: none;">
+                        <div class="applied-promo-info">
+                            <i class="fas fa-check-circle"></i>
+                            <span id="applied-promo-text"></span>
+                        </div>
+                        <button type="button" class="btn-remove-promo" onclick="removePromoCode()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Available Coupons -->
+                <div class="available-coupons-section" id="available-coupons-section">
+                    <div class="coupons-header" onclick="toggleAvailableCoupons()">
+                        <span><i class="fas fa-ticket-alt"></i> Coupons disponibles</span>
+                        <i class="fas fa-chevron-down" id="coupons-toggle-icon"></i>
+                    </div>
+                    <div class="coupons-list" id="available-coupons-list">
+                        <!-- Coupons will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Checkout Button -->
+                <div class="checkout-actions">
+                    <button type="button" id="checkout-button" class="btn-checkout" onclick="proceedToCheckout()">
+                        <i class="fas fa-lock"></i>
+                        <span>Passer la commande</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Security Badges -->
+                <div class="security-section">
+                    <div class="security-badges">
+                        <div class="badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Paiement securise</span>
+                        </div>
+                        <div class="badge">
+                            <i class="fas fa-undo"></i>
+                            <span>Retours 30 jours</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-section">
+                    <p class="payment-title">Modes de paiement acceptes</p>
+                    <div class="payment-icons">
+                        <img src="../assets/images/logos/visa.png" alt="Visa" title="Visa">
+                        <img src="../assets/images/logos/mastercard.png" alt="Mastercard" title="Mastercard">
+                        <img src="../assets/images/logos/amex.png" alt="American Express" title="American Express">
+                        <img src="../assets/images/logos/paypal.png" alt="PayPal" title="PayPal">
+                        <img src="../assets/images/logos/applepay.png" alt="Apple Pay" title="Apple Pay">
+                    </div>
+                </div>
+
+                <!-- Policies -->
+                <div class="policies-section">
+                    <div class="policy">
+                        <i class="fas fa-shipping-fast"></i>
+                        <div>
+                            <strong>Livraison gratuite</strong>
+                            <span>Sur toutes les commandes</span>
+                        </div>
+                    </div>
+                    <div class="policy">
+                        <i class="fas fa-box-open"></i>
+                        <div>
+                            <strong>Retours faciles</strong>
+                            <span>30 jours pour changer d'avis</span>
+                        </div>
+                    </div>
+                    <div class="policy">
+                        <i class="fas fa-headset"></i>
+                        <div>
+                            <strong>Support 24/7</strong>
+                            <span>Une question? Contactez-nous</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Footer -->
+    <footer></footer>
+
+    <!-- Scripts -->
+    <script src="../js/components.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/promo.js"></script>
+    <script src="../js/basket.js"></script>
+
+    <script>
+        // Initialize components
+        document.addEventListener('DOMContentLoaded', () => {
+            ShekComponents.initHeader({
+                showSearch: false,
+                showTabs: false,
+                showBackButton: true,
+                pageTitle: '<i class="fas fa-shopping-bag"></i> Votre Panier'
+            });
+            ShekComponents.initFooter('basket');
+        });
+    </script>
+
+</body>
+</html>

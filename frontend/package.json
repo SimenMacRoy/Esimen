@@ -1,0 +1,11 @@
+{
+  "name": "esimen-frontend",
+  "version": "1.0.0",
+  "description": "Frontend pour Shek's House - Site e-commerce",
+  "scripts": {
+    "start": "npx serve -s . -l 3000"
+  },
+  "keywords": ["ecommerce", "frontend"],
+  "author": "",
+  "license": "ISC"
+}

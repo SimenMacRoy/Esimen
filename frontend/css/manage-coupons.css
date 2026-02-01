@@ -1,0 +1,772 @@
+/* ============================================
+   MANAGE COUPONS PAGE - Modern Admin Design
+   ============================================ */
+
+:root {
+    --primary: #ff4500;
+    --primary-dark: #e03d00;
+    --primary-light: #ff6b35;
+    --dark: #1a1a1a;
+    --white: #ffffff;
+    --gray: #666666;
+    --gray-light: #999999;
+    --gray-lighter: #e5e5e5;
+    --bg-light: #f8f9fa;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --error: #e74c3c;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.15);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --transition-fast: 0.2s ease;
+}
+
+/* ============================================
+   ADMIN CONTAINER
+   ============================================ */
+.admin-container {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    min-height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* ============================================
+   PAGE HEADER BAR
+   ============================================ */
+.page-header-bar {
+    background: linear-gradient(135deg, var(--dark) 0%, #2a2a2a 100%);
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.page-header-bar .header-content h1 {
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.page-header-bar .header-content h1 i {
+    color: var(--primary);
+}
+
+.page-header-bar .header-content p {
+    color: var(--gray-light);
+    margin: 8px 0 0;
+    font-size: 14px;
+}
+
+.add-coupon-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.add-coupon-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   STATS GRID
+   ============================================ */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card .stat-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 69, 0, 0.1);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 20px;
+}
+
+.stat-card.active .stat-icon {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--success);
+}
+
+.stat-card .stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-card .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.stat-card .stat-label {
+    font-size: 13px;
+    color: var(--gray);
+}
+
+/* ============================================
+   COUPONS SECTION
+   ============================================ */
+.coupons-section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-header h2 i {
+    color: var(--primary);
+}
+
+.filter-group select {
+    padding: 10px 16px;
+    border: 2px solid var(--gray-lighter);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* ============================================
+   COUPONS LIST
+   ============================================ */
+.coupons-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.coupon-card {
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.coupon-card:hover {
+    background: #f0f0f0;
+}
+
+.coupon-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary);
+}
+
+.coupon-card.inactive::before {
+    background: var(--gray-light);
+}
+
+.coupon-card.expired::before {
+    background: var(--error);
+}
+
+.coupon-code-badge {
+    background: linear-gradient(135deg, var(--dark) 0%, #2a2a2a 100%);
+    color: var(--white);
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    min-width: 140px;
+    text-align: center;
+}
+
+.coupon-info {
+    flex: 1;
+}
+
+.coupon-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0 0 6px;
+}
+
+.coupon-description {
+    font-size: 13px;
+    color: var(--gray);
+    margin: 0 0 8px;
+}
+
+.coupon-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.coupon-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gray);
+}
+
+.coupon-meta-item i {
+    color: var(--primary);
+    font-size: 11px;
+}
+
+.coupon-discount {
+    text-align: center;
+    padding: 0 20px;
+}
+
+.coupon-discount .value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.coupon-discount .type {
+    font-size: 12px;
+    color: var(--gray);
+}
+
+.coupon-status {
+    padding: 0 20px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: rgba(39, 174, 96, 0.15);
+    color: var(--success);
+}
+
+.status-badge.inactive {
+    background: rgba(153, 153, 153, 0.15);
+    color: var(--gray);
+}
+
+.status-badge.expired {
+    background: rgba(231, 76, 60, 0.15);
+    color: var(--error);
+}
+
+.coupon-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all var(--transition-fast);
+}
+
+.btn-edit {
+    background: rgba(255, 69, 0, 0.1);
+    color: var(--primary);
+}
+
+.btn-edit:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.btn-delete {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--error);
+}
+
+.btn-delete:hover {
+    background: var(--error);
+    color: var(--white);
+}
+
+/* ============================================
+   MODAL STYLES
+   ============================================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 2000;
+    padding: 40px 20px;
+    overflow-y: auto;
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--bg-light);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray);
+    font-size: 16px;
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: var(--error);
+    color: var(--white);
+}
+
+.modal-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-card h2 i {
+    color: var(--primary);
+}
+
+/* ============================================
+   FORM STYLES
+   ============================================ */
+.coupon-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-section {
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    padding: 20px;
+}
+
+.form-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-section h3 i {
+    color: var(--primary);
+    font-size: 14px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px 14px;
+    border: 2px solid var(--gray-lighter);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 14px;
+    transition: all var(--transition-fast);
+    background: var(--white);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-group small {
+    font-size: 11px;
+    color: var(--gray-light);
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.btn-cancel {
+    padding: 12px 24px;
+    background: var(--bg-light);
+    color: var(--gray);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-cancel:hover {
+    background: var(--gray-lighter);
+    color: var(--dark);
+}
+
+.btn-submit {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all var(--transition-fast);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 69, 0, 0.35);
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================
+   LOADER
+   ============================================ */
+.loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: var(--gray);
+}
+
+.loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--gray-lighter);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: var(--gray-lighter);
+    margin-bottom: 16px;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 15px;
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+#toast-container {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.toast {
+    background: var(--dark);
+    color: var(--white);
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-lg);
+    animation: toastSlideIn 0.3s ease;
+}
+
+.toast.toast-success { background: var(--success); }
+.toast.toast-error { background: var(--error); }
+.toast.toast-info { background: var(--primary); }
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 900px) {
+    .coupon-card {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .coupon-card::before {
+        width: 100%;
+        height: 4px;
+        bottom: auto;
+    }
+
+    .coupon-code-badge {
+        min-width: auto;
+    }
+
+    .coupon-discount {
+        padding: 12px 0;
+        border-top: 1px solid var(--gray-lighter);
+        border-bottom: 1px solid var(--gray-lighter);
+    }
+
+    .coupon-meta {
+        justify-content: center;
+    }
+
+    .coupon-actions {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-container {
+        padding-top: 80px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .page-header-bar {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .page-header-bar .header-content h1 {
+        font-size: 20px;
+        justify-content: center;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .modal-card {
+        padding: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+}

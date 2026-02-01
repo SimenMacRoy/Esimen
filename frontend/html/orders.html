@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+    <title>Mes Commandes - Shek's House</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/orders.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logos/logoShek.jpg">
+</head>
+<body>
+
+    <!-- Header -->
+    <header></header>
+
+    <!-- Main Content -->
+    <main class="orders-page">
+        <div class="orders-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1><i class="fas fa-box"></i> Mes Commandes</h1>
+                <p>Suivez l'historique de toutes vos commandes</p>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="loading-state">
+                <div class="order-skeleton">
+                    <div class="skeleton skeleton-header"></div>
+                    <div class="skeleton skeleton-body"></div>
+                </div>
+                <div class="order-skeleton">
+                    <div class="skeleton skeleton-header"></div>
+                    <div class="skeleton skeleton-body"></div>
+                </div>
+            </div>
+
+            <!-- Orders List -->
+            <div class="orders-list" id="orders-list" style="display: none;">
+                <!-- Orders will be loaded dynamically -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3>Aucune commande</h3>
+                <p>Vous n'avez pas encore passé de commande.</p>
+                <a href="../index.html" class="btn-shop">
+                    <i class="fas fa-store"></i>
+                    Découvrir nos produits
+                </a>
+            </div>
+
+            <!-- Login Required State -->
+            <div class="login-required" id="login-required" style="display: none;">
+                <div class="login-icon">
+                    <i class="fas fa-user-lock"></i>
+                </div>
+                <h3>Connexion requise</h3>
+                <p>Veuillez vous connecter pour voir vos commandes.</p>
+                <a href="profile.html" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Se connecter
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Order Detail Modal -->
+    <div class="modal-overlay" id="order-modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2>Détails de la commande</h2>
+                <span class="order-number" id="modal-order-number">#SH-XXXXX</span>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Footer -->
+    <footer></footer>
+
+    <!-- Scripts -->
+    <script src="../js/components.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/orders.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            ShekComponents.initHeader({
+                showSearch: false,
+                showTabs: false,
+                showBackButton: true,
+                pageTitle: '<i class="fas fa-box"></i> Mes Commandes'
+            });
+            ShekComponents.initFooter('profile');
+        });
+    </script>
+
+</body>
+</html>

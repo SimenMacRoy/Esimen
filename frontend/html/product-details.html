@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+    <title>Détails du Produit - Shek's House</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/product-details.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logos/logoShek.jpg">
+</head>
+<body>
+
+    <!-- Header -->
+    <header></header>
+
+    <!-- Main Content -->
+    <main class="product-page">
+        <div class="product-container">
+            <!-- Product Gallery -->
+            <div class="product-gallery">
+                <div class="main-image-wrapper">
+                    <div class="image-badge" id="image-counter">1/1</div>
+                    <img id="main-product-image" src="../assets/images/default_image.jpg" alt="Image du produit" class="main-image">
+                    <button class="gallery-nav gallery-prev" id="gallery-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="gallery-nav gallery-next" id="gallery-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="thumbnail-gallery" id="thumbnail-gallery">
+                    <!-- Thumbnails loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info-panel">
+                <!-- Loading State -->
+                <div class="loading-state" id="loading-state">
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-price"></div>
+                    <div class="skeleton skeleton-text"></div>
+                    <div class="skeleton skeleton-text short"></div>
+                </div>
+
+                <!-- Product Details (hidden until loaded) -->
+                <div class="product-details-content" id="product-content" style="display: none;">
+                    <div class="product-category" id="product-category">
+                        <i class="fas fa-tag"></i>
+                        <span>Catégorie</span>
+                    </div>
+
+                    <h1 class="product-title" id="product-title">Nom du produit</h1>
+
+                    <div class="product-price-section">
+                        <span class="product-price" id="product-price">CA$ 0.00</span>
+                        <div class="product-likes">
+                            <button class="like-btn" id="like-btn" title="J'aime">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span id="like-count">0</span>
+                            </button>
+                            <button class="dislike-btn" id="dislike-btn" title="Je n'aime pas">
+                                <i class="fas fa-thumbs-down"></i>
+                                <span id="dislike-count">0</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-description" id="product-description">
+                        <p>Description du produit</p>
+                    </div>
+
+                    <!-- Stock Status -->
+                    <div class="stock-indicator" id="stock-indicator">
+                        <div class="stock-badge in-stock">
+                            <i class="fas fa-check-circle"></i>
+                            <span>En stock</span>
+                        </div>
+                        <span class="stock-count" id="stock-count">(10 disponibles)</span>
+                    </div>
+
+                    <!-- Quantity Selector -->
+                    <div class="quantity-selector">
+                        <label>Quantité</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn qty-minus" id="qty-minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" id="quantity-input" value="1" min="1" readonly>
+                            <button type="button" class="qty-btn qty-plus" id="qty-plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <button class="btn-add-to-cart" id="add-to-cart-btn">
+                        <div class="btn-content">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Ajouter au panier</span>
+                        </div>
+                        <div class="btn-price" id="btn-total-price">CA$ 0.00</div>
+                    </button>
+
+                    <!-- Features -->
+                    <div class="product-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="feature-text">
+                                <span class="feature-title">Livraison gratuite</span>
+                                <span class="feature-desc">Partout au Canada</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-undo"></i>
+                            </div>
+                            <div class="feature-text">
+                                <span class="feature-title">Retours faciles</span>
+                                <span class="feature-desc">Sous 30 jours</span>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="feature-text">
+                                <span class="feature-title">Paiement sécurisé</span>
+                                <span class="feature-desc">Cryptage SSL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div class="error-state" id="error-state" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Produit non trouvé</h3>
+                    <p>Désolé, ce produit n'existe pas ou n'est plus disponible.</p>
+                    <a href="../index.html" class="btn-back-home">
+                        <i class="fas fa-home"></i>
+                        Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Audit Section (visible only for admins) -->
+        <div class="admin-audit-section" id="admin-audit-section" style="display: none;">
+            <h3><i class="fas fa-history"></i> Historique des modifications</h3>
+            <div class="audit-list" id="audit-list">
+                <!-- Audit entries loaded dynamically -->
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section" id="comments-section">
+            <h3><i class="fas fa-comments"></i> Commentaires <span id="comments-count">(0)</span></h3>
+
+            <!-- Add Comment Form -->
+            <div class="add-comment-form" id="add-comment-form">
+                <textarea id="comment-input" placeholder="Laissez votre commentaire..." maxlength="1000"></textarea>
+                <button class="btn-submit-comment" id="submit-comment-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Publier
+                </button>
+            </div>
+            <p class="login-prompt" id="login-prompt" style="display: none;">
+                <a href="profile.html">Connectez-vous</a> pour laisser un commentaire
+            </p>
+
+            <!-- Comments List -->
+            <div class="comments-list" id="comments-list">
+                <!-- Comments loaded dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Lightbox -->
+    <div class="lightbox-overlay" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightbox-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="lightbox-nav lightbox-prev" id="lightbox-prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <img src="" alt="Image agrandie" class="lightbox-image" id="lightbox-image">
+            <button class="lightbox-nav lightbox-next" id="lightbox-next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="lightbox-counter" id="lightbox-counter">1/1</div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Footer -->
+    <footer></footer>
+
+    <!-- Scripts -->
+    <script src="../js/components.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/product-details.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            ShekComponents.initHeader({
+                showSearch: false,
+                showTabs: false,
+                showBackButton: true,
+                pageTitle: '<i class="fas fa-box-open"></i> Détails du produit'
+            });
+            ShekComponents.initFooter('accueil');
+        });
+    </script>
+
+</body>
+</html>

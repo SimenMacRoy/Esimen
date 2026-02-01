@@ -1,0 +1,376 @@
+/* ============================================
+   MANAGE PRODUCTS PAGE - Modern Admin Design
+   ============================================ */
+
+/* ============================================
+   ADMIN CONTAINER
+   ============================================ */
+.admin-container {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    min-height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* ============================================
+   PAGE HEADER BAR
+   ============================================ */
+.page-header-bar {
+    background: linear-gradient(135deg, var(--dark) 0%, #2a2a2a 100%);
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.page-header-bar .header-content h1 {
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.page-header-bar .header-content h1 i {
+    color: var(--primary);
+}
+
+.page-header-bar .header-content p {
+    color: var(--gray-light);
+    margin: 8px 0 0;
+    font-size: 14px;
+}
+
+.add-product-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+
+.add-product-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   PRODUCT LIST GRID
+   ============================================ */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+/* ============================================
+   PRODUCT CARD
+   ============================================ */
+.product-card {
+    background-color: var(--white);
+    border: none;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.product-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+.product-card-content {
+    padding: 20px;
+    flex: 1;
+}
+
+.product-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+
+.product-card .price {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0 0 8px;
+}
+
+.product-card .stock {
+    font-size: 13px;
+    color: var(--gray);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.product-card .stock.low {
+    color: #f39c12;
+}
+
+.product-card .stock.out {
+    color: #e74c3c;
+}
+
+/* ============================================
+   PRODUCT STATUS BADGE
+   ============================================ */
+.status-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    border-radius: var(--radius-lg);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background-color: rgba(39, 174, 96, 0.9);
+    color: white;
+}
+
+.status-badge.inactive {
+    background-color: rgba(231, 76, 60, 0.9);
+    color: white;
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px 20px;
+}
+
+.action-buttons button {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.action-buttons .modify-button {
+    background-color: var(--dark);
+    color: var(--white);
+}
+
+.action-buttons .modify-button:hover {
+    background-color: var(--black);
+    transform: translateY(-2px);
+}
+
+.action-buttons .delete-button {
+    background-color: transparent;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+}
+
+.action-buttons .delete-button:hover {
+    background-color: #e74c3c;
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 24px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.empty-state i {
+    font-size: 64px;
+    color: var(--gray-light);
+    margin-bottom: 24px;
+}
+
+.empty-state h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0 0 8px;
+}
+
+.empty-state p {
+    font-size: 16px;
+    color: var(--gray);
+    margin: 0 0 24px;
+}
+
+/* ============================================
+   LOADER
+   ============================================ */
+.loader-container {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    text-align: center;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+}
+
+.loader-container p {
+    margin-top: 16px;
+    color: var(--gray);
+}
+
+/* ============================================
+   TOAST CONTAINER
+   ============================================ */
+#toast-container {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    width: 90%;
+    max-width: 400px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .admin-container {
+        padding-top: 90px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .page-header-bar {
+        padding: 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .page-header-bar .header-content h1 {
+        font-size: 20px;
+        justify-content: center;
+    }
+
+    .add-product-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .product-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .product-card img {
+        height: 150px;
+    }
+
+    .product-card-content {
+        padding: 16px;
+    }
+
+    .product-card h3 {
+        font-size: 14px;
+    }
+
+    .product-card .price {
+        font-size: 18px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0 16px 16px;
+    }
+
+    .action-buttons button {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-container {
+        padding-top: 80px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .page-header-bar {
+        padding: 16px;
+    }
+
+    .page-header-bar .header-content h1 {
+        font-size: 18px;
+    }
+
+    .product-list {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .product-card img {
+        height: 180px;
+    }
+}

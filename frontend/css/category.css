@@ -1,0 +1,153 @@
+/* ============================================
+   CATEGORY PAGE - Modern Design
+   ============================================ */
+
+/* ============================================
+   CATEGORY LIST
+   ============================================ */
+.category-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 24px;
+    margin-top: 140px;
+    margin-bottom: 80px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ============================================
+   CATEGORY CARD
+   ============================================ */
+.category-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: var(--white);
+    padding: 24px 32px;
+    border-radius: var(--radius-md);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    min-height: 80px;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    background: var(--black);
+}
+
+.category-card:hover::before {
+    opacity: 1;
+}
+
+.category-card:active {
+    transform: translateY(-2px);
+}
+
+/* Category Card with Icon */
+.category-card i {
+    margin-right: 12px;
+    font-size: 22px;
+}
+
+/* ============================================
+   CATEGORY HEADER
+   ============================================ */
+.category-header {
+    text-align: center;
+    margin-top: 140px;
+    margin-bottom: 24px;
+    padding: 0 24px;
+}
+
+.category-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 8px;
+}
+
+.category-header p {
+    font-size: 16px;
+    color: var(--gray);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .category-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        padding: 16px;
+        margin-top: 120px;
+    }
+
+    .category-card {
+        padding: 20px 24px;
+        font-size: 15px;
+        min-height: 70px;
+    }
+
+    .category-card i {
+        font-size: 18px;
+        margin-right: 10px;
+    }
+
+    .category-header {
+        margin-top: 120px;
+    }
+
+    .category-header h1 {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 12px;
+        margin-top: 100px;
+    }
+
+    .category-card {
+        padding: 18px 20px;
+        font-size: 14px;
+        min-height: 60px;
+    }
+
+    .category-header {
+        margin-top: 100px;
+        margin-bottom: 16px;
+    }
+
+    .category-header h1 {
+        font-size: 22px;
+    }
+
+    .category-header p {
+        font-size: 14px;
+    }
+}

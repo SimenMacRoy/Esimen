@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+    <title>Gerer les Coupons - Shek's House</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/manage-coupons.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logos/logoShek.jpg">
+</head>
+<body>
+
+    <header></header>
+
+    <main class="admin-container">
+        <div class="page-header-bar">
+            <div class="header-content">
+                <h1><i class="fas fa-ticket-alt"></i> Gerer les Coupons</h1>
+                <p>Creer et gerer vos codes promotionnels</p>
+            </div>
+            <button class="add-coupon-btn" onclick="openCouponModal()">
+                <i class="fas fa-plus"></i>
+                Nouveau Coupon
+            </button>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-ticket-alt"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="total-coupons">0</span>
+                    <span class="stat-label">Coupons Total</span>
+                </div>
+            </div>
+            <div class="stat-card active">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="active-coupons">0</span>
+                    <span class="stat-label">Coupons Actifs</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="total-uses">0</span>
+                    <span class="stat-label">Utilisations</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coupons List -->
+        <div class="coupons-section">
+            <div class="section-header">
+                <h2><i class="fas fa-list"></i> Liste des Coupons</h2>
+                <div class="filter-group">
+                    <select id="filter-status" onchange="filterCoupons()">
+                        <option value="all">Tous</option>
+                        <option value="active">Actifs</option>
+                        <option value="inactive">Inactifs</option>
+                        <option value="expired">Expires</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="coupons-list" class="coupons-list">
+                <div class="loader-container">
+                    <div class="loader"></div>
+                    <p>Chargement des coupons...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Coupon Modal -->
+    <div id="coupon-modal" class="modal-overlay">
+        <div class="modal-card coupon-modal-card">
+            <button class="modal-close" onclick="closeCouponModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <h2 id="modal-title"><i class="fas fa-ticket-alt"></i> Nouveau Coupon</h2>
+
+            <form id="coupon-form" class="coupon-form">
+                <input type="hidden" id="coupon-id">
+
+                <!-- Basic Info -->
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Informations de base</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="coupon-code">Code *</label>
+                            <input type="text" id="coupon-code" placeholder="Ex: PROMO20" required>
+                            <small>Lettres et chiffres uniquement, sans espaces</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="coupon-name">Nom *</label>
+                            <input type="text" id="coupon-name" placeholder="Ex: Solde d'ete 20%" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="coupon-description">Description</label>
+                        <textarea id="coupon-description" placeholder="Description du coupon (optionnel)"></textarea>
+                    </div>
+                </div>
+
+                <!-- Discount Type -->
+                <div class="form-section">
+                    <h3><i class="fas fa-percent"></i> Type de rabais</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="discount-type">Type *</label>
+                            <select id="discount-type" required onchange="onDiscountTypeChange()">
+                                <option value="percentage">Pourcentage (%)</option>
+                                <option value="fixed_amount">Montant fixe ($)</option>
+                                <option value="buy_x_get_y">Achetez X, Obtenez Y</option>
+                                <option value="free_shipping">Livraison gratuite</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="discount-value-group">
+                            <label for="discount-value">Valeur *</label>
+                            <input type="number" id="discount-value" min="0" step="0.01" placeholder="10" required>
+                        </div>
+                    </div>
+
+                    <!-- Buy X Get Y fields -->
+                    <div class="form-row" id="buy-get-fields" style="display: none;">
+                        <div class="form-group">
+                            <label for="buy-quantity">Acheter (quantite)</label>
+                            <input type="number" id="buy-quantity" min="1" placeholder="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="get-quantity">Obtenir gratuit</label>
+                            <input type="number" id="get-quantity" min="1" placeholder="1">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="min-purchase">Achat minimum ($)</label>
+                            <input type="number" id="min-purchase" min="0" step="0.01" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-discount">Rabais maximum ($)</label>
+                            <input type="number" id="max-discount" min="0" step="0.01" placeholder="Illimite">
+                            <small>Laisser vide pour illimite</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restrictions -->
+                <div class="form-section">
+                    <h3><i class="fas fa-filter"></i> Restrictions</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="applies-to">S'applique a</label>
+                            <select id="applies-to" onchange="onAppliesToChange()">
+                                <option value="all">Tous les produits</option>
+                                <option value="department">Un departement</option>
+                                <option value="category">Une categorie</option>
+                                <option value="product">Un produit specifique</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="department-group" style="display: none;">
+                            <label for="department-select">Departement</label>
+                            <select id="department-select">
+                                <option value="">Choisir...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="category-group" style="display: none;">
+                            <label for="category-select">Categorie</label>
+                            <select id="category-select">
+                                <option value="">Choisir...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="product-group" style="display: none;">
+                            <label for="product-id">ID Produit</label>
+                            <input type="number" id="product-id" min="1" placeholder="ID du produit">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="new-customers-only">
+                                <span>Nouveaux clients seulement</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Usage Limits -->
+                <div class="form-section">
+                    <h3><i class="fas fa-tachometer-alt"></i> Limites d'utilisation</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="max-total-uses">Utilisations totales max</label>
+                            <input type="number" id="max-total-uses" min="1" placeholder="Illimite">
+                            <small>Laisser vide pour illimite</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="max-uses-per-user">Par utilisateur</label>
+                            <input type="number" id="max-uses-per-user" min="1" value="1" placeholder="1">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Validity Period -->
+                <div class="form-section">
+                    <h3><i class="fas fa-calendar-alt"></i> Periode de validite</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start-date">Date de debut *</label>
+                            <input type="datetime-local" id="start-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date">Date de fin *</label>
+                            <input type="datetime-local" id="end-date" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="form-section">
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="is-active" checked>
+                            <span>Coupon actif</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeCouponModal()">Annuler</button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i>
+                        <span id="submit-btn-text">Creer le coupon</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer></footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/components.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/manage-coupons.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            ShekComponents.initHeader({
+                showSearch: false,
+                showTabs: false,
+                showBackButton: true,
+                pageTitle: '<i class="fas fa-ticket-alt"></i> Coupons'
+            });
+            ShekComponents.initFooter('profile');
+        });
+    </script>
+</body>
+</html>

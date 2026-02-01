@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+    <title>Gerer les Produits - Shek's House</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/manage-product.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logos/logoShek.jpg">
+</head>
+<body>
+
+    <header></header>
+
+    <main class="admin-container">
+        <div class="page-header-bar">
+            <div class="header-content">
+                <h1><i class="fas fa-boxes"></i> Gerer les Produits</h1>
+                <p>Modifier ou supprimer vos articles</p>
+            </div>
+            <a href="add-product.html" class="add-product-btn">
+                <i class="fas fa-plus"></i>
+                Ajouter
+            </a>
+        </div>
+
+        <div id="product-list" class="product-list">
+            <div class="loader-container">
+                <div class="loader"></div>
+                <p>Chargement des produits...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer></footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/components.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/manage-products.js"></script>
+</body>
+</html>
