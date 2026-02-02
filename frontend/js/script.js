@@ -98,7 +98,8 @@ function initApp() {
                     startImageSlideshow(imageContainer, product.images);
                 } else {
                     const img = document.createElement('img');
-                    img.src = `${config.baseURL}${product.images[0] || '/uploads/default_image.jpg'}`;
+                    const imagePath = product.images[0] || '/uploads/default_image.jpg';
+                    img.src = imagePath.startsWith('http') ? imagePath : `${config.baseURL}${imagePath}`;
                     img.alt = product.name;
                     imageContainer.appendChild(img);
                 }

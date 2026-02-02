@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (response.ok && result.success) {
                     // Update the profile picture display
                     const profileImg = document.getElementById('profile-picture');
-                    profileImg.src = `${config.baseURL}${result.profilePicture}`;
+                    profileImg.src = result.profilePicture.startsWith('http') ? result.profilePicture : `${config.baseURL}${result.profilePicture}`;
 
                     // Update userData in localStorage
                     const userData = Auth.getUserData();
@@ -337,7 +337,7 @@ function displayProfile(userData) {
     // Set profile picture
     const profilePicture = document.getElementById('profile-picture');
     if (userData.profilePicture) {
-        profilePicture.src = `${config.baseURL}${userData.profilePicture}`;
+        profilePicture.src = userData.profilePicture.startsWith('http') ? userData.profilePicture : `${config.baseURL}${userData.profilePicture}`;
     } else {
         profilePicture.src = '../assets/images/logos/default_picture.jpg';
     }
