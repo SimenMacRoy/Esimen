@@ -1668,7 +1668,7 @@ app.post('/api/basket', authenticateToken, (req, res) => {
             const query = `
                 INSERT INTO BASKET (user_id, product_id, quantity)
                 VALUES (?, ?, ?)
-                ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity), added_at = NOW()
+                ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity)
             `;
 
             db.query(query, [userId, productId, qty], (err) => {
@@ -1714,7 +1714,7 @@ app.put('/api/basket', authenticateToken, (req, res) => {
                 return res.status(400).json({ error: `Only ${stockResults[0].stock} items available` });
             }
 
-            const query = 'UPDATE BASKET SET quantity = ?, added_at = NOW() WHERE user_id = ? AND product_id = ?';
+            const query = 'UPDATE BASKET SET quantity = ? WHERE user_id = ? AND product_id = ?';
             db.query(query, [qty, userId, product_id], (err) => {
                 if (err) {
                     return res.status(500).json({ error: 'Database error.' });
