@@ -4,7 +4,7 @@
 // En local: 'http://localhost:3006'
 // En production: 'https://votre-app.railway.app' (URL fournie par Railway)
 // ============================================
-const config = {
+var config = {
     baseURL: 'https://esimen-production.up.railway.app',
 
     // Stripe public key (la clé de test pour le dev, clé live pour prod)
