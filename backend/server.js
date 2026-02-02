@@ -12,6 +12,8 @@ const Stripe = require('stripe');
 const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app = express();
 const port = process.env.PORT || 3006;
@@ -212,32 +214,67 @@ function validatePositiveInteger(value) {
 
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Serve uploads with explicit CORS headers for cross-origin access
-app.use('/uploads', (req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-    next();
-}, express.static(path.join(__dirname, 'uploads')));
+// ===================
+// CLOUDINARY CONFIG
+// ===================
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Check Cloudinary configuration
+const isCloudinaryConfigured = process.env.CLOUDINARY_CLOUD_NAME &&
+                                process.env.CLOUDINARY_API_KEY &&
+                                process.env.CLOUDINARY_API_SECRET;
+
+if (!isCloudinaryConfigured) {
+    console.warn('WARNING: Cloudinary is not configured. Image uploads will use local storage (not persistent on Railway).');
+}
 
 // ===================
 // FILE UPLOAD CONFIG
 // ===================
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, 'uploads');
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
+let storage;
+if (isCloudinaryConfigured) {
+    // Use Cloudinary storage for production
+    storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'shekshouse',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+            transformation: [{ width: 1000, height: 1000, crop: 'limit', quality: 'auto' }]
         }
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        // Sanitize filename
-        const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '_');
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-        cb(null, `${uniqueSuffix}-${sanitizedName}`);
-    }
-});
+    });
+    console.log('Using Cloudinary for image storage');
+} else {
+    // Fallback to local storage for development
+    storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            const uploadPath = path.join(__dirname, 'uploads');
+            if (!fs.existsSync(uploadPath)) {
+                fs.mkdirSync(uploadPath, { recursive: true });
+            }
+            cb(null, uploadPath);
+        },
+        filename: (req, file, cb) => {
+            const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+            const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+            cb(null, `${uniqueSuffix}-${sanitizedName}`);
+        }
+    });
+    console.log('Using local storage for images (dev mode)');
+}
+
+// Serve local uploads (fallback for dev)
+app.use('/uploads', (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+}, express.static(path.join(__dirname, 'uploads')));
 
 const fileFilter = (req, file, cb) => {
     const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -451,7 +488,8 @@ app.post('/api/add-products', authenticateAdmin, upload.array('images', 5), (req
 
         const product_id = result.insertId;
         const imageQuery = 'INSERT INTO PRODUCT_IMAGES (product_id, image_url) VALUES ?';
-        const imageValues = files.map(file => [product_id, `/uploads/${file.filename}`]);
+        // For Cloudinary, file.path contains the full URL; for local storage, use /uploads/filename
+        const imageValues = files.map(file => [product_id, file.path || `/uploads/${file.filename}`]);
 
         db.query(imageQuery, [imageValues], (imageErr) => {
             if (imageErr) {
@@ -508,7 +546,8 @@ app.put('/api/products/:product_id', authenticateAdmin, upload.array('images', 5
                 }
 
                 const imageQuery = 'INSERT INTO PRODUCT_IMAGES (product_id, image_url) VALUES ?';
-                const imageValues = files.map(file => [product_id, `/uploads/${file.filename}`]);
+                // For Cloudinary, file.path contains the full URL; for local storage, use /uploads/filename
+                const imageValues = files.map(file => [product_id, file.path || `/uploads/${file.filename}`]);
 
                 db.query(imageQuery, [imageValues], (imageErr) => {
                     if (imageErr) {
@@ -998,7 +1037,8 @@ app.post('/api/users/profile-picture', authenticateToken, upload.single('profile
         return res.status(400).json({ error: 'No file uploaded.' });
     }
 
-    const imageUrl = `/uploads/${file.filename}`;
+    // For Cloudinary, file.path contains the full URL; for local storage, use /uploads/filename
+    const imageUrl = file.path || `/uploads/${file.filename}`;
 
     db.query('UPDATE USERS SET profile_picture = ? WHERE user_id = ?', [imageUrl, user_id], (err, result) => {
         if (err) {
