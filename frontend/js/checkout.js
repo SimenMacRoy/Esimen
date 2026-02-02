@@ -1,7 +1,9 @@
 // Checkout page with JWT authentication and multi-step flow
 
-// Use global config if available
-const config = window.config || { baseURL: 'http://localhost:3006' };
+// Use global config from config.js (fallback for local dev)
+if (typeof config === 'undefined') {
+    var config = window.config || { baseURL: 'http://localhost:3006' };
+}
 
 // Tax rate (Quebec TPS + TVQ)
 const TAX_RATE = 0.14975;

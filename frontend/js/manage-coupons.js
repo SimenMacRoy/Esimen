@@ -1,5 +1,8 @@
 // Manage Coupons - Admin functionality
-const config = window.config || { baseURL: 'http://localhost:3006' };
+// Use global config from config.js (fallback for local dev)
+if (typeof config === 'undefined') {
+    var config = window.config || { baseURL: 'http://localhost:3006' };
+}
 
 let allCoupons = [];
 let categories = [];

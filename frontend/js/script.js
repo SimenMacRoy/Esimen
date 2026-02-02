@@ -1,5 +1,7 @@
-// Use global config if available (from config.js)
-const config = window.config || { baseURL: 'http://localhost:3006' };
+// Use global config from config.js (fallback for local dev without config.js)
+if (typeof config === 'undefined') {
+    var config = window.config || { baseURL: 'http://localhost:3006' };
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     // Wait a bit for components to be initialized

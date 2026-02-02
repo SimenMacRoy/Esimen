@@ -2,8 +2,10 @@
 // PRODUCT DETAILS - Shek's House
 // ============================================
 
-// Use global config if available
-const config = window.config || { baseURL: 'http://localhost:3006' };
+// Use global config from config.js (fallback for local dev)
+if (typeof config === 'undefined') {
+    var config = window.config || { baseURL: 'http://localhost:3006' };
+}
 
 // Helper to get full image URL
 function getImageUrl(imagePath) {

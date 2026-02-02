@@ -1,7 +1,9 @@
 // Add product page with JWT authentication (Admin only)
 
-// Use global config if available
-const config = window.config || { baseURL: 'http://localhost:3006' };
+// Use global config from config.js (fallback for local dev)
+if (typeof config === 'undefined') {
+    var config = window.config || { baseURL: 'http://localhost:3006' };
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Check if user is admin
