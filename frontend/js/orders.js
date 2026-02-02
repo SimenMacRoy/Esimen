@@ -2,9 +2,14 @@
 // ORDERS PAGE - Shek's House
 // ============================================
 
-const config = {
-    baseURL: 'http://localhost:3006'
-};
+// Use global config if available
+const config = window.config || { baseURL: 'http://localhost:3006' };
+
+// Helper to get full image URL
+function getImageUrl(imagePath) {
+    if (!imagePath) return '../assets/images/default_image.jpg';
+    return imagePath.startsWith('http') ? imagePath : `${config.baseURL}${imagePath}`;
+}
 
 let orders = [];
 
@@ -104,7 +109,7 @@ function createOrderCard(order) {
         if (index === 3 && order.items.length > 4) {
             return `<div class="item-thumbnail more">+${order.items.length - 3}</div>`;
         }
-        const imgSrc = item.image_url || '../assets/images/default_image.jpg';
+        const imgSrc = getImageUrl(item.image_url);
         return `<div class="item-thumbnail"><img src="${imgSrc}" alt="${item.product_name}"></div>`;
     }).join('');
 
@@ -157,7 +162,7 @@ function showOrderDetails(orderId) {
     });
 
     const itemsHtml = order.items.map(item => {
-        const imgSrc = item.image_url || '../assets/images/default_image.jpg';
+        const imgSrc = getImageUrl(item.image_url);
         return `
             <div class="modal-item">
                 <div class="modal-item-image">

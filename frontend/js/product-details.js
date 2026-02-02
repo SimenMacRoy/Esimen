@@ -2,9 +2,14 @@
 // PRODUCT DETAILS - Shek's House
 // ============================================
 
-const config = {
-    baseURL: 'http://localhost:3006'
-};
+// Use global config if available
+const config = window.config || { baseURL: 'http://localhost:3006' };
+
+// Helper to get full image URL
+function getImageUrl(imagePath) {
+    if (!imagePath) return '../assets/images/default_image.jpg';
+    return imagePath.startsWith('http') ? imagePath : `${config.baseURL}${imagePath}`;
+}
 
 let product = null;
 let currentImageIndex = 0;
@@ -176,14 +181,14 @@ function renderImages() {
         ? product.images
         : ['../assets/images/default_image.jpg'];
 
-    mainImage.src = images[0];
+    mainImage.src = getImageUrl(images[0]);
     imageCounter.textContent = `1/${images.length}`;
 
     thumbnailGallery.innerHTML = '';
     images.forEach((img, index) => {
         const thumb = document.createElement('div');
         thumb.className = `thumbnail-item ${index === 0 ? 'active' : ''}`;
-        thumb.innerHTML = `<img src="${img}" />`;
+        thumb.innerHTML = `<img src="${getImageUrl(img)}" />`;
         thumb.onclick = () => setImage(index);
         thumbnailGallery.appendChild(thumb);
     });
@@ -192,7 +197,7 @@ function renderImages() {
 function setImage(index) {
     const images = product.images?.length ? product.images : ['../assets/images/default_image.jpg'];
     currentImageIndex = index;
-    mainImage.src = images[index];
+    mainImage.src = getImageUrl(images[index]);
     imageCounter.textContent = `${index + 1}/${images.length}`;
 
     document.querySelectorAll('.thumbnail-item').forEach((el, i) => {
@@ -251,7 +256,7 @@ function openLightbox() {
     if (!product) return;
     const images = product.images?.length ? product.images : ['../assets/images/default_image.jpg'];
 
-    lightboxImage.src = images[currentImageIndex];
+    lightboxImage.src = getImageUrl(images[currentImageIndex]);
     lightboxCounter.textContent = `${currentImageIndex + 1}/${images.length}`;
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -266,7 +271,7 @@ function navigateLightbox(direction) {
     const images = product.images?.length ? product.images : ['../assets/images/default_image.jpg'];
     currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
 
-    lightboxImage.src = images[currentImageIndex];
+    lightboxImage.src = getImageUrl(images[currentImageIndex]);
     lightboxCounter.textContent = `${currentImageIndex + 1}/${images.length}`;
 
     // Also update main gallery

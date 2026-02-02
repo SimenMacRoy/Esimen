@@ -51,7 +51,9 @@ function initApp() {
         imageContainer.appendChild(imgElement);
 
         const changeImage = () => {
-            imgElement.src = images[currentIndex];
+            // Prepend baseURL for images hosted on backend
+            const imagePath = images[currentIndex];
+            imgElement.src = imagePath.startsWith('http') ? imagePath : `${config.baseURL}${imagePath}`;
             imgElement.alt = `Image ${currentIndex + 1}`;
             currentIndex = (currentIndex + 1) % images.length;
         };

@@ -35,20 +35,25 @@ app.use(helmet({
 }));
 
 // CORS configuration
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',')
-    : ['http://localhost:3006', 'http://127.0.0.1:3006'];
+const allowedOrigins = [
+    'https://esimen.netlify.app',
+    'https://shekshouse.netlify.app',
+    'http://localhost:3006'
+];
 
 app.use(cors({
-    origin: function(origin, callback) {
-        // Allow requests with no origin (mobile apps, curl, etc.)
+    origin: function (origin, callback) {
         if (!origin) return callback(null, true);
+
         if (allowedOrigins.includes(origin)) {
             return callback(null, true);
         }
-        return callback(null, true); // Allow all for development
+
+        return callback(new Error('Not allowed by CORS'));
     },
-    credentials: true
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 
 // Rate limiting (disabled in test mode)

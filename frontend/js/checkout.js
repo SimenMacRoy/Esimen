@@ -119,7 +119,8 @@ async function loadOrderSummary() {
             const response = await fetch(`${config.baseURL}/api/products/${item.product_id}`);
             if (response.ok) {
                 const product = await response.json();
-                const imageUrl = product.images && product.images.length > 0 ? product.images[0] : '../assets/images/default_image.jpg';
+                const imagePath = product.images && product.images.length > 0 ? product.images[0] : null;
+                const imageUrl = imagePath ? (imagePath.startsWith('http') ? imagePath : `${config.baseURL}${imagePath}`) : '../assets/images/default_image.jpg';
                 const itemTotal = item.quantity * product.price;
                 subtotal += itemTotal;
 

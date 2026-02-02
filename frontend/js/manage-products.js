@@ -1,7 +1,13 @@
 // Manage products page with JWT authentication (Admin only)
-const config = {
-    baseURL: 'http://localhost:3006',
-};
+
+// Use global config if available
+const config = window.config || { baseURL: 'http://localhost:3006' };
+
+// Helper to get full image URL
+function getImageUrl(imagePath) {
+    if (!imagePath) return '../assets/images/default_image.jpg';
+    return imagePath.startsWith('http') ? imagePath : `${config.baseURL}${imagePath}`;
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Check if user is admin
@@ -46,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             products.forEach(product => {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
-                const imageUrl = product.images && product.images[0] ? product.images[0] : '../assets/images/default_image.jpg';
+                const imageUrl = getImageUrl(product.images && product.images[0] ? product.images[0] : null);
 
                 // Stock status
                 let stockClass = '';
