@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const manageUsersButton = document.getElementById('manage-users-button');
     const manageCatalogButton = document.getElementById('manage-catalog-button');
     const manageCouponsButton = document.getElementById('manage-coupons-button');
+    const manageOrdersButton = document.getElementById('manage-orders-button');
 
     // Check if user is logged in
     if (Auth.isLoggedIn()) {
@@ -164,6 +165,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     manageCouponsButton.addEventListener('click', () => {
         window.location.href = 'manage-coupons.html';
+    });
+
+    manageOrdersButton.addEventListener('click', () => {
+        window.location.href = 'manage-orders.html';
     });
 
     // Prefill modify form

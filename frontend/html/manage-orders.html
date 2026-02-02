@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+    <title>Gerer les Commandes - Shek's House</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/manage-orders.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="../assets/images/logos/logoShek.jpg">
+</head>
+<body>
+
+    <header></header>
+
+    <main class="admin-container">
+        <div class="page-header-bar">
+            <div class="header-content">
+                <h1><i class="fas fa-clipboard-list"></i> Gerer les Commandes</h1>
+                <p>Suivre et mettre a jour vos commandes</p>
+            </div>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-total">0</span>
+                    <span class="stat-label">Total Commandes</span>
+                </div>
+            </div>
+            <div class="stat-card confirmed">
+                <div class="stat-icon"><i class="fas fa-check"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-confirmed">0</span>
+                    <span class="stat-label">Confirmees</span>
+                </div>
+            </div>
+            <div class="stat-card processing">
+                <div class="stat-icon"><i class="fas fa-box"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-processing">0</span>
+                    <span class="stat-label">En preparation</span>
+                </div>
+            </div>
+            <div class="stat-card shipped">
+                <div class="stat-icon"><i class="fas fa-truck"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-shipped">0</span>
+                    <span class="stat-label">Expediees</span>
+                </div>
+            </div>
+            <div class="stat-card delivered">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-delivered">0</span>
+                    <span class="stat-label">Livrees</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Rechercher par # commande, client...">
+            </div>
+            <div class="filter-group">
+                <select id="status-filter">
+                    <option value="all">Tous les statuts</option>
+                    <option value="confirmed">Confirmees</option>
+                    <option value="processing">En preparation</option>
+                    <option value="shipped">Expediees</option>
+                    <option value="delivered">Livrees</option>
+                    <option value="cancelled">Annulees</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Orders List -->
+        <div id="orders-list" class="orders-list">
+            <div class="loader-container">
+                <div class="loader"></div>
+                <p>Chargement des commandes...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Order Detail Modal -->
+    <div id="order-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modal-content">
+                <!-- Content loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <footer></footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/manage-orders.js"></script>
+</body>
+</html>

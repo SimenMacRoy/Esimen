@@ -67,7 +67,7 @@ function getBasket() {
 // Initialize Stripe Elements
 function initializeStripe() {
     try {
-        stripe = Stripe('pk_test_51PIRk7DIrmiE2Hgb4lLVD99VQnFg7uWaAhtEBBBzLIixaLhcQ9FOuhkSonPw8SozcgiS19efR92rNwYX6kQ7TRvT00YayxN2sq');
+        stripe = Stripe(config.stripePublicKey);
         const elements = stripe.elements();
 
         const style = {

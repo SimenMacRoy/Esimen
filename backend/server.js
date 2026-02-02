@@ -807,25 +807,110 @@ app.post('/api/users/register', async (req, res) => {
             // Generate token for auto-login
             const token = generateToken({ user_id: userId, email: email.toLowerCase().trim(), is_admin: 0 });
 
-            // Send welcome email (non-blocking)
+            // Send beautiful welcome email (non-blocking)
+            const frontendUrl = process.env.FRONTEND_URL || 'https://shekshouse.netlify.app';
             const mailOptions = {
-                from: process.env.EMAIL_USER,
+                from: `"Shek's House" <${process.env.EMAIL_USER}>`,
                 to: email,
-                subject: "Bienvenu(e) chez SHEK'S HOUSE!",
+                subject: `🎉 Bienvenue chez Shek's House, ${name}!`,
                 html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 10px;">
-                        <div style="text-align: center; margin-bottom: 25px;">
-                            <h1 style="color: #ff4500; margin: 0;">Bienvenue ${name}!</h1>
-                        </div>
-                        <p style="color: #333333; font-size: 16px; line-height: 1.6;">Merci de votre inscription chez Shek's House.</p>
-                        <p style="color: #333333; font-size: 16px; line-height: 1.6;">Nous sommes ravis de vous compter parmi nous!</p>
-                        <div style="background: #f8f8f8; padding: 20px; border-radius: 8px; margin: 25px 0;">
-                            <p style="color: #666666; margin: 0; font-size: 14px;">Decouvrez nos dernieres collections et profitez de nos offres exclusives.</p>
-                        </div>
-                        <p style="color: #333333; font-size: 15px;">Cordialement,<br><strong style="color: #ff4500;">L'equipe Shek's House</strong></p>
-                        <hr style="border: none; border-top: 1px solid #eeeeee; margin: 25px 0;">
-                        <p style="color: #999999; font-size: 12px; text-align: center;">Shek's House - Votre boutique en ligne</p>
-                    </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%); padding: 40px 30px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700;">SHEK'S HOUSE</h1>
+            <p style="color: #ff4500; margin: 10px 0 0; font-size: 14px; letter-spacing: 2px;">MODE & STYLE PREMIUM</p>
+        </div>
+
+        <!-- Welcome Section -->
+        <div style="text-align: center; padding: 40px 30px 20px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
+                <tr>
+                    <td style="width: 80px; height: 80px; background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%); border-radius: 50%; text-align: center; vertical-align: middle;">
+                        <span style="color: white; font-size: 40px; line-height: 80px;">👋</span>
+                    </td>
+                </tr>
+            </table>
+            <h2 style="color: #1a1a1a; margin: 25px 0 10px; font-size: 28px;">Bienvenue ${name}!</h2>
+            <p style="color: #666; margin: 0; font-size: 16px;">Votre compte a été créé avec succès</p>
+        </div>
+
+        <!-- Main Content -->
+        <div style="padding: 0 30px 30px;">
+            <p style="color: #333; font-size: 16px; line-height: 1.6;">
+                Nous sommes ravis de vous accueillir dans la famille <strong style="color: #ff4500;">Shek's House</strong>!
+                Vous avez désormais accès à une expérience shopping unique avec des collections tendance et des offres exclusives.
+            </p>
+
+            <!-- Benefits Box -->
+            <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; padding: 25px; margin: 25px 0;">
+                <h3 style="color: #1a1a1a; margin: 0 0 15px; font-size: 18px;">✨ Vos avantages membre</h3>
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="padding: 8px 0; color: #333;">
+                            <span style="color: #ff4500; margin-right: 10px;">✓</span>
+                            Accès aux ventes privées
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #333;">
+                            <span style="color: #ff4500; margin-right: 10px;">✓</span>
+                            Livraison gratuite sur toutes vos commandes
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #333;">
+                            <span style="color: #ff4500; margin-right: 10px;">✓</span>
+                            Codes promo exclusifs par email
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #333;">
+                            <span style="color: #ff4500; margin-right: 10px;">✓</span>
+                            Suivi de vos commandes en temps réel
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- CTA Button -->
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="${frontendUrl}" style="display: inline-block; background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%); color: #ffffff; text-decoration: none; padding: 15px 40px; border-radius: 30px; font-weight: 600; font-size: 16px;">
+                    🛍️ Commencer mon shopping
+                </a>
+            </div>
+
+            <!-- Account Info -->
+            <div style="background: #f8f9fa; border-radius: 12px; padding: 20px; margin-top: 25px;">
+                <p style="color: #666; margin: 0 0 10px; font-size: 14px;">Vos informations de connexion:</p>
+                <p style="color: #1a1a1a; margin: 0; font-size: 15px;">
+                    <strong>Email:</strong> ${email}
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background: #1a1a1a; padding: 30px; text-align: center;">
+            <p style="color: #ffffff; margin: 0 0 15px; font-size: 14px;">
+                Des questions? Contactez-nous!
+            </p>
+            <a href="mailto:support@shekshouse.com" style="color: #ff4500; text-decoration: none; font-weight: 600;">support@shekshouse.com</a>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #333;">
+                <p style="color: #666; margin: 0; font-size: 12px;">
+                    © ${new Date().getFullYear()} Shek's House. Tous droits réservés.<br>
+                    Montréal, Québec, Canada
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
                 `,
             };
 
@@ -1721,6 +1806,274 @@ app.get('/api/orders', authenticateToken, (req, res) => {
         res.json(Object.values(ordersMap));
     });
 });
+
+// ===================
+// ADMIN ORDERS API
+// ===================
+
+// Get all orders (Admin only)
+app.get('/api/admin/orders', authenticateAdmin, (req, res) => {
+    const { status, search, limit = 50, offset = 0 } = req.query;
+
+    let query = `
+        SELECT o.*, u.name as customer_name, u.surname as customer_surname, u.email as customer_email,
+               (SELECT COUNT(*) FROM ORDER_ITEMS WHERE order_id = o.order_id) as item_count
+        FROM ORDERS o
+        LEFT JOIN USERS u ON o.user_id = u.user_id
+        WHERE 1=1
+    `;
+    const params = [];
+
+    if (status && status !== 'all') {
+        query += ' AND o.status = ?';
+        params.push(status);
+    }
+
+    if (search) {
+        query += ' AND (o.order_number LIKE ? OR u.name LIKE ? OR u.surname LIKE ? OR u.email LIKE ?)';
+        const searchTerm = `%${search}%`;
+        params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+    }
+
+    query += ' ORDER BY o.created_at DESC LIMIT ? OFFSET ?';
+    params.push(parseInt(limit), parseInt(offset));
+
+    db.query(query, params, (err, results) => {
+        if (err) {
+            console.error('Admin orders query error:', err);
+            return res.status(500).json({ error: 'Database error.' });
+        }
+        res.json(results);
+    });
+});
+
+// Get order details (Admin only)
+app.get('/api/admin/orders/:order_id', authenticateAdmin, (req, res) => {
+    const { order_id } = req.params;
+
+    const query = `
+        SELECT o.*, u.name as customer_name, u.surname as customer_surname,
+               u.email as customer_email, u.phone as customer_phone
+        FROM ORDERS o
+        LEFT JOIN USERS u ON o.user_id = u.user_id
+        WHERE o.order_id = ?
+    `;
+
+    db.query(query, [order_id], (err, orderResults) => {
+        if (err) {
+            console.error('Order detail query error:', err);
+            return res.status(500).json({ error: 'Database error.' });
+        }
+
+        if (orderResults.length === 0) {
+            return res.status(404).json({ error: 'Order not found.' });
+        }
+
+        const order = orderResults[0];
+
+        // Get order items
+        const itemsQuery = `
+            SELECT oi.*,
+                   (SELECT image_url FROM PRODUCT_IMAGES WHERE product_id = oi.product_id LIMIT 1) as image_url
+            FROM ORDER_ITEMS oi
+            WHERE oi.order_id = ?
+        `;
+
+        db.query(itemsQuery, [order_id], (itemErr, items) => {
+            if (itemErr) {
+                console.error('Order items query error:', itemErr);
+                return res.status(500).json({ error: 'Database error.' });
+            }
+
+            order.items = items;
+            res.json(order);
+        });
+    });
+});
+
+// Update order status (Admin only)
+app.put('/api/admin/orders/:order_id/status', authenticateAdmin, (req, res) => {
+    const { order_id } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ['confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
+    if (!validStatuses.includes(status)) {
+        return res.status(400).json({ error: 'Invalid status.' });
+    }
+
+    // First get the order and customer info
+    const getOrderQuery = `
+        SELECT o.*, u.email, u.name, u.surname
+        FROM ORDERS o
+        JOIN USERS u ON o.user_id = u.user_id
+        WHERE o.order_id = ?
+    `;
+
+    db.query(getOrderQuery, [order_id], (getErr, orderResults) => {
+        if (getErr) {
+            console.error('Get order error:', getErr);
+            return res.status(500).json({ error: 'Database error.' });
+        }
+
+        if (orderResults.length === 0) {
+            return res.status(404).json({ error: 'Order not found.' });
+        }
+
+        const order = orderResults[0];
+        const previousStatus = order.status;
+
+        // Update the status
+        db.query('UPDATE ORDERS SET status = ? WHERE order_id = ?', [status, order_id], (updateErr) => {
+            if (updateErr) {
+                console.error('Update order status error:', updateErr);
+                return res.status(500).json({ error: 'Database error.' });
+            }
+
+            // Send email notification for status changes
+            if (status !== previousStatus) {
+                sendOrderStatusEmail(order, status);
+            }
+
+            res.json({ success: true, message: 'Order status updated.', previousStatus, newStatus: status });
+        });
+    });
+});
+
+// Get order statistics (Admin only)
+app.get('/api/admin/orders/stats/summary', authenticateAdmin, (req, res) => {
+    const queries = {
+        total: 'SELECT COUNT(*) as count FROM ORDERS',
+        confirmed: "SELECT COUNT(*) as count FROM ORDERS WHERE status = 'confirmed'",
+        processing: "SELECT COUNT(*) as count FROM ORDERS WHERE status = 'processing'",
+        shipped: "SELECT COUNT(*) as count FROM ORDERS WHERE status = 'shipped'",
+        delivered: "SELECT COUNT(*) as count FROM ORDERS WHERE status = 'delivered'",
+        cancelled: "SELECT COUNT(*) as count FROM ORDERS WHERE status = 'cancelled'",
+        revenue: "SELECT COALESCE(SUM(total), 0) as total FROM ORDERS WHERE status != 'cancelled'",
+        today: "SELECT COUNT(*) as count FROM ORDERS WHERE DATE(created_at) = CURDATE()"
+    };
+
+    const stats = {};
+    let completed = 0;
+    const totalQueries = Object.keys(queries).length;
+
+    Object.entries(queries).forEach(([key, query]) => {
+        db.query(query, (err, results) => {
+            if (err) {
+                stats[key] = 0;
+            } else {
+                stats[key] = results[0].count || results[0].total || 0;
+            }
+            completed++;
+            if (completed === totalQueries) {
+                res.json(stats);
+            }
+        });
+    });
+});
+
+// Helper function to send order status email
+function sendOrderStatusEmail(order, newStatus) {
+    const statusMessages = {
+        processing: {
+            subject: `📦 Commande #${order.order_number} en préparation`,
+            title: 'Votre commande est en cours de préparation!',
+            message: 'Notre équipe prépare soigneusement votre commande. Elle sera expédiée très bientôt.',
+            icon: '📦',
+            color: '#3498db'
+        },
+        shipped: {
+            subject: `🚚 Commande #${order.order_number} expédiée!`,
+            title: 'Votre commande est en route!',
+            message: 'Bonne nouvelle! Votre commande a été expédiée et est en chemin vers vous.',
+            icon: '🚚',
+            color: '#9b59b6'
+        },
+        delivered: {
+            subject: `✅ Commande #${order.order_number} livrée`,
+            title: 'Commande livrée avec succès!',
+            message: 'Votre commande a été livrée. Nous espérons que vous apprécierez vos achats!',
+            icon: '✅',
+            color: '#27ae60'
+        },
+        cancelled: {
+            subject: `❌ Commande #${order.order_number} annulée`,
+            title: 'Commande annulée',
+            message: 'Votre commande a été annulée. Si vous avez des questions, contactez notre support.',
+            icon: '❌',
+            color: '#e74c3c'
+        }
+    };
+
+    const statusInfo = statusMessages[newStatus];
+    if (!statusInfo) return;
+
+    const frontendUrl = process.env.FRONTEND_URL || 'https://shekshouse.netlify.app';
+
+    const mailOptions = {
+        from: `"Shek's House" <${process.env.EMAIL_USER}>`,
+        to: order.email,
+        subject: statusInfo.subject,
+        html: `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%); padding: 30px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px;">SHEK'S HOUSE</h1>
+        </div>
+
+        <!-- Status Icon -->
+        <div style="text-align: center; padding: 40px 30px 20px;">
+            <div style="width: 80px; height: 80px; background: ${statusInfo.color}; border-radius: 50%; margin: 0 auto; line-height: 80px;">
+                <span style="font-size: 40px;">${statusInfo.icon}</span>
+            </div>
+            <h2 style="color: #1a1a1a; margin: 25px 0 10px; font-size: 24px;">${statusInfo.title}</h2>
+            <p style="color: #666; margin: 0; font-size: 16px;">${statusInfo.message}</p>
+        </div>
+
+        <!-- Order Info -->
+        <div style="padding: 0 30px 30px;">
+            <div style="background: #f8f9fa; border-radius: 12px; padding: 20px;">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Numéro de commande:</td>
+                        <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #1a1a1a;">#${order.order_number}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; color: #666;">Total:</td>
+                        <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #ff4500;">CA$ ${parseFloat(order.total).toFixed(2)}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="${frontendUrl}/html/orders.html" style="display: inline-block; background: #ff4500; color: #ffffff; text-decoration: none; padding: 12px 30px; border-radius: 25px; font-weight: 600;">
+                    Voir ma commande
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background: #1a1a1a; padding: 20px; text-align: center;">
+            <p style="color: #666; margin: 0; font-size: 12px;">
+                © ${new Date().getFullYear()} Shek's House. Tous droits réservés.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+        `
+    };
+
+    transporter.sendMail(mailOptions).catch(err => {
+        console.error('Error sending status email:', err);
+    });
+}
 
 // ===================
 // PAYMENT API
