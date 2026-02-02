@@ -1,6 +1,5 @@
-const config = {
-    baseURL: 'http://localhost:3006', // Update this IP dynamically as needed
-};
+// Use global config if available (from config.js)
+const config = window.config || { baseURL: 'http://localhost:3006' };
 
 document.addEventListener('DOMContentLoaded', () => {
     // Wait a bit for components to be initialized

@@ -51,7 +51,9 @@ const Auth = {
 
 // API utilities with automatic token handling
 const API = {
-    baseURL: 'http://localhost:3006',
+    get baseURL() {
+        return window.config?.baseURL || 'http://localhost:3006';
+    },
 
     // Get headers with auth token
     getHeaders(includeAuth = true) {

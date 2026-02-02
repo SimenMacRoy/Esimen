@@ -1,7 +1,7 @@
 // Products page with JWT authentication
-const config = {
-    baseURL: 'http://localhost:3006',
-};
+
+// Use global config if available
+const config = window.config || { baseURL: 'http://localhost:3006' };
 
 function getUserId() {
     const userData = Auth.getUserData();
