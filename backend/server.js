@@ -13,7 +13,6 @@ const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app = express();
 const port = process.env.PORT || 3006;
@@ -238,17 +237,28 @@ if (!isCloudinaryConfigured) {
 // FILE UPLOAD CONFIG
 // ===================
 
+// Helper function to upload buffer to Cloudinary
+function uploadToCloudinary(buffer, folder = 'shekshouse') {
+    return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+            {
+                folder: folder,
+                resource_type: 'image',
+                transformation: [{ width: 1000, height: 1000, crop: 'limit', quality: 'auto' }]
+            },
+            (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+            }
+        );
+        uploadStream.end(buffer);
+    });
+}
+
 let storage;
 if (isCloudinaryConfigured) {
-    // Use Cloudinary storage for production
-    storage = new CloudinaryStorage({
-        cloudinary: cloudinary,
-        params: {
-            folder: 'shekshouse',
-            allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-            transformation: [{ width: 1000, height: 1000, crop: 'limit', quality: 'auto' }]
-        }
-    });
+    // Use memory storage - files will be uploaded to Cloudinary manually
+    storage = multer.memoryStorage();
     console.log('Using Cloudinary for image storage');
 } else {
     // Fallback to local storage for development
@@ -454,7 +464,7 @@ app.get('/api/products/:product_id', (req, res) => {
 });
 
 // Add product (Admin only)
-app.post('/api/add-products', authenticateAdmin, upload.array('images', 5), (req, res) => {
+app.post('/api/add-products', authenticateAdmin, upload.array('images', 5), async (req, res) => {
     const { name, description, stock, price, department_id, category_id } = req.body;
     const files = req.files;
 
@@ -475,38 +485,54 @@ app.post('/api/add-products', authenticateAdmin, upload.array('images', 5), (req
         return res.status(400).json({ error: 'At least one image is required.' });
     }
 
-    const query = `
-        INSERT INTO PRODUCTS (description, stock, name, price, department_id, category_id, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, NOW())
-    `;
-
-    db.query(query, [description, parseInt(stock), name, parseFloat(price), department_id, category_id], (err, result) => {
-        if (err) {
-            console.error('Database error:', err);
-            return res.status(500).json({ error: 'Database error.' });
+    try {
+        // Upload images to Cloudinary or use local path
+        let imageUrls = [];
+        if (isCloudinaryConfigured) {
+            // Upload to Cloudinary
+            const uploadPromises = files.map(file => uploadToCloudinary(file.buffer, 'shekshouse/products'));
+            const results = await Promise.all(uploadPromises);
+            imageUrls = results.map(result => result.secure_url);
+        } else {
+            // Local storage - use filename
+            imageUrls = files.map(file => `/uploads/${file.filename}`);
         }
 
-        const product_id = result.insertId;
-        const imageQuery = 'INSERT INTO PRODUCT_IMAGES (product_id, image_url) VALUES ?';
-        // For Cloudinary, file.path contains the full URL; for local storage, use /uploads/filename
-        const imageValues = files.map(file => [product_id, file.path || `/uploads/${file.filename}`]);
+        const query = `
+            INSERT INTO PRODUCTS (description, stock, name, price, department_id, category_id, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, NOW())
+        `;
 
-        db.query(imageQuery, [imageValues], (imageErr) => {
-            if (imageErr) {
-                console.error('Error saving images:', imageErr);
-                return res.status(500).json({ error: 'Error saving images.' });
+        db.query(query, [description, parseInt(stock), name, parseFloat(price), department_id, category_id], (err, result) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Database error.' });
             }
 
-            // Log audit trail
-            logProductAudit(product_id, req.user.user_id, 'created', name, JSON.stringify({ price, stock, department_id, category_id }));
+            const product_id = result.insertId;
+            const imageQuery = 'INSERT INTO PRODUCT_IMAGES (product_id, image_url) VALUES ?';
+            const imageValues = imageUrls.map(url => [product_id, url]);
 
-            res.json({ success: true, message: 'Product added successfully.', product_id });
+            db.query(imageQuery, [imageValues], (imageErr) => {
+                if (imageErr) {
+                    console.error('Error saving images:', imageErr);
+                    return res.status(500).json({ error: 'Error saving images.' });
+                }
+
+                // Log audit trail
+                logProductAudit(product_id, req.user.user_id, 'created', name, JSON.stringify({ price, stock, department_id, category_id }));
+
+                res.json({ success: true, message: 'Product added successfully.', product_id });
+            });
         });
-    });
+    } catch (uploadError) {
+        console.error('Error uploading images:', uploadError);
+        return res.status(500).json({ error: 'Error uploading images.' });
+    }
 });
 
 // Update product (Admin only)
-app.put('/api/products/:product_id', authenticateAdmin, upload.array('images', 5), (req, res) => {
+app.put('/api/products/:product_id', authenticateAdmin, upload.array('images', 5), async (req, res) => {
     const { name, description, stock, price, department_id, category_id } = req.body;
     const { product_id } = req.params;
     const files = req.files;
@@ -523,44 +549,60 @@ app.put('/api/products/:product_id', authenticateAdmin, upload.array('images', 5
         return res.status(400).json({ error: 'Stock must be a non-negative integer.' });
     }
 
-    const query = `
-        UPDATE PRODUCTS
-        SET name = ?, description = ?, stock = ?, price = ?, department_id = ?, category_id = ?
-        WHERE product_id = ?
-    `;
-
-    db.query(query, [name, description, parseInt(stock), parseFloat(price), department_id, category_id, product_id], (err) => {
-        if (err) {
-            console.error('Database error:', err);
-            return res.status(500).json({ error: 'Database error.' });
-        }
-
-        // Log audit trail
-        logProductAudit(product_id, req.user.user_id, 'modified', name, JSON.stringify({ price, stock, department_id, category_id, imagesUpdated: files && files.length > 0 }));
-
+    try {
+        // Upload new images if provided
+        let imageUrls = [];
         if (files && files.length > 0) {
-            // Delete old images first
-            db.query('DELETE FROM PRODUCT_IMAGES WHERE product_id = ?', [product_id], (delErr) => {
-                if (delErr) {
-                    console.error('Error deleting old images:', delErr);
-                }
-
-                const imageQuery = 'INSERT INTO PRODUCT_IMAGES (product_id, image_url) VALUES ?';
-                // For Cloudinary, file.path contains the full URL; for local storage, use /uploads/filename
-                const imageValues = files.map(file => [product_id, file.path || `/uploads/${file.filename}`]);
-
-                db.query(imageQuery, [imageValues], (imageErr) => {
-                    if (imageErr) {
-                        console.error('Error updating images:', imageErr);
-                        return res.status(500).json({ error: 'Error updating images.' });
-                    }
-                    res.json({ success: true, message: 'Product updated successfully.' });
-                });
-            });
-        } else {
-            res.json({ success: true, message: 'Product updated successfully.' });
+            if (isCloudinaryConfigured) {
+                const uploadPromises = files.map(file => uploadToCloudinary(file.buffer, 'shekshouse/products'));
+                const results = await Promise.all(uploadPromises);
+                imageUrls = results.map(result => result.secure_url);
+            } else {
+                imageUrls = files.map(file => `/uploads/${file.filename}`);
+            }
         }
-    });
+
+        const query = `
+            UPDATE PRODUCTS
+            SET name = ?, description = ?, stock = ?, price = ?, department_id = ?, category_id = ?
+            WHERE product_id = ?
+        `;
+
+        db.query(query, [name, description, parseInt(stock), parseFloat(price), department_id, category_id, product_id], (err) => {
+            if (err) {
+                console.error('Database error:', err);
+                return res.status(500).json({ error: 'Database error.' });
+            }
+
+            // Log audit trail
+            logProductAudit(product_id, req.user.user_id, 'modified', name, JSON.stringify({ price, stock, department_id, category_id, imagesUpdated: files && files.length > 0 }));
+
+            if (imageUrls.length > 0) {
+                // Delete old images first
+                db.query('DELETE FROM PRODUCT_IMAGES WHERE product_id = ?', [product_id], (delErr) => {
+                    if (delErr) {
+                        console.error('Error deleting old images:', delErr);
+                    }
+
+                    const imageQuery = 'INSERT INTO PRODUCT_IMAGES (product_id, image_url) VALUES ?';
+                    const imageValues = imageUrls.map(url => [product_id, url]);
+
+                    db.query(imageQuery, [imageValues], (imageErr) => {
+                        if (imageErr) {
+                            console.error('Error updating images:', imageErr);
+                            return res.status(500).json({ error: 'Error updating images.' });
+                        }
+                        res.json({ success: true, message: 'Product updated successfully.' });
+                    });
+                });
+            } else {
+                res.json({ success: true, message: 'Product updated successfully.' });
+            }
+        });
+    } catch (uploadError) {
+        console.error('Error uploading images:', uploadError);
+        return res.status(500).json({ error: 'Error uploading images.' });
+    }
 });
 
 // Delete product (Admin only)
@@ -1029,7 +1071,7 @@ app.put('/api/users/update', authenticateToken, async (req, res) => {
 });
 
 // Upload profile picture (Authenticated)
-app.post('/api/users/profile-picture', authenticateToken, upload.single('profile_picture'), (req, res) => {
+app.post('/api/users/profile-picture', authenticateToken, upload.single('profile_picture'), async (req, res) => {
     const user_id = req.user.user_id;
     const file = req.file;
 
@@ -1037,21 +1079,33 @@ app.post('/api/users/profile-picture', authenticateToken, upload.single('profile
         return res.status(400).json({ error: 'No file uploaded.' });
     }
 
-    // For Cloudinary, file.path contains the full URL; for local storage, use /uploads/filename
-    const imageUrl = file.path || `/uploads/${file.filename}`;
-
-    db.query('UPDATE USERS SET profile_picture = ? WHERE user_id = ?', [imageUrl, user_id], (err, result) => {
-        if (err) {
-            console.error('Error updating profile picture:', err);
-            return res.status(500).json({ error: 'Database error.' });
+    try {
+        let imageUrl;
+        if (isCloudinaryConfigured) {
+            // Upload to Cloudinary
+            const result = await uploadToCloudinary(file.buffer, 'shekshouse/profiles');
+            imageUrl = result.secure_url;
+        } else {
+            // Local storage
+            imageUrl = `/uploads/${file.filename}`;
         }
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'User not found.' });
-        }
+        db.query('UPDATE USERS SET profile_picture = ? WHERE user_id = ?', [imageUrl, user_id], (err, result) => {
+            if (err) {
+                console.error('Error updating profile picture:', err);
+                return res.status(500).json({ error: 'Database error.' });
+            }
 
-        res.json({ success: true, profilePicture: imageUrl, message: 'Photo de profil mise a jour.' });
-    });
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'User not found.' });
+            }
+
+            res.json({ success: true, profilePicture: imageUrl, message: 'Photo de profil mise a jour.' });
+        });
+    } catch (uploadError) {
+        console.error('Error uploading profile picture:', uploadError);
+        return res.status(500).json({ error: 'Error uploading image.' });
+    }
 });
 
 // Delete user (Authenticated)
