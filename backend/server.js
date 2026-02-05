@@ -122,6 +122,12 @@ db.getConnection((err, connection) => {
 // EMAIL CONFIGURATION
 // ===================
 
+const isEmailConfigured = process.env.EMAIL_USER && process.env.EMAIL_PASS;
+
+if (!isEmailConfigured) {
+    console.warn('WARNING: Email credentials not configured. EMAIL_USER and EMAIL_PASS are required for sending emails.');
+}
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -129,6 +135,17 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
+
+// Verify email configuration on startup
+if (isEmailConfigured) {
+    transporter.verify((error, success) => {
+        if (error) {
+            console.error('Email configuration error:', error.message);
+        } else {
+            console.log('Email server is ready to send messages');
+        }
+    });
+}
 
 // ===================
 // JWT AUTHENTICATION

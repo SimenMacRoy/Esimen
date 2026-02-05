@@ -1170,31 +1170,132 @@ body {
 }
 
 @media (max-width: 480px) {
+    .basket-page {
+        padding: 80px 12px 100px;
+        gap: 16px;
+    }
+
+    .section-header h2 {
+        font-size: 18px;
+    }
+
     .basket-item {
-        flex-direction: column;
-        align-items: flex-start;
+        padding: 12px;
+        padding-right: 40px;
     }
 
     .item-card {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        gap: 10px;
     }
 
     .square-image {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+    }
+
+    .item-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .item-details h3 {
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 4px;
+    }
+
+    .item-details .item-description {
+        display: none;
+    }
+
+    .item-details .item-price {
+        font-size: 14px;
     }
 
     .item-controls {
-        width: 100%;
-        justify-content: center;
-        margin-top: 12px;
+        gap: 4px;
+    }
+
+    .item-controls button {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .item-controls .quantity {
+        font-size: 14px;
+        min-width: 30px;
     }
 
     .remove-item-btn {
         position: absolute;
-        top: 12px;
-        right: 12px;
+        top: 10px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
         margin-left: 0;
+        font-size: 12px;
+    }
+
+    .checkout-card {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .checkout-card h2 {
+        font-size: 16px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+    }
+
+    .checkout-summary {
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .checkout-row {
+        font-size: 13px;
+    }
+
+    .checkout-row.total {
+        font-size: 15px;
+        padding-top: 12px;
+    }
+
+    .checkout-row.total .amount {
+        font-size: 17px;
+    }
+
+    .btn-checkout {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+
+    .address-card {
+        padding: 12px;
+    }
+
+    .address-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .address-header h3 {
+        font-size: 13px;
+    }
+
+    .btn-edit-address {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .address-content p {
+        font-size: 12px;
     }
 
     .empty-basket-message {

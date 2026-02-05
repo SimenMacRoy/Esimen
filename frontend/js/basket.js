@@ -338,42 +338,59 @@ async function updateQuantity(event, change) {
     const basket = getBasket();
     const item = basket.find(i => i.product_id === productId);
     if (item) {
-        item.quantity = parseInt(item.quantity, 10) + change;
+        const newQuantity = parseInt(item.quantity, 10) + change;
 
-        if (item.quantity < 1) {
+        if (newQuantity < 1) {
             removeItem(event);
-        } else {
-            saveBasket(basket);
-            updateHeaderBasketCount();
+            return;
+        }
 
+        // Check stock before increasing
+        if (change > 0) {
             try {
-                const response = await fetch(`${window.config.baseURL}/api/basket`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${Auth.getToken()}`
-                    },
-                    body: JSON.stringify({
-                        user_id: getUserId(),
-                        product_id: item.product_id,
-                        quantity: item.quantity,
-                    }),
-                });
-
-                if (response.ok) {
-                    console.log(`Quantity for product ${item.product_id} updated successfully.`);
-                } else if (response.status === 401) {
-                    Auth.logout();
-                    return;
-                } else {
-                    console.error(`Failed to update quantity for product ${item.product_id}.`);
+                const product = await fetchProductDetails(productId);
+                if (product && product.stock !== undefined) {
+                    if (newQuantity > product.stock) {
+                        showToast(`Stock insuffisant. Seulement ${product.stock} disponible(s).`, 'error');
+                        return;
+                    }
                 }
             } catch (error) {
-                console.error('Error updating quantity on the server:', error);
+                console.error('Error checking stock:', error);
             }
-
-            renderBasket();
         }
+
+        item.quantity = newQuantity;
+        saveBasket(basket);
+        updateHeaderBasketCount();
+
+        try {
+            const response = await fetch(`${window.config.baseURL}/api/basket`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({
+                    user_id: getUserId(),
+                    product_id: item.product_id,
+                    quantity: item.quantity,
+                }),
+            });
+
+            if (response.ok) {
+                console.log(`Quantity for product ${item.product_id} updated successfully.`);
+            } else if (response.status === 401) {
+                Auth.logout();
+                return;
+            } else {
+                console.error(`Failed to update quantity for product ${item.product_id}.`);
+            }
+        } catch (error) {
+            console.error('Error updating quantity on the server:', error);
+        }
+
+        renderBasket();
     }
 }
 

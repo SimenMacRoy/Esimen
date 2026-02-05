@@ -317,6 +317,8 @@ function setupQuantityControls() {
             quantity++;
             qtyInput.value = quantity;
             updateTotalPrice();
+        } else if (product && quantity >= product.stock) {
+            showToast(`Stock insuffisant. Seulement ${product.stock} disponible(s).`, 'warning');
         }
     };
 
@@ -346,6 +348,12 @@ addToCartBtn.onclick = async () => {
     }
 
     if (!requireLogin()) return;
+
+    // Check stock before adding
+    if (product && quantity > product.stock) {
+        showToast(`Stock insuffisant. Seulement ${product.stock} disponible(s).`, 'error');
+        return;
+    }
 
     // Disable button during request
     addToCartBtn.disabled = true;
