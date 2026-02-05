@@ -18,6 +18,9 @@ const app = express();
 const port = process.env.PORT || 3006;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
+// Trust proxy for Railway/Render/Heroku (required for rate limiting behind reverse proxy)
+app.set('trust proxy', 1);
+
 // Stripe initialization with validation
 if (!process.env.STRIPE_SECRET_KEY) {
     console.warn('WARNING: STRIPE_SECRET_KEY is not set. Payment features will not work.');
