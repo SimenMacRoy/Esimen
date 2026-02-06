@@ -2257,6 +2257,12 @@ function sendOrderStatusEmail(order, newStatus) {
 // PAYMENT API
 // ===================
 
+// Get Stripe publishable key (public endpoint)
+app.get('/api/stripe-config', (req, res) => {
+    const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_51PIRk7DIrmiE2Hgb4lLVD99VQnFg7uWaAhtEBBBzLIixaLhcQ9FOuhkSonPw8SozcgiS19efR92rNwYX6kQ7TRvT00YayxN2sq';
+    res.json({ publishableKey });
+});
+
 app.post('/api/payment', authenticateToken, async (req, res) => {
     const user_id = req.user.user_id;
     const { amount, currency, paymentMethodId, delivery, promoCode, subtotal: clientSubtotal, discount: clientDiscount } = req.body;

@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Initialize Stripe
-    initializeStripe();
+    await initializeStripe();
 
     // Load order summary
     await loadOrderSummary();
@@ -65,9 +65,15 @@ function getBasket() {
 }
 
 // Initialize Stripe Elements
-function initializeStripe() {
+async function initializeStripe() {
     try {
-        stripe = Stripe(config.stripePublicKey);
+        // Load Stripe key from backend
+        const stripeKey = await config.loadStripeKey();
+        if (!stripeKey) {
+            console.error('Failed to load Stripe configuration');
+            return;
+        }
+        stripe = Stripe(stripeKey);
         const elements = stripe.elements();
 
         const style = {

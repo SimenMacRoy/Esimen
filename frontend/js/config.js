@@ -5,17 +5,23 @@
 // En production: 'https://votre-app.railway.app' (URL fournie par Railway)
 // ============================================
 
-// Mode de l'application: 'development' ou 'production'
-var APP_MODE = 'development'; // Changer en 'production' quand vous avez la cle Stripe live
-
 var config = {
     baseURL: 'https://esimen-production.up.railway.app',
+    stripePublicKey: null, // Will be loaded from backend
 
-    // Stripe public keys
-    // Pour passer en production: changer APP_MODE en 'production' et ajouter votre cle live
-    stripePublicKey: APP_MODE === 'production'
-        ? 'pk_live_VOTRE_CLE_LIVE_ICI'  // Remplacer par votre cle publishable live de Stripe
-        : 'pk_test_51PIRk7DIrmiE2Hgb4lLVD99VQnFg7uWaAhtEBBBzLIixaLhcQ9FOuhkSonPw8SozcgiS19efR92rNwYX6kQ7TRvT00YayxN2sq'
+    // Load Stripe key from backend
+    async loadStripeKey() {
+        if (this.stripePublicKey) return this.stripePublicKey;
+        try {
+            const response = await fetch(`${this.baseURL}/api/stripe-config`);
+            const data = await response.json();
+            this.stripePublicKey = data.publishableKey;
+            return this.stripePublicKey;
+        } catch (error) {
+            console.error('Failed to load Stripe config:', error);
+            return null;
+        }
+    }
 };
 
 // Rendre la config disponible globalement
