@@ -148,8 +148,10 @@ async function sendEmail(mailOptions) {
     // Use Resend in production (when RESEND_API_KEY is set)
     if (resend) {
         try {
+            // Resend requires a verified domain - use their default or your verified domain
+            const resendFrom = process.env.RESEND_FROM_EMAIL || "Shek's House <onboarding@resend.dev>";
             const emailData = {
-                from: mailOptions.from || "Shek's House <onboarding@resend.dev>",
+                from: resendFrom,
                 to: Array.isArray(mailOptions.to) ? mailOptions.to : [mailOptions.to],
                 subject: mailOptions.subject,
                 html: mailOptions.html || mailOptions.text
