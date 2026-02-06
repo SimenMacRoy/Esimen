@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const multer = require('multer');
@@ -125,40 +126,81 @@ db.getConnection((err, connection) => {
 // EMAIL CONFIGURATION
 // ===================
 
-const isEmailConfigured = process.env.EMAIL_USER && process.env.EMAIL_PASS;
+// Resend for production (Railway blocks SMTP)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-if (!isEmailConfigured) {
-    console.warn('WARNING: Email credentials not configured. EMAIL_USER and EMAIL_PASS are required for sending emails.');
-}
-
+// Nodemailer for local development
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    pool: true, // Use pooled connections
-    maxConnections: 5,
-    maxMessages: 100,
-    connectionTimeout: 60000, // 60 seconds
-    greetingTimeout: 30000, // 30 seconds
-    socketTimeout: 60000, // 60 seconds
-    tls: {
-        rejectUnauthorized: false // Allow self-signed certificates
-    }
+    connectionTimeout: 30000,
+    greetingTimeout: 15000,
+    socketTimeout: 30000
 });
 
-// Verify email configuration on startup
-if (isEmailConfigured) {
-    transporter.verify((error, success) => {
-        if (error) {
-            console.error('Email configuration error:', error.message);
-        } else {
-            console.log('Email server is ready to send messages');
+// Unified email sending function
+async function sendEmail(mailOptions) {
+    // Use Resend in production (when RESEND_API_KEY is set)
+    if (resend) {
+        try {
+            const emailData = {
+                from: mailOptions.from || "Shek's House <onboarding@resend.dev>",
+                to: Array.isArray(mailOptions.to) ? mailOptions.to : [mailOptions.to],
+                subject: mailOptions.subject,
+                html: mailOptions.html || mailOptions.text
+            };
+
+            // Handle attachments for Resend
+            if (mailOptions.attachments && mailOptions.attachments.length > 0) {
+                emailData.attachments = await Promise.all(
+                    mailOptions.attachments.map(async (att) => {
+                        if (att.path) {
+                            const content = fs.readFileSync(att.path);
+                            return {
+                                filename: att.filename,
+                                content: content
+                            };
+                        }
+                        return att;
+                    })
+                );
+            }
+
+            const result = await resend.emails.send(emailData);
+            console.log('Email sent via Resend:', result);
+            return result;
+        } catch (error) {
+            console.error('Resend error:', error);
+            throw error;
         }
+    }
+
+    // Fallback to nodemailer for local development
+    return new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Nodemailer error:', error);
+                reject(error);
+            } else {
+                console.log('Email sent via Nodemailer:', info.messageId);
+                resolve(info);
+            }
+        });
     });
+}
+
+// Log email configuration status
+if (resend) {
+    console.log('Email: Using Resend API');
+} else if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    console.log('Email: Using Nodemailer (SMTP)');
+} else {
+    console.warn('WARNING: No email service configured. Set RESEND_API_KEY for production or EMAIL_USER/EMAIL_PASS for development.');
 }
 
 // ===================
@@ -1034,7 +1076,7 @@ app.post('/api/users/register', async (req, res) => {
                 `,
             };
 
-            transporter.sendMail(mailOptions).catch(err => {
+            sendEmail(mailOptions).catch(err => {
                 console.error('Error sending welcome email:', err);
             });
 
@@ -1673,13 +1715,14 @@ app.post('/api/forgot-password', (req, res) => {
             `,
         };
 
-        transporter.sendMail(mailOptions, (error) => {
-            if (error) {
+        sendEmail(mailOptions)
+            .then(() => {
+                res.json({ success: true, message: 'Reset code sent to your email.' });
+            })
+            .catch((error) => {
                 console.error('Error sending email:', error);
-                return res.status(500).json({ success: false, message: 'Failed to send email.' });
-            }
-            res.json({ success: true, message: 'Reset code sent to your email.' });
-        });
+                res.status(500).json({ success: false, message: 'Failed to send email.' });
+            });
     });
 });
 
@@ -2203,7 +2246,7 @@ function sendOrderStatusEmail(order, newStatus) {
         `
     };
 
-    transporter.sendMail(mailOptions).catch(err => {
+    sendEmail(mailOptions).catch(err => {
         console.error('Error sending status email:', err);
     });
 }
@@ -2769,13 +2812,16 @@ function generateInvoiceAndSendEmail(orderInfo, callback) {
             }]
         };
 
-        transporter.sendMail(mailOptions, (error) => {
-            fs.unlink(invoicePath, () => {});
-            if (error) {
+        sendEmail(mailOptions)
+            .then(() => {
+                fs.unlink(invoicePath, () => {});
+                callback(null);
+            })
+            .catch((error) => {
+                fs.unlink(invoicePath, () => {});
                 console.error('Error sending invoice email:', error);
-            }
-            callback(error);
-        });
+                callback(error);
+            });
     });
 
     writeStream.on('error', callback);
@@ -3006,7 +3052,7 @@ function sendCouponNotificationEmails(couponData) {
                 `,
             };
 
-            transporter.sendMail(mailOptions).catch(err => {
+            sendEmail(mailOptions).catch(err => {
                 console.error(`Error sending coupon email to ${user.email}:`, err);
             });
         });
