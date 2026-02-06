@@ -6,7 +6,7 @@
 // ============================================
 
 // Mode de l'application: 'development' ou 'production'
-var APP_MODE = 'production';
+var APP_MODE = 'development'; // Changer en 'production' quand vous avez la cle Stripe live
 
 var config = {
     baseURL: 'https://esimen-production.up.railway.app',
