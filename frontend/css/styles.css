@@ -207,7 +207,7 @@ header.scrolled .search-bar input {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--white);
+    background-color: #858282;
     border-radius: var(--radius-full);
     width: 38px;
     height: 38px;
@@ -554,7 +554,7 @@ footer {
     flex-direction: column;
     align-items: center;
     font-size: 10px;
-    color: var(--gray);
+    color: #444444;
     cursor: pointer;
     padding: 6px 14px;
     border-radius: var(--radius-sm);
@@ -570,6 +570,7 @@ footer {
 .nav-item i {
     font-size: 18px;
     margin-bottom: 2px;
+    color: #333333;
 }
 
 .nav-item.active {
